@@ -1,0 +1,40 @@
+# Environment files and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# Node and frontend build output
+node_modules/
+dist/
+build/
+.vite/
+coverage/
+*.log
+npm-debug.log*
+
+# Machine learning data and models (large files)
+ml/data/
+ml/models/
+.ipynb_checkpoints/
+
+# Supabase local files
+supabase/.temp/
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
