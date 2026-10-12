@@ -11,7 +11,9 @@
     "retry": "Try again",
     "back": "Back",
     "next": "Next",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "close": "Close",
+    "dismiss": "Dismiss"
   },
   "states": {
     "loading": "Loading…",
