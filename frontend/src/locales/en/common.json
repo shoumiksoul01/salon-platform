@@ -1,0 +1,21 @@
+{
+  "appName": "Salon & Parlour Booking",
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "bn": "বাংলা"
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "retry": "Try again",
+    "back": "Back",
+    "next": "Next",
+    "confirm": "Confirm"
+  },
+  "states": {
+    "loading": "Loading…",
+    "empty": "Nothing here yet.",
+    "error": "Something went wrong."
+  }
+}
