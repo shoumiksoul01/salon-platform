@@ -1,0 +1,18 @@
+{
+  "profile": {
+    "title": "Profile and language",
+    "languageTitle": "Language",
+    "languageHint": "Choose the language you want to use. We remember your choice.",
+    "detailsTitle": "Your details",
+    "fullName": "Full name",
+    "phone": "Phone number",
+    "phoneHint": "Used for booking reminders.",
+    "email": "Email",
+    "nameRequired": "Enter your name.",
+    "phoneInvalid": "Enter a valid mobile number, like 01XXXXXXXXX.",
+    "emailInvalid": "Enter a valid email address.",
+    "contactRequired": "Enter a phone number or an email.",
+    "saved": "Profile saved.",
+    "saveFailed": "Could not save your profile. Try again."
+  }
+}
