@@ -1,11 +1,18 @@
 import { useEffect, useState } from 'react'
-import type { SyntheticEvent } from 'react'
+import type { ChangeEvent, SyntheticEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Card, Checkbox, FormField, Input, Select, useToast } from '../../components/ui'
+import { Badge, Button, Card, Checkbox, FormField, Input, Modal, Select, useToast } from '../../components/ui'
+import type { BadgeVariant } from '../../components/ui'
 import MapPicker from '../../components/MapPicker'
 import type { MapPoint } from '../../components/MapPicker'
-import { getMyShop, saveMyShop } from '../../api/shop'
-import type { ApprovalStatus, GenderCategory, WorkingHour } from '../../api/shop'
+import {
+  deleteDocument,
+  getMyShop,
+  saveMyShop,
+  submitForApproval,
+  uploadDocument,
+} from '../../api/shop'
+import type { ApprovalStatus, GenderCategory, ShopDocument, WorkingHour } from '../../api/shop'
 import styles from './ShopSetupPage.module.css'
 
 type LoadState = 'loading' | 'error' | 'ready'
@@ -16,15 +23,26 @@ interface FormErrors {
   phone?: string
   hours?: string
   location?: string
+  licence?: string
 }
 
 const PHONE_PATTERN = /^(?:\+?88)?01[3-9]\d{8}$/
 const GENDERS: GenderCategory[] = ['gents', 'ladies', 'unisex']
 const WEEK_ORDER = [6, 0, 1, 2, 3, 4, 5] // Saturday first
+const MAX_FILE_BYTES = 5 * 1024 * 1024
+const FILE_TYPES: string[] = ['application/pdf', 'image/jpeg', 'image/png']
+
+const STATUS_VARIANT: Record<ApprovalStatus, BadgeVariant> = {
+  draft: 'neutral',
+  pending: 'warning',
+  approved: 'success',
+  rejected: 'danger',
+  suspended: 'danger',
+}
 
 // OWN-02: shop setup and documents (FR-01.1)
 export default function ShopSetupPage() {
-  const { t } = useTranslation(['owner', 'common'])
+  const { t, i18n } = useTranslation(['owner', 'common'])
   const toast = useToast()
 
   const [loadState, setLoadState] = useState<LoadState>('loading')
@@ -39,8 +57,13 @@ export default function ShopSetupPage() {
   const [point, setPoint] = useState<MapPoint | null>(null)
   const [focusKey, setFocusKey] = useState(0)
   const [status, setStatus] = useState<ApprovalStatus>('draft')
+  const [reason, setReason] = useState<string | null>(null)
+  const [documents, setDocuments] = useState<ShopDocument[]>([])
   const [errors, setErrors] = useState<FormErrors>({})
   const [saving, setSaving] = useState(false)
+  const [uploading, setUploading] = useState(false)
+  const [confirmOpen, setConfirmOpen] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -60,6 +83,8 @@ export default function ShopSetupPage() {
             : null,
         )
         setStatus(shop.approval_status)
+        setReason(shop.approval_reason)
+        setDocuments(shop.documents)
         setLoadState('ready')
       })
       .catch(() => {
@@ -72,6 +97,16 @@ export default function ShopSetupPage() {
 
   // The form cannot be edited while the shop is under review or suspended.
   const locked = status === 'pending' || status === 'suspended'
+  const canSubmit = status === 'draft' || status === 'rejected'
+  const hasLicence = documents.some((doc) => doc.doc_type === 'trade_licence')
+  const checklist = [
+    { key: 'details', done: Boolean(name.trim() && address.trim() && PHONE_PATTERN.test(phone.trim())) },
+    { key: 'pin', done: point !== null },
+    { key: 'licence', done: hasLicence },
+  ]
+  const dateFormatter = new Intl.DateTimeFormat(i18n.language === 'bn' ? 'bn-BD' : 'en-GB', {
+    dateStyle: 'medium',
+  })
 
   function retry() {
     setLoadState('loading')
@@ -115,6 +150,7 @@ export default function ShopSetupPage() {
 
     // The pin and the licence are only required when the owner submits for approval.
     if (forSubmit && !point) found.location = t('shop.locationRequired')
+    if (forSubmit && !hasLicence) found.licence = t('shop.licenceRequired')
     return found
   }
 
@@ -131,6 +167,7 @@ export default function ShopSetupPage() {
       working_hours: hours,
     })
     setStatus(saved.approval_status)
+    setReason(saved.approval_reason)
   }
 
   async function handleSave(event: SyntheticEvent<HTMLFormElement>) {
@@ -147,6 +184,67 @@ export default function ShopSetupPage() {
       toast.show({ message: t('shop.saveFailed'), variant: 'danger' })
     } finally {
       setSaving(false)
+    }
+  }
+
+  function requestSubmit() {
+    const found = validate(true)
+    setErrors(found)
+    if (Object.keys(found).length > 0) return
+    setConfirmOpen(true)
+  }
+
+  async function confirmSubmit() {
+    setSubmitting(true)
+    try {
+      await persist()
+      const submitted = await submitForApproval()
+      setStatus(submitted.approval_status)
+      setReason(submitted.approval_reason)
+      setConfirmOpen(false)
+      toast.show({ message: t('shop.submitted'), variant: 'success' })
+    } catch {
+      toast.show({ message: t('shop.submitFailed'), variant: 'danger' })
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  async function handleFile(event: ChangeEvent<HTMLInputElement>) {
+    const input = event.target
+    const file = input.files?.[0]
+    if (!file) return
+    input.value = '' // lets the owner pick the same file again later
+
+    if (!FILE_TYPES.includes(file.type)) {
+      setErrors((previous) => ({ ...previous, licence: t('shop.fileType') }))
+      return
+    }
+    if (file.size > MAX_FILE_BYTES) {
+      setErrors((previous) => ({ ...previous, licence: t('shop.fileTooBig') }))
+      return
+    }
+
+    setErrors((previous) => ({ ...previous, licence: undefined }))
+    setUploading(true)
+    try {
+      const document = await uploadDocument(file)
+      setDocuments((previous) => [...previous, document])
+      toast.show({ message: t('shop.uploaded'), variant: 'success' })
+    } catch {
+      toast.show({ message: t('shop.uploadFailed'), variant: 'danger' })
+    } finally {
+      setUploading(false)
+    }
+  }
+
+  async function removeDocument(id: string) {
+    try {
+      await deleteDocument(id)
+      setDocuments((previous) => previous.filter((doc) => doc.id !== id))
+      toast.show({ message: t('shop.removed'), variant: 'info' })
+    } catch {
+      toast.show({ message: t('shop.removeFailed'), variant: 'danger' })
     }
   }
 
@@ -175,6 +273,34 @@ export default function ShopSetupPage() {
 
       {loadState === 'ready' && (
         <>
+          <Card as="section" role="status">
+            <div className={styles.bannerHead}>
+              <Badge variant={STATUS_VARIANT[status]}>{t(`shop.status.${status}.label`)}</Badge>
+              <h2 className={styles.bannerTitle}>{t(`shop.status.${status}.title`)}</h2>
+            </div>
+            <p className={styles.text}>{t(`shop.status.${status}.body`)}</p>
+            {reason && (status === 'rejected' || status === 'suspended') && (
+              <p className={styles.reason}>
+                <strong>{t('shop.reasonLabel')}</strong> {reason}
+              </p>
+            )}
+            {canSubmit && (
+              <>
+                <h3 className={styles.checklistTitle}>{t('shop.checklistTitle')}</h3>
+                <ul className={styles.checklist}>
+                  {checklist.map((item) => (
+                    <li key={item.key} className={item.done ? styles.done : styles.todo}>
+                      <span aria-hidden="true">{item.done ? '✓' : '○'}</span> {t(`shop.check.${item.key}`)}
+                      <span className={styles.srOnly}>
+                        {' '}
+                        {item.done ? t('shop.check.done') : t('shop.check.todo')}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+          </Card>
 
           <form className={styles.form} onSubmit={handleSave} noValidate>
             <fieldset className={styles.fieldset} disabled={locked}>
@@ -323,13 +449,79 @@ export default function ShopSetupPage() {
                 )}
               </Card>
 
+              <Card as="section">
+                <h2 className={styles.sectionTitle}>{t('shop.documentsTitle')}</h2>
+                <p className={styles.hint}>{t('shop.documentsHint')}</p>
+                <FormField label={t('shop.tradeLicence')} error={errors.licence} required>
+                  {(control) => (
+                    <input
+                      id={control.id}
+                      type="file"
+                      accept=".pdf,.jpg,.jpeg,.png"
+                      required={control.required}
+                      aria-invalid={control.invalid || undefined}
+                      aria-describedby={control['aria-describedby']}
+                      className={styles.file}
+                      disabled={uploading}
+                      onChange={handleFile}
+                    />
+                  )}
+                </FormField>
+                {uploading && (
+                  <p className={styles.status} role="status">
+                    {t('common:states.loading')}
+                  </p>
+                )}
+                {documents.length === 0 ? (
+                  <p className={styles.status}>{t('shop.noDocuments')}</p>
+                ) : (
+                  <ul className={styles.docList}>
+                    {documents.map((doc) => (
+                      <li key={doc.id} className={styles.docItem}>
+                        <div>
+                          <span className={styles.docName}>{doc.file_name}</span>
+                          <span className={styles.docMeta}>
+                            {dateFormatter.format(new Date(doc.uploaded_at))}
+                          </span>
+                        </div>
+                        <Button variant="ghost" onClick={() => removeDocument(doc.id)}>
+                          {t('shop.remove')}
+                        </Button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </Card>
+
               <div className={styles.actions}>
                 <Button type="submit" variant="secondary" loading={saving}>
                   {t('shop.save')}
                 </Button>
+                {canSubmit && (
+                  <Button onClick={requestSubmit}>{t('shop.submit')}</Button>
+                )}
               </div>
             </fieldset>
           </form>
+
+          <Modal
+            open={confirmOpen}
+            onClose={() => setConfirmOpen(false)}
+            title={t('shop.submitTitle')}
+            closeLabel={t('common:actions.close')}
+            footer={
+              <>
+                <Button variant="secondary" onClick={() => setConfirmOpen(false)}>
+                  {t('common:actions.cancel')}
+                </Button>
+                <Button onClick={confirmSubmit} loading={submitting}>
+                  {t('shop.submitConfirm')}
+                </Button>
+              </>
+            }
+          >
+            <p className={styles.text}>{t('shop.submitBody')}</p>
+          </Modal>
         </>
       )}
     </main>

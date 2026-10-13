@@ -71,3 +71,37 @@ export async function saveMyShop(input: ShopInput): Promise<Shop> {
   }
   throw new Error('The real shop API is not wired yet')
 }
+
+export async function uploadDocument(file: File): Promise<ShopDocument> {
+  if (USE_MOCK) {
+    await delay(500)
+    const document: ShopDocument = {
+      id: crypto.randomUUID(),
+      doc_type: 'trade_licence',
+      file_name: file.name,
+      file_url: '',
+      uploaded_at: new Date().toISOString(),
+    }
+    current = { ...current, documents: [...current.documents, document] }
+    return document
+  }
+  throw new Error('The real shop API is not wired yet')
+}
+
+export async function deleteDocument(id: string): Promise<void> {
+  if (USE_MOCK) {
+    await delay(200)
+    current = { ...current, documents: current.documents.filter((doc) => doc.id !== id) }
+    return
+  }
+  throw new Error('The real shop API is not wired yet')
+}
+
+export async function submitForApproval(): Promise<Shop> {
+  if (USE_MOCK) {
+    await delay(400)
+    current = { ...current, approval_status: 'pending', approval_reason: null }
+    return { ...current }
+  }
+  throw new Error('The real shop API is not wired yet')
+}
