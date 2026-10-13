@@ -1,0 +1,105 @@
+{
+  "shop": {
+    "title": "Shop setup",
+    "detailsTitle": "Shop details",
+    "name": "Shop name",
+    "description": "About your shop",
+    "descriptionHint": "A short description that customers see on your shop page.",
+    "address": "Address",
+    "area": "Area",
+    "areaHint": "For example Dhanmondi or Savar.",
+    "phone": "Shop phone number",
+    "genderLabel": "Who is your shop for?",
+    "gender": {
+      "gents": "Gents",
+      "ladies": "Ladies",
+      "unisex": "Unisex (everyone)"
+    },
+    "hoursTitle": "Opening hours",
+    "hoursHint": "Set the hours for each day. Customers can only book inside these hours.",
+    "closed": "Closed",
+    "opens": "Opens",
+    "closes": "Closes",
+    "days": {
+      "0": "Sunday",
+      "1": "Monday",
+      "2": "Tuesday",
+      "3": "Wednesday",
+      "4": "Thursday",
+      "5": "Friday",
+      "6": "Saturday"
+    },
+    "locationTitle": "Shop location",
+    "locationHint": "Click the map to place the pin, or drag the pin to adjust it. Customers use this to find you.",
+    "mapLabel": "Map for choosing the shop location",
+    "useMyLocation": "Use my location",
+    "coordinates": "Pin at {{lat}}, {{lng}}",
+    "noPin": "No pin placed yet.",
+    "locationUnavailable": "Your browser cannot share your location.",
+    "locationDenied": "Could not get your location. Click the map instead.",
+    "nameRequired": "Enter the shop name.",
+    "addressRequired": "Enter the shop address.",
+    "phoneRequired": "Enter the shop phone number.",
+    "phoneInvalid": "Enter a valid mobile number, like 01XXXXXXXXX.",
+    "hoursNoDay": "Open the shop on at least one day.",
+    "hoursInvalid": "Opening time must be before closing time on every open day.",
+    "locationRequired": "Place the pin on the map before you submit.",
+    "save": "Save changes",
+    "saved": "Shop details saved.",
+    "saveFailed": "Could not save. Try again.",
+    "documentsTitle": "Documents",
+    "documentsHint": "Upload your trade licence so we can verify your shop. PDF, JPG or PNG, up to 5 MB.",
+    "tradeLicence": "Trade licence",
+    "noDocuments": "No document uploaded yet.",
+    "remove": "Remove",
+    "uploaded": "Document uploaded.",
+    "uploadFailed": "Could not upload the file. Try again.",
+    "removed": "Document removed.",
+    "removeFailed": "Could not remove the document. Try again.",
+    "fileType": "Use a PDF, JPG or PNG file.",
+    "fileTooBig": "The file is larger than 5 MB.",
+    "licenceRequired": "Upload your trade licence before you submit.",
+    "reasonLabel": "Reason:",
+    "checklistTitle": "Before you submit",
+    "check": {
+      "details": "Name, address and phone",
+      "pin": "Map pin",
+      "licence": "Trade licence",
+      "done": "(done)",
+      "todo": "(not done)"
+    },
+    "submit": "Submit for approval",
+    "submitTitle": "Submit your shop for approval?",
+    "submitBody": "You cannot edit your shop while it is under review.",
+    "submitConfirm": "Submit",
+    "submitted": "Submitted for approval.",
+    "submitFailed": "Could not submit. Try again.",
+    "status": {
+      "draft": {
+        "label": "Not submitted",
+        "title": "Finish your shop setup",
+        "body": "Complete your shop details, place the pin, and upload your trade licence. Then submit for approval."
+      },
+      "pending": {
+        "label": "Under review",
+        "title": "Your shop is under review",
+        "body": "We are checking your documents. You cannot edit your shop while it is under review."
+      },
+      "approved": {
+        "label": "Approved",
+        "title": "Your shop is approved",
+        "body": "Your shop is live and customers can find it."
+      },
+      "rejected": {
+        "label": "Needs changes",
+        "title": "Your shop needs changes",
+        "body": "Your shop was not approved. Fix the problem below and submit again."
+      },
+      "suspended": {
+        "label": "Suspended",
+        "title": "Your shop is suspended",
+        "body": "Your shop is hidden from customers. Contact support."
+      }
+    }
+  }
+}
