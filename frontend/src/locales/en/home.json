@@ -1,0 +1,39 @@
+{
+  "hero": {
+    "title": "Find a salon or parlour near you",
+    "subtitle": "Compare shops, book a slot and skip the wait.",
+    "searchLabel": "Search shops or services",
+    "searchPlaceholder": "For example haircut, facial or a shop name",
+    "searchButton": "Search",
+    "browseAll": "Browse all shops"
+  },
+  "nearby": {
+    "title": "Shops near you",
+    "subtitle": "Approved shops, closest first.",
+    "distance": "{{km}} km away",
+    "emptyTitle": "No shops to show yet",
+    "emptyDescription": "New shops are approved every day. Please check back soon.",
+    "errorTitle": "Could not load shops",
+    "errorDescription": "Check your connection and try again."
+  },
+  "featured": {
+    "title": "Featured offers",
+    "subtitle": "Limited-time discounts from approved shops.",
+    "percentOff": "{{percent}}% off",
+    "saveAmount": "Save {{amount}}",
+    "validUntil": "Valid until {{date}}",
+    "emptyTitle": "No offers right now",
+    "emptyDescription": "Shops add new offers often. Please check back soon.",
+    "errorTitle": "Could not load offers",
+    "errorDescription": "Check your connection and try again."
+  },
+  "gender": {
+    "men": "Men",
+    "women": "Women",
+    "unisex": "Unisex"
+  },
+  "reviews_one": "{{count}} review",
+  "reviews_other": "{{count}} reviews",
+  "noReviews": "No reviews yet",
+  "ratingLabel": "Rated {{rating}} out of 5"
+}
