@@ -1,0 +1,14 @@
+{
+  "layout": {
+    "skipToContent": "Skip to main content",
+    "mainNav": "Admin navigation",
+    "openMenu": "Menu",
+    "closeMenu": "Close",
+    "panelTitle": "Admin panel",
+    "dashboard": "Dashboard",
+    "shops": "Shop approvals",
+    "moderation": "Moderation",
+    "plans": "Commission and plans",
+    "viewSite": "View public site"
+  }
+}
