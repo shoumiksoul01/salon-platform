@@ -1,8 +1,12 @@
 import type { RouteObject } from 'react-router-dom'
+import PublicLayout from '../layouts/PublicLayout'
 import KitPreview from '../pages/dev/KitPreview'
 
-// Public layout routes (PUB, AUTH, BOOK, SHR pages) are added here.
+// Public pages (PUB, AUTH, BOOK, SHR) are added to the children array of the layout route.
 // The /dev/kit page exists only while running "npm run dev".
 export const publicRoutes: RouteObject[] = [
-  ...(import.meta.env.DEV ? [{ path: '/dev/kit', element: <KitPreview /> }] : []),
+  {
+    element: <PublicLayout />,
+    children: [...(import.meta.env.DEV ? [{ path: '/dev/kit', element: <KitPreview /> }] : [])],
+  },
 ]

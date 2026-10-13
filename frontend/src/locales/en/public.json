@@ -1,0 +1,18 @@
+{
+  "layout": {
+    "skipToContent": "Skip to main content",
+    "mainNav": "Main navigation",
+    "openMenu": "Menu",
+    "closeMenu": "Close",
+    "findShops": "Find shops",
+    "forShops": "For shop owners",
+    "login": "Log in",
+    "register": "Register",
+    "footerNav": "Footer",
+    "about": "About",
+    "terms": "Terms",
+    "privacy": "Privacy",
+    "tagline": "Find a salon or parlour, book a slot and skip the wait.",
+    "rights": "© {{year}} Salon & Parlour Booking. All rights reserved."
+  }
+}

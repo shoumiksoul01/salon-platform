@@ -19,7 +19,7 @@ export default function KitPreview() {
   const showError = name.length > 0 && name.length < 3
 
   return (
-    <main
+    <div
       style={{
         maxWidth: '32rem',
         margin: '0 auto',
@@ -148,7 +148,8 @@ export default function KitPreview() {
       >
         <p style={{ margin: 0 }}>You can book again later, but the slot may be taken.</p>
       </Modal>
-            <KitPreviewData />
-    </main>
+
+      <KitPreviewData />
+    </div>
   )
 }
