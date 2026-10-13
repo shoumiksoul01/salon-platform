@@ -10,6 +10,7 @@ import {
   Select,
   useToast,
 } from '../../components/ui'
+import KitPreviewData from './KitPreviewData'
 
 export default function KitPreview() {
   const [name, setName] = useState('')
@@ -147,6 +148,7 @@ export default function KitPreview() {
       >
         <p style={{ margin: 0 }}>You can book again later, but the slot may be taken.</p>
       </Modal>
+            <KitPreviewData />
     </main>
   )
 }

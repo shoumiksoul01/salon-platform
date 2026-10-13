@@ -1,0 +1,56 @@
+.scroll {
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+}
+.scroll:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.table {
+  width: 100%;
+  min-width: 32rem;
+  border-collapse: collapse;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--color-text);
+}
+
+.caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.table th {
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-weight: var(--weight-semibold);
+  text-align: start;
+  white-space: nowrap;
+}
+
+.table td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr:hover {
+  background: var(--color-surface);
+}
+
+.table .end {
+  text-align: end;
+}
