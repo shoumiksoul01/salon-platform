@@ -249,7 +249,7 @@ export default function ShopSetupPage() {
   }
 
   return (
-    <main className={styles.page}>
+    <div className={styles.page}>
       <h1 className={styles.title}>{t('shop.title')}</h1>
 
       {loadState === 'loading' && (
@@ -524,6 +524,6 @@ export default function ShopSetupPage() {
           </Modal>
         </>
       )}
-    </main>
+    </div>
   )
 }

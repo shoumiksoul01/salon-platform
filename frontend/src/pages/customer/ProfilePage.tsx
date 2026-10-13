@@ -91,7 +91,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <main className={styles.page}>
+    <div className={styles.page}>
       <h1 className={styles.title}>{t('profile.title')}</h1>
 
       <Card as="section">
@@ -167,6 +167,6 @@ export default function ProfilePage() {
           </form>
         )}
       </Card>
-    </main>
+    </div>
   )
 }
