@@ -1,0 +1,51 @@
+{
+  "title": "Find a salon or parlour",
+  "subtitle": "Search by shop or service name, then narrow it down with filters.",
+  "search": {
+    "label": "Search shops or services",
+    "placeholder": "e.g. haircut, bridal makeup, Dhanmondi",
+    "button": "Search"
+  },
+  "gender": {
+    "men": "Men",
+    "women": "Women",
+    "unisex": "Men and women"
+  },
+  "filters": {
+    "title": "Filters",
+    "show": "Show filters",
+    "hide": "Hide filters",
+    "clear": "Clear filters",
+    "gender": { "label": "For", "any": "Everyone" },
+    "rating": { "label": "Minimum rating", "any": "Any rating", "value": "{{rating}} stars and up" },
+    "distance": { "label": "Distance", "any": "Any distance", "value": "Within {{km}} km" },
+    "price": { "label": "Starting price", "any": "Any price", "value": "Up to ৳{{amount}}" },
+    "offers": "Has an offer",
+    "open": "Open now",
+    "sort": {
+      "label": "Sort by",
+      "distance": "Nearest first",
+      "rating": "Highest rated",
+      "price": "Lowest starting price"
+    }
+  },
+  "results": {
+    "heading": "Search results",
+    "count_one": "{{count}} shop found",
+    "count_other": "{{count}} shops found",
+    "emptyTitle": "No shops match",
+    "emptyDescription": "Try removing a filter or searching for something else.",
+    "errorTitle": "Could not load shops",
+    "errorDescription": "Check your connection and try again."
+  },
+  "card": {
+    "from": "From ৳{{amount}}",
+    "distance": "{{km}} km away",
+    "reviews_one": "{{count}} review",
+    "reviews_other": "{{count}} reviews",
+    "noReviews": "No reviews yet",
+    "ratingLabel": "Rated {{rating}} out of 5",
+    "openNow": "Open now",
+    "offer": "Offer"
+  }
+}
