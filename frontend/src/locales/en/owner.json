@@ -11,8 +11,8 @@
     "phone": "Shop phone number",
     "genderLabel": "Who is your shop for?",
     "gender": {
-      "gents": "Gents",
-      "ladies": "Ladies",
+      "men": "Men",
+      "women": "Women",
       "unisex": "Unisex (everyone)"
     },
     "hoursTitle": "Opening hours",

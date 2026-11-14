@@ -1,13 +1,16 @@
 import { mockShop } from '../mocks/shop'
+import type { GenderCategory, ShopStatus } from '../mocks/shops'
 
 // Mock or real data. Flip to false in the wire-up commit for FR-01.1.
 const USE_MOCK = true
 
-export type ApprovalStatus = 'draft' | 'pending' | 'approved' | 'rejected' | 'suspended'
-export type GenderCategory = 'gents' | 'ladies' | 'unisex'
+// Same values as the shared fixtures. 'draft' only exists in the shop setup page,
+// before the owner submits the shop for approval.
+export type ApprovalStatus = 'draft' | ShopStatus
+export type { GenderCategory }
 
 export interface WorkingHour {
-  weekday: number // 0 = Sunday ... 6 = Saturday
+  day_of_week: number // 0 = Sunday ... 6 = Saturday
   is_closed: boolean
   opens_at: string // 'HH:MM'
   closes_at: string // 'HH:MM'
@@ -32,7 +35,7 @@ export interface Shop {
   latitude: number | null
   longitude: number | null
   working_hours: WorkingHour[]
-  approval_status: ApprovalStatus
+  status: ApprovalStatus
   approval_reason: string | null
   documents: ShopDocument[]
 }
@@ -100,7 +103,7 @@ export async function deleteDocument(id: string): Promise<void> {
 export async function submitForApproval(): Promise<Shop> {
   if (USE_MOCK) {
     await delay(400)
-    current = { ...current, approval_status: 'pending', approval_reason: null }
+    current = { ...current, status: 'pending', approval_reason: null }
     return { ...current }
   }
   throw new Error('The real shop API is not wired yet')

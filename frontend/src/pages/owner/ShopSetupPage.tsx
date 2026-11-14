@@ -27,7 +27,7 @@ interface FormErrors {
 }
 
 const PHONE_PATTERN = /^(?:\+?88)?01[3-9]\d{8}$/
-const GENDERS: GenderCategory[] = ['gents', 'ladies', 'unisex']
+const GENDERS: GenderCategory[] = ['men', 'women', 'unisex']
 const WEEK_ORDER = [6, 0, 1, 2, 3, 4, 5] // Saturday first
 const MAX_FILE_BYTES = 5 * 1024 * 1024
 const FILE_TYPES: string[] = ['application/pdf', 'image/jpeg', 'image/png']
@@ -82,7 +82,7 @@ export default function ShopSetupPage() {
             ? { lat: shop.latitude, lng: shop.longitude }
             : null,
         )
-        setStatus(shop.approval_status)
+        setStatus(shop.status)
         setReason(shop.approval_reason)
         setDocuments(shop.documents)
         setLoadState('ready')
@@ -115,7 +115,7 @@ export default function ShopSetupPage() {
 
   function updateHour(weekday: number, change: Partial<WorkingHour>) {
     setHours((previous) =>
-      previous.map((hour) => (hour.weekday === weekday ? { ...hour, ...change } : hour)),
+      previous.map((hour) => (hour.day_of_week === weekday ? { ...hour, ...change } : hour)),
     )
   }
 
@@ -166,7 +166,7 @@ export default function ShopSetupPage() {
       longitude: point ? point.lng : null,
       working_hours: hours,
     })
-    setStatus(saved.approval_status)
+    setStatus(saved.status)
     setReason(saved.approval_reason)
   }
 
@@ -199,7 +199,7 @@ export default function ShopSetupPage() {
     try {
       await persist()
       const submitted = await submitForApproval()
-      setStatus(submitted.approval_status)
+      setStatus(submitted.status)
       setReason(submitted.approval_reason)
       setConfirmOpen(false)
       toast.show({ message: t('shop.submitted'), variant: 'success' })
@@ -385,7 +385,7 @@ export default function ShopSetupPage() {
                 <h2 className={styles.sectionTitle}>{t('shop.hoursTitle')}</h2>
                 <p className={styles.hint}>{t('shop.hoursHint')}</p>
                 {WEEK_ORDER.map((weekday) => {
-                  const hour = hours.find((item) => item.weekday === weekday)
+                  const hour = hours.find((item) => item.day_of_week === weekday)
                   if (!hour) return null
                   const day = t(`shop.days.${weekday}`)
                   return (
