@@ -11,8 +11,8 @@
     "phone": "Shop phone number",
     "genderLabel": "Who is your shop for?",
     "gender": {
-      "men": "Men",
-      "women": "Women",
+      "gents": "Gents",
+      "ladies": "Ladies",
       "unisex": "Unisex (everyone)"
     },
     "hoursTitle": "Opening hours",
@@ -101,5 +101,16 @@
         "body": "Your shop is hidden from customers. Contact support."
       }
     }
+  },
+  "layout": {
+    "skipToContent": "Skip to main content",
+    "mainNav": "Owner navigation",
+    "quickNav": "Quick navigation",
+    "panelTitle": "Owner panel",
+    "shop": "Shop setup",
+    "profile": "Profile and language",
+    "more": "More",
+    "closeMore": "Close",
+    "viewSite": "View public site"
   }
 }
