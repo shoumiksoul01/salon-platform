@@ -1,6 +1,16 @@
+import { Navigate } from 'react-router-dom'
 import type { RouteObject } from 'react-router-dom'
+import CustomerLayout from '../layouts/CustomerLayout'
 import ProfilePage from '../pages/customer/ProfilePage'
 
-// Customer layout routes (CUS pages) are added here.
-// When the customer layout is added (UI-SM-02), these routes move inside it.
-export const customerRoutes: RouteObject[] = [{ path: '/me/profile', element: <ProfilePage /> }]
+// Customer pages (CUS) are added to the children array of the layout route.
+// /me has no bookings page yet (CUS-01), so it sends the customer to the profile page.
+export const customerRoutes: RouteObject[] = [
+  {
+    element: <CustomerLayout />,
+    children: [
+      { path: '/me', element: <Navigate to="/me/profile" replace /> },
+      { path: '/me/profile', element: <ProfilePage /> },
+    ],
+  },
+]

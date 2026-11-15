@@ -14,5 +14,15 @@
     "contactRequired": "Enter a phone number or an email.",
     "saved": "Profile saved.",
     "saveFailed": "Could not save your profile. Try again."
+  },
+  "layout": {
+    "skipToContent": "Skip to main content",
+    "mainNav": "Main navigation",
+    "quickNav": "Quick navigation",
+    "home": "Home",
+    "findShops": "Find shops",
+    "profile": "Profile and language",
+    "more": "More",
+    "closeMore": "Close"
   }
 }
