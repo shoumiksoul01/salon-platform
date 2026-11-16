@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Badge, Button, Card, EmptyState, Skeleton } from '../../components/ui'
 import { useAsync } from '../../hooks/useAsync'
 import { getShopDetails, type ShopOffer } from '../../api/shops'
+import ShopMedia from './ShopMedia'
 import styles from './ShopDetailsPage.module.css'
 
 const localeFor = (language: string) => (language.startsWith('bn') ? 'bn-BD' : 'en-GB')
@@ -145,6 +146,8 @@ function Details({ shopId }: { shopId: string }) {
         </p>
         <p className={styles.description}>{shop.description}</p>
       </header>
+
+      <ShopMedia shopId={shop.id} />
 
       <div className={styles.layout}>
         <div className={styles.column}>

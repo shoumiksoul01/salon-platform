@@ -1,0 +1,19 @@
+{
+  "title": "Photos and virtual tour",
+  "error": {
+    "message": "Could not load the photos."
+  },
+  "gallery": {
+    "label": "Shop photos",
+    "previous": "Previous photo",
+    "next": "Next photo",
+    "position": "Photo {{current}} of {{total}}",
+    "show": "Show photo {{number}}"
+  },
+  "tour": {
+    "title": "Virtual tour",
+    "description": "Look around the shop before you book.",
+    "open": "Open virtual tour",
+    "newTab": "(opens in a new tab)"
+  }
+}
