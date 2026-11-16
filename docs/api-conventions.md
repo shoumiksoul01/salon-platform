@@ -35,6 +35,7 @@ The server stores and returns UTC. The frontend shows times in Asia/Dhaka.
 | `role` | `customer`, `shop_owner`, `staff`, `admin` |
 | booking `status` | `pending`, `confirmed`, `arrived`, `in_service`, `completed`, `cancelled`, `no_show` |
 | payment `status` | `pending`, `paid`, `failed`, `refunded` |
+| payment `method` | `bkash`, `nagad`, `card`, `pay_at_shop` |
 
 ## Authentication
 
@@ -46,7 +47,7 @@ The server stores and returns UTC. The frontend shows times in Asia/Dhaka.
 
 - Query parameters: `limit` (default 20, maximum 100) and `offset` (default 0).
 - Sorting: `sort=field` for ascending, `sort=-field` for descending. Example: `sort=-created_at`.
-- Filters are plain query parameters. Example: `GET /shops?gender_category=ladies&open_now=true`.
+- Filters are plain query parameters. Example: `GET /shops?gender_category=women&open_now=true`.
 - Every list response has this shape:
 
 ```json
