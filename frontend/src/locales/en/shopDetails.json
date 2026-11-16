@@ -1,0 +1,47 @@
+{
+  "back": "Back to shops",
+  "notFound": {
+    "title": "Shop not found",
+    "description": "This shop does not exist or is not open for bookings yet.",
+    "action": "Browse shops"
+  },
+  "error": {
+    "title": "Could not load this shop",
+    "description": "Check your connection and try again."
+  },
+  "info": {
+    "address": "Address",
+    "phone": "Phone",
+    "payments": "Payment options",
+    "approval": "Bookings need the shop's approval"
+  },
+  "payment": {
+    "deposit": "Deposit online",
+    "full": "Pay in full online",
+    "pay_at_shop": "Pay at the shop"
+  },
+  "hours": {
+    "title": "Opening hours",
+    "closed": "Closed"
+  },
+  "services": {
+    "title": "Services",
+    "empty": "This shop has not listed any services yet.",
+    "duration": "{{minutes}} min",
+    "price": "৳{{amount}}",
+    "offer": "Offer"
+  },
+  "offers": {
+    "title": "Offers",
+    "until": "Until {{date}}",
+    "percentage": "{{percent}}% off",
+    "fixed": "৳{{amount}} off",
+    "combo": "Combo, save ৳{{amount}}",
+    "appliesTo": "Applies to: {{services}}"
+  },
+  "reviews": {
+    "title": "Reviews ({{count}})",
+    "empty": "No reviews yet.",
+    "reply": "Reply from the shop"
+  }
+}

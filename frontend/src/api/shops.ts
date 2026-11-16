@@ -1,10 +1,15 @@
 import {
+  offerServices,
   offers,
+  reviews,
   services,
   shopWorkingHours,
   shops,
   type Offer,
+  type Review,
+  type Service,
   type Shop,
+  type ShopWorkingHours,
 } from '../mocks/shops'
 import { getMockMode, mockDelay } from './mock'
 
@@ -42,6 +47,20 @@ export interface ShopResult extends NearbyShop {
   from_price_poisha: number | null
   has_offer: boolean
   is_open_now: boolean
+}
+
+// An offer with the ids of the services it applies to.
+export interface ShopOffer extends Offer {
+  service_ids: string[]
+}
+
+// Everything the shop details page (PUB-04) needs, in one call.
+export interface ShopDetails {
+  shop: Shop
+  working_hours: ShopWorkingHours[]
+  services: Service[]
+  offers: ShopOffer[]
+  reviews: Review[]
 }
 
 async function getJson<T>(path: string): Promise<T> {
@@ -226,5 +245,43 @@ export async function searchShops(filters: ShopFilters): Promise<ShopResult[]> {
       results.push(result)
     }
     return sortResults(results, filters.sort)
+  })
+}
+
+// Returns null when the shop does not exist or is not approved (the page shows "not found").
+export async function getShopDetails(shopId: string): Promise<ShopDetails | null> {
+  if (!USE_MOCK) {
+    const response = await fetch(`/api/v1/shops/${shopId}`)
+    if (response.status === 404) return null
+    if (!response.ok) throw new Error(`Request failed: ${response.status}`)
+    return (await response.json()) as ShopDetails
+  }
+
+  return mockDelay<ShopDetails | null>(() => {
+    const mode = getMockMode()
+    if (mode === 'error') throw new Error('Mock error')
+    if (mode === 'empty') return null
+
+    const shop = shops.find((item) => item.id === shopId && item.status === 'approved')
+    if (!shop) return null
+
+    return {
+      shop,
+      working_hours: shopWorkingHours
+        .filter((row) => row.shop_id === shop.id)
+        .sort((a, b) => a.day_of_week - b.day_of_week),
+      services: services.filter((service) => service.shop_id === shop.id && service.is_active),
+      offers: offers
+        .filter((offer) => offer.shop_id === shop.id && offer.is_active)
+        .map((offer) => ({
+          ...offer,
+          service_ids: offerServices
+            .filter((link) => link.offer_id === offer.id)
+            .map((link) => link.service_id),
+        })),
+      reviews: reviews
+        .filter((review) => review.shop_id === shop.id)
+        .sort((a, b) => b.created_at.localeCompare(a.created_at)),
+    }
   })
 }

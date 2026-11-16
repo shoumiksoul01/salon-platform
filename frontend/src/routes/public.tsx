@@ -2,6 +2,7 @@ import type { RouteObject } from 'react-router-dom'
 import PublicLayout from '../layouts/PublicLayout'
 import HomePage from '../pages/public/HomePage'
 import ShopsPage from '../pages/public/ShopsPage'
+import ShopDetailsPage from '../pages/public/ShopDetailsPage'
 import KitPreview from '../pages/dev/KitPreview'
 
 // Public pages (PUB, AUTH, BOOK, SHR) are added to the children array of the layout route.
@@ -12,6 +13,7 @@ export const publicRoutes: RouteObject[] = [
     children: [
       { path: '/', element: <HomePage /> },
       { path: '/shops', element: <ShopsPage /> },
+      { path: '/shops/:shopId', element: <ShopDetailsPage /> },
       ...(import.meta.env.DEV ? [{ path: '/dev/kit', element: <KitPreview /> }] : []),
     ],
   },
