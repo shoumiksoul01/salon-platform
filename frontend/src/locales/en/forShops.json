@@ -1,0 +1,69 @@
+{
+  "hero": {
+    "title": "Bring your salon or parlour online",
+    "subtitle": "Show your services and prices, take bookings and run your queue from your phone.",
+    "cta": "Set up your shop",
+    "hint": "Your shop goes live once our team has approved it."
+  },
+  "benefits": {
+    "title": "Everything your shop needs",
+    "subtitle": "Tools for owners, managers and staff, built for how salons really work.",
+    "showcase": {
+      "title": "Show your best work",
+      "body": "Add services, prices, offers, photos and a virtual tour, so customers know what to expect."
+    },
+    "bookings": {
+      "title": "Take bookings around the clock",
+      "body": "Customers pick a service, a stylist and a free slot. No more back-and-forth phone calls."
+    },
+    "staff": {
+      "title": "Plan your team's day",
+      "body": "Set working hours, breaks and leave for each stylist, and block time when the shop is busy or closed."
+    },
+    "queue": {
+      "title": "Run one live queue",
+      "body": "Booked customers and walk-ins in the same list, with a waiting time your customers can see."
+    },
+    "noShows": {
+      "title": "Cut down on no-shows",
+      "body": "Customers confirm before they come, and slots nobody confirmed are released for someone else."
+    },
+    "payments": {
+      "title": "Get paid your way",
+      "body": "Customers can pay a deposit or the full amount by bKash, Nagad or card, or pay at the shop if you allow it."
+    }
+  },
+  "steps": {
+    "title": "How to get listed",
+    "subtitle": "Four steps from sign-up to your first booking.",
+    "profile": {
+      "title": "Create your shop profile",
+      "body": "Add your name, address, map location and opening hours."
+    },
+    "documents": {
+      "title": "Upload your documents",
+      "body": "Add your trade licence and a few photos of your shop."
+    },
+    "review": {
+      "title": "We check your shop",
+      "body": "Our team reviews your details and approves your shop, or tells you what to fix."
+    },
+    "live": {
+      "title": "Start taking bookings",
+      "body": "Once approved, customers can find your shop, see your slots and book."
+    }
+  },
+  "checklist": {
+    "title": "Have these ready",
+    "licence": "Your trade licence",
+    "address": "Your shop address and a pin on the map",
+    "hours": "Opening hours and breaks",
+    "photos": "A few photos of your shop and your work",
+    "services": "Your services, with prices and how long each takes"
+  },
+  "cta": {
+    "title": "Ready to get listed?",
+    "body": "Create your shop profile and send it for approval.",
+    "button": "Set up your shop"
+  }
+}

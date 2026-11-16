@@ -3,6 +3,7 @@ import PublicLayout from '../layouts/PublicLayout'
 import HomePage from '../pages/public/HomePage'
 import ShopsPage from '../pages/public/ShopsPage'
 import ShopDetailsPage from '../pages/public/ShopDetailsPage'
+import ForShopsPage from '../pages/public/ForShopsPage'
 import KitPreview from '../pages/dev/KitPreview'
 
 // Public pages (PUB, AUTH, BOOK, SHR) are added to the children array of the layout route.
@@ -14,6 +15,7 @@ export const publicRoutes: RouteObject[] = [
       { path: '/', element: <HomePage /> },
       { path: '/shops', element: <ShopsPage /> },
       { path: '/shops/:shopId', element: <ShopDetailsPage /> },
+      { path: '/for-shops', element: <ForShopsPage /> },
       ...(import.meta.env.DEV ? [{ path: '/dev/kit', element: <KitPreview /> }] : []),
     ],
   },
