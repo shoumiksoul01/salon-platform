@@ -14,12 +14,15 @@ import {
 } from '../../components/ui'
 import { useAsync } from '../../hooks/useAsync'
 import { searchShops, type ShopFilters, type ShopResult } from '../../api/shops'
+import ShopsMap from './ShopsMap'
 import styles from './ShopsPage.module.css'
 
 const GENDERS = ['men', 'women', 'unisex'] as const
 const RATINGS = [3, 4, 4.5]
 const DISTANCES = [2, 5, 10]
 const PRICES_TAKA = [500, 1000, 2000, 3000]
+
+type ResultsView = 'list' | 'map'
 
 const localeFor = (language: string) => (language.startsWith('bn') ? 'bn-BD' : 'en-GB')
 
@@ -157,9 +160,10 @@ function ShopResultCard({ shop }: { shop: ShopResult }) {
   )
 }
 
-// Remounted (through its key) whenever the address changes, so every new
-// search starts in the loading state.
-function Results({ filters }: { filters: ShopFilters }) {
+// Remounted (through its key) whenever a filter in the address changes, so every
+// new search starts in the loading state. Switching between list and map does
+// not remount it, so the results are kept.
+function Results({ filters, view }: { filters: ShopFilters; view: ResultsView }) {
   const { t } = useTranslation('shops')
   const load = useCallback(() => searchShops(filters), [filters])
   const { state, retry } = useAsync(load)
@@ -202,11 +206,15 @@ function Results({ filters }: { filters: ShopFilters }) {
       <p className={styles.count} aria-live="polite">
         {t('results.count', { count: state.data.length })}
       </p>
-      <ul className={styles.grid}>
-        {state.data.map((shop) => (
-          <ShopResultCard key={shop.id} shop={shop} />
-        ))}
-      </ul>
+      {view === 'map' ? (
+        <ShopsMap shops={state.data} />
+      ) : (
+        <ul className={styles.grid}>
+          {state.data.map((shop) => (
+            <ShopResultCard key={shop.id} shop={shop} />
+          ))}
+        </ul>
+      )}
     </>
   )
 }
@@ -216,8 +224,13 @@ export default function ShopsPage() {
   const [searchParams, setSearchParams] = useSearchParams()
   const [filtersOpen, setFiltersOpen] = useState(false)
 
-  const paramsKey = searchParams.toString()
-  const filters = useMemo(() => readFilters(new URLSearchParams(paramsKey)), [paramsKey])
+  const view: ResultsView = searchParams.get('view') === 'map' ? 'map' : 'list'
+
+  // The address without "view": changing only the view must not reload the results.
+  const filtersParams = new URLSearchParams(searchParams)
+  filtersParams.delete('view')
+  const filtersKey = filtersParams.toString()
+  const filters = useMemo(() => readFilters(new URLSearchParams(filtersKey)), [filtersKey])
 
   const locale = localeFor(i18n.language)
   const number = new Intl.NumberFormat(locale)
@@ -231,10 +244,11 @@ export default function ShopsPage() {
     setSearchParams(next, { replace: true })
   }
 
-  // Clears every filter but keeps the search text.
+  // Clears every filter but keeps the search text and the chosen view.
   function clearFilters() {
     const next = new URLSearchParams()
     if (filters.q) next.set('q', filters.q)
+    if (view === 'map') next.set('view', 'map')
     setSearchParams(next, { replace: true })
   }
 
@@ -373,7 +387,23 @@ export default function ShopsPage() {
           <h2 id="results-title" className={styles.visuallyHidden}>
             {t('results.heading')}
           </h2>
-          <Results key={paramsKey} filters={filters} />
+          <div className={styles.viewToggle} role="group" aria-label={t('view.label')}>
+            <Button
+              variant={view === 'list' ? 'primary' : 'secondary'}
+              aria-pressed={view === 'list'}
+              onClick={() => update({ view: null })}
+            >
+              {t('view.list')}
+            </Button>
+            <Button
+              variant={view === 'map' ? 'primary' : 'secondary'}
+              aria-pressed={view === 'map'}
+              onClick={() => update({ view: 'map' })}
+            >
+              {t('view.map')}
+            </Button>
+          </div>
+          <Results key={filtersKey} filters={filters} view={view} />
         </section>
       </div>
     </div>

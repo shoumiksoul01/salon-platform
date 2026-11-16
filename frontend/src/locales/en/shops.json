@@ -29,6 +29,14 @@
       "price": "Lowest starting price"
     }
   },
+  "view": {
+    "label": "Results view",
+    "list": "List",
+    "map": "Map"
+  },
+  "map": {
+    "label": "Map of shop results"
+  },
   "results": {
     "heading": "Search results",
     "count_one": "{{count}} shop found",
