@@ -5,7 +5,7 @@ import styles from './ForShopsPage.module.css'
 
 // Both buttons lead to the owner's shop setup page. Point them at '/register'
 // in UI-SK-17, once the Register page exists.
-const SETUP_PATH = '/owner/shop'
+const SETUP_PATH = '/register?role=owner'
 
 const BENEFITS = ['showcase', 'bookings', 'staff', 'queue', 'noShows', 'payments'] as const
 const STEPS = ['profile', 'documents', 'review', 'live'] as const
