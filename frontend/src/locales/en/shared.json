@@ -1,0 +1,72 @@
+{
+  "status": {
+    "booking": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "arrived": "Arrived",
+      "in_service": "In service",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "no_show": "No-show"
+    },
+    "queue": {
+      "waiting": "Waiting",
+      "in_service": "In service",
+      "completed": "Done",
+      "cancelled": "Left"
+    },
+    "payment": {
+      "pending": "Payment pending",
+      "paid": "Paid",
+      "failed": "Payment failed",
+      "refunded": "Refunded"
+    }
+  },
+  "queueCard": {
+    "positionLabel": "Position {{position}} in the queue",
+    "walkIn": "Walk-in",
+    "you": "You",
+    "staffWith": "With {{name}}",
+    "anyStaff": "First available staff",
+    "next": "Next",
+    "wait": "About {{minutes}} min wait",
+    "joinedAt": "Joined at {{time}}"
+  },
+  "schedule": {
+    "hoursTitle": "Weekly hours",
+    "hoursHint": "Set the working hours for each day. Tick Day off for days that are not worked.",
+    "days": {
+      "0": "Sunday",
+      "1": "Monday",
+      "2": "Tuesday",
+      "3": "Wednesday",
+      "4": "Thursday",
+      "5": "Friday",
+      "6": "Saturday"
+    },
+    "off": "Day off",
+    "opens": "Starts",
+    "closes": "Ends",
+    "hoursInvalid": "The start time must be before the end time.",
+    "breaksTitle": "Breaks",
+    "breaksHint": "Customers cannot book during a break.",
+    "noBreaks": "No breaks yet.",
+    "breakLabel": "Break name",
+    "breakDay": "Day",
+    "everyDay": "Every working day",
+    "from": "From",
+    "to": "To",
+    "addBreak": "Add break",
+    "removeBreak": "Remove break",
+    "breakInvalid": "The break must end after it starts.",
+    "defaultBreakLabel": "Break",
+    "timeOffTitle": "Blocked time",
+    "timeOffHint": "Block holidays or emergencies. No bookings can be made in this time.",
+    "noTimeOff": "No blocked time.",
+    "reason": "Reason",
+    "addTimeOff": "Add blocked time",
+    "removeTimeOff": "Remove blocked time",
+    "timeOffInvalid": "The end must be after the start.",
+    "defaultReason": "Day off"
+  }
+}
