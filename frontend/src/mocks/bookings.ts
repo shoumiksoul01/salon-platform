@@ -54,13 +54,14 @@ export interface StaffService {
   service_id: string
 }
 
-// day_of_week: 0 = Sunday ... 6 = Saturday. Times are local shop time, "HH:MM".
+// Same field names as ShopWorkingHours in ./shops, so one weekly-hours editor
+// works for both. day_of_week: 0 = Sunday ... 6 = Saturday, times "HH:MM".
 export interface StaffHours {
   staff_id: string
   day_of_week: number
-  starts_at: string
-  ends_at: string
-  is_off: boolean
+  opens_at: string
+  closes_at: string
+  is_closed: boolean
 }
 
 // day_of_week null = every working day.
@@ -249,7 +250,7 @@ export const staffMembers: Staff[] = [
 
 // [staff number, service numbers from ./shops]
 const staffServiceMap: [number, number[]][] = [
-  [1, [1, 4]],
+  [1, [1, 2, 4]],
   [2, [2, 4]],
   [3, [3, 1]],
   [4, [5, 6, 7, 8]],
@@ -260,8 +261,8 @@ const staffServiceMap: [number, number[]][] = [
   [9, [13, 14, 15]],
   [10, [17, 18, 19, 20]],
   [11, [17, 19, 20]],
-  [12, [21, 22, 24]],
-  [13, [23, 24]],
+  [12, [21, 22, 23, 24]],
+  [13, [22, 23, 24]],
 ]
 
 export const staffServices: StaffService[] = staffServiceMap.flatMap(
@@ -274,16 +275,16 @@ export const staffServices: StaffService[] = staffServiceMap.flatMap(
 
 const weekHours = (
   staff: number,
-  startsAt: string,
-  endsAt: string,
+  opensAt: string,
+  closesAt: string,
   offDays: number[],
 ): StaffHours[] =>
   [0, 1, 2, 3, 4, 5, 6].map((day) => ({
     staff_id: uid(STAFF, staff),
     day_of_week: day,
-    starts_at: startsAt,
-    ends_at: endsAt,
-    is_off: offDays.includes(day),
+    opens_at: opensAt,
+    closes_at: closesAt,
+    is_closed: offDays.includes(day),
   }))
 
 export const staffHours: StaffHours[] = [
