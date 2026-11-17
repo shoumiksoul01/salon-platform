@@ -54,8 +54,7 @@ export interface StaffService {
   service_id: string
 }
 
-// Same field names as ShopWorkingHours in ./shops, so one weekly-hours editor
-// works for both. day_of_week: 0 = Sunday ... 6 = Saturday, times "HH:MM".
+// day_of_week: 0 = Sunday ... 6 = Saturday. Times are local shop time, "HH:MM".
 export interface StaffHours {
   staff_id: string
   day_of_week: number
@@ -208,6 +207,17 @@ const atMs = (dayOffset: number, time: string): number => {
 }
 const at = (dayOffset: number, time: string): string =>
   new Date(atMs(dayOffset, time)).toISOString()
+
+// Most demo shops are closed on Fridays. For their bookings on other days,
+// atOpen() moves a Friday to the next open day (or the previous one for the past),
+// so no booking lands on a closed day. Do not use it for dayOffset 0 (today).
+const FRIDAY = 5
+const dayOfWeekOf = (dayOffset: number): number =>
+  new Date(startOfTodayMs + dayOffset * DAY_MS + DHAKA_OFFSET_MS).getUTCDay()
+const atOpen = (dayOffset: number, time: string): string => {
+  const shift = dayOfWeekOf(dayOffset) === FRIDAY ? (dayOffset < 0 ? -1 : 1) : 0
+  return at(dayOffset + shift, time)
+}
 const minutesAgo = (minutes: number): string =>
   new Date(Date.now() - minutes * 60 * 1000).toISOString()
 const plusMinutes = (iso: string, minutes: number): string =>
@@ -250,7 +260,7 @@ export const staffMembers: Staff[] = [
 
 // [staff number, service numbers from ./shops]
 const staffServiceMap: [number, number[]][] = [
-  [1, [1, 2, 4]],
+  [1, [1, 4]],
   [2, [2, 4]],
   [3, [3, 1]],
   [4, [5, 6, 7, 8]],
@@ -261,8 +271,8 @@ const staffServiceMap: [number, number[]][] = [
   [9, [13, 14, 15]],
   [10, [17, 18, 19, 20]],
   [11, [17, 19, 20]],
-  [12, [21, 22, 23, 24]],
-  [13, [22, 23, 24]],
+  [12, [21, 22, 24]],
+  [13, [23, 24]],
 ]
 
 export const staffServices: StaffService[] = staffServiceMap.flatMap(
@@ -277,19 +287,19 @@ const weekHours = (
   staff: number,
   opensAt: string,
   closesAt: string,
-  offDays: number[],
+  closedDays: number[],
 ): StaffHours[] =>
   [0, 1, 2, 3, 4, 5, 6].map((day) => ({
     staff_id: uid(STAFF, staff),
     day_of_week: day,
     opens_at: opensAt,
     closes_at: closesAt,
-    is_closed: offDays.includes(day),
+    is_closed: closedDays.includes(day),
   }))
 
 export const staffHours: StaffHours[] = [
   ...weekHours(1, '10:00', '20:00', [5]),
-  ...weekHours(2, '10:00', '20:00', [5, 4]),
+  ...weekHours(2, '10:00', '20:00', [5]),
   ...weekHours(3, '11:00', '19:00', [5]),
   ...weekHours(4, '10:00', '22:00', []),
   ...weekHours(5, '12:00', '22:00', [2]),
@@ -521,7 +531,7 @@ addBooking({
   customerName: DEMO_CUSTOMER_NAME,
   staff: 1,
   services: [1, 2],
-  startsAt: at(1, '15:00'),
+  startsAt: atOpen(1, '15:00'),
   status: 'confirmed',
   method: 'bkash',
   payment: 'paid',
@@ -535,7 +545,7 @@ addBooking({
   customerName: DEMO_CUSTOMER_NAME,
   staff: 7,
   services: [10],
-  startsAt: at(3, '12:00'),
+  startsAt: atOpen(3, '11:00'),
   status: 'pending', // Nilima Salon requires booking approval
   method: 'pay_at_shop',
   payment: 'pending',
@@ -549,7 +559,7 @@ addBooking({
   customerName: DEMO_CUSTOMER_NAME,
   staff: 3,
   services: [3],
-  startsAt: at(2, '11:00'),
+  startsAt: atOpen(2, '11:00'),
   status: 'confirmed',
   method: 'card',
   payment: 'paid',
@@ -565,7 +575,7 @@ addBooking({
   customerName: DEMO_CUSTOMER_NAME,
   staff: 12,
   services: [21],
-  startsAt: at(-7, '13:00'),
+  startsAt: atOpen(-7, '13:00'),
   status: 'completed', // no review yet, so the review button shows
   method: 'card',
   payment: 'paid',
@@ -594,7 +604,7 @@ addBooking({
   customerName: DEMO_CUSTOMER_NAME,
   staff: 2,
   services: [4],
-  startsAt: at(-14, '16:00'),
+  startsAt: atOpen(-14, '16:00'),
   status: 'no_show',
   method: 'pay_at_shop',
   payment: 'pending',
@@ -680,7 +690,7 @@ addBooking({
   customerName: 'Afrin Sultana',
   staff: 3,
   services: [3],
-  startsAt: at(0, '14:30'),
+  startsAt: at(0, '15:30'),
   status: 'confirmed',
   method: 'bkash',
   payment: 'paid',
@@ -722,7 +732,7 @@ addBooking({
   customerName: 'Priya Sen',
   staff: 1,
   services: [1],
-  startsAt: at(1, '10:00'),
+  startsAt: atOpen(1, '10:00'),
   status: 'confirmed',
   method: 'card',
   payment: 'paid',
@@ -735,7 +745,7 @@ addBooking({
   customerName: 'Samira Khan',
   staff: 2,
   services: [2, 4],
-  startsAt: at(1, '12:00'),
+  startsAt: atOpen(1, '11:00'),
   status: 'pending',
   method: 'pay_at_shop',
   payment: 'pending',
@@ -747,7 +757,7 @@ addBooking({
   customerName: 'Lubna Yasmin',
   staff: 3,
   services: [1],
-  startsAt: at(-1, '15:00'),
+  startsAt: atOpen(-1, '16:00'),
   status: 'no_show',
   method: 'pay_at_shop',
   payment: 'pending',
@@ -759,7 +769,7 @@ addBooking({
   customerName: 'Nabila Chowdhury',
   staff: 1,
   services: [2],
-  startsAt: at(-1, '11:00'),
+  startsAt: atOpen(-1, '11:00'),
   status: 'completed',
   method: 'bkash',
   payment: 'paid',
@@ -787,7 +797,7 @@ addBooking({
   customerName: 'Shilpi Das',
   staff: 6,
   services: [9],
-  startsAt: at(1, '11:00'),
+  startsAt: atOpen(1, '11:00'),
   status: 'pending',
   method: 'bkash',
   payment: 'paid',
