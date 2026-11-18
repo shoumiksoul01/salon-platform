@@ -23,6 +23,40 @@
     "findShops": "Find shops",
     "profile": "Profile and language",
     "more": "More",
-    "closeMore": "Close"
+    "closeMore": "Close",
+    "myBookings": "My bookings"
+  },
+  "bookings": {
+    "title": "My bookings",
+    "tabsLabel": "Booking lists",
+    "upcoming": "Upcoming",
+    "past": "Past",
+    "loading": "Loading your bookings",
+    "emptyUpcomingTitle": "No upcoming bookings",
+    "emptyUpcomingText": "Find a salon and book a time that suits you.",
+    "findShops": "Find shops",
+    "emptyPastTitle": "No past bookings yet",
+    "emptyPastText": "Your finished bookings will appear here.",
+    "staffWith": "With {{name}}",
+    "anyStaff": "Any available staff",
+    "money": "৳{{amount}}",
+    "total": "Total {{amount}}",
+    "paid": "Paid {{amount}}",
+    "method": {
+      "bkash": "bKash",
+      "nagad": "Nagad",
+      "card": "Card",
+      "pay_at_shop": "Pay at the shop"
+    },
+    "notes": {
+      "confirmRequest": "Please confirm that you are coming.",
+      "awaitingApproval": "The shop still has to approve your booking.",
+      "holdUntil": "Finish your payment before {{time}} or the slot will be released.",
+      "arrived": "You are checked in. Open the live queue to see your turn.",
+      "cancelledByYou": "You cancelled this booking.",
+      "cancelledByShop": "The shop cancelled this booking.",
+      "noShow": "You did not arrive for this booking.",
+      "refunded": "{{amount}} was refunded."
+    }
   }
 }
