@@ -1,8 +1,9 @@
-import { useState, type FormEvent } from 'react'
+import { useRef, useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { Badge, Button, Card, EmptyState, FormField, Input, Skeleton } from '../../components/ui'
+import { Badge, Button, Card, EmptyState, Input, Skeleton } from '../../components/ui'
 import { useAsync } from '../../hooks/useAsync'
+import { useReducedMotion } from '../../hooks/useReducedMotion'
 import {
   listFeaturedOffers,
   listNearbyShops,
@@ -10,6 +11,10 @@ import {
   type NearbyShop,
 } from '../../api/shops'
 import styles from './HomePage.module.css'
+
+// Files in frontend/public/hero/ (the video is added in its own commit).
+const HERO_VIDEO = '/hero/hero.mp4'
+const HERO_POSTER = '/hero/hero-poster.jpg'
 
 // Stable functions, so useAsync does not reload on every render.
 const loadNearby = () => listNearbyShops(6)
@@ -187,10 +192,16 @@ function OffersSection() {
   )
 }
 
-export default function HomePage() {
+function Hero() {
   const { t } = useTranslation('home')
   const navigate = useNavigate()
+  const reduceMotion = useReducedMotion()
+  const videoRef = useRef<HTMLVideoElement>(null)
   const [query, setQuery] = useState('')
+  const [playing, setPlaying] = useState(true)
+  const [videoFailed, setVideoFailed] = useState(false)
+
+  const showVideo = !reduceMotion && !videoFailed
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -198,33 +209,80 @@ export default function HomePage() {
     navigate(trimmed ? `/shops?q=${encodeURIComponent(trimmed)}` : '/shops')
   }
 
+  function togglePlayback() {
+    const video = videoRef.current
+    if (!video) return
+    if (video.paused) {
+      void video.play()
+    } else {
+      video.pause()
+    }
+  }
+
+  return (
+    <section className={styles.hero} aria-labelledby="home-title">
+      {showVideo && (
+        <video
+          ref={videoRef}
+          className={styles.video}
+          src={HERO_VIDEO}
+          poster={HERO_POSTER}
+          autoPlay
+          muted
+          loop
+          playsInline
+          aria-hidden="true"
+          tabIndex={-1}
+          onPlay={() => setPlaying(true)}
+          onPause={() => setPlaying(false)}
+          onError={() => setVideoFailed(true)}
+        />
+      )}
+      {reduceMotion && <img className={styles.video} src={HERO_POSTER} alt="" />}
+      <div className={styles.overlay} aria-hidden="true" />
+
+      <div className={styles.heroContent}>
+        <h1 id="home-title" className={styles.title}>
+          {t('hero.title')}
+        </h1>
+        <p className={styles.subtitle}>{t('hero.subtitle')}</p>
+        <form className={styles.search} role="search" onSubmit={handleSubmit}>
+          <div className={styles.searchField}>
+            <Input
+              type="search"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder={t('hero.searchPlaceholder')}
+              aria-label={t('hero.searchLabel')}
+            />
+          </div>
+          <Button type="submit">{t('hero.searchButton')}</Button>
+        </form>
+        <Link className={styles.browse} to="/shops">
+          {t('hero.browseAll')}
+        </Link>
+      </div>
+
+      {showVideo && (
+        <button
+          type="button"
+          className={styles.pause}
+          onClick={togglePlayback}
+          aria-label={playing ? t('heroVideo:pause') : t('heroVideo:play')}
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            {playing ? <path d="M6 4h4v16H6zM14 4h4v16h-4z" /> : <path d="M8 5v14l11-7z" />}
+          </svg>
+        </button>
+      )}
+    </section>
+  )
+}
+
+export default function HomePage() {
   return (
     <>
-      <section className={styles.hero} aria-labelledby="home-title">
-        <div className={styles.container}>
-          <h1 id="home-title" className={styles.title}>
-            {t('hero.title')}
-          </h1>
-          <p className={styles.subtitle}>{t('hero.subtitle')}</p>
-          <form className={styles.search} role="search" onSubmit={handleSubmit}>
-            <FormField label={t('hero.searchLabel')}>
-              {(control) => (
-                <Input
-                  {...control}
-                  type="search"
-                  value={query}
-                  onChange={(event) => setQuery(event.target.value)}
-                  placeholder={t('hero.searchPlaceholder')}
-                />
-              )}
-            </FormField>
-            <Button type="submit">{t('hero.searchButton')}</Button>
-          </form>
-          <Link className={styles.browse} to="/shops">
-            {t('hero.browseAll')}
-          </Link>
-        </div>
-      </section>
+      <Hero />
       <NearbySection />
       <OffersSection />
     </>

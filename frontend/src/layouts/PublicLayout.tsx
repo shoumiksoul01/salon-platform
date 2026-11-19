@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { KeyboardEvent } from 'react'
-import { Link, Outlet } from 'react-router-dom'
+import { Link, Outlet, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import LanguageSwitcher from '../components/LanguageSwitcher'
 import styles from './PublicLayout.module.css'
@@ -11,7 +11,18 @@ const CURRENT_YEAR = new Date().getFullYear()
 // The layout provides the page's <main>, so pages inside it must not render their own.
 export default function PublicLayout() {
   const { t } = useTranslation('public')
+  const { pathname } = useLocation()
   const [menuOpen, setMenuOpen] = useState(false)
+
+  // On the Home page the header sits on top of the hero video.
+  const overHero = pathname === '/'
+  const headerClass = [
+    styles.header,
+    overHero ? styles.headerOverHero : '',
+    overHero && menuOpen ? styles.headerOpen : '',
+  ]
+    .filter(Boolean)
+    .join(' ')
 
   function closeMenu() {
     setMenuOpen(false)
@@ -27,7 +38,7 @@ export default function PublicLayout() {
         {t('layout.skipToContent')}
       </a>
 
-      <header className={styles.header} onKeyDown={handleKeyDown}>
+      <header className={headerClass} onKeyDown={handleKeyDown}>
         <div className={styles.bar}>
           <Link to="/" className={styles.brand} onClick={closeMenu}>
             {t('common:appName')}
