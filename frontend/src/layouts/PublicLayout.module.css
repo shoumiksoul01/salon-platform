@@ -24,7 +24,7 @@
   outline-offset: 2px;
 }
 
-/* Header: dark bar, spaced capitals, gold outlined button */
+/* Header: dark bar, name on the left, actions on the right */
 .header {
   position: sticky;
   top: 0;
@@ -76,82 +76,66 @@
   color: var(--color-primary);
 }
 
-/* On phones the nav opens under the bar */
+/* On phones the actions open under the bar */
 .nav {
   display: none;
   flex-basis: 100%;
   flex-direction: column;
-  gap: var(--space-3);
   padding-bottom: var(--space-3);
 }
 .navOpen {
   display: flex;
 }
 
-.links {
-  display: flex;
-  flex-direction: column;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
 .actions {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: var(--space-3);
 }
 
 .authLinks {
   display: flex;
-  gap: var(--space-2);
-}
-.authLinks > * {
-  flex: 1;
+  align-items: center;
+  gap: var(--space-1);
 }
 
-.link,
-.outline,
-.cta {
+.authLink {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
   min-height: var(--tap-min);
-  padding: 0 var(--space-4);
-  border-radius: var(--radius-sm);
+  padding: 0 var(--space-2);
+  color: var(--color-text);
   font-size: var(--text-sm);
   font-weight: var(--weight-semibold);
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   text-decoration: none;
 }
-
-.link {
-  justify-content: flex-start;
-  color: var(--color-text);
-}
-.link:hover {
-  color: var(--color-primary);
-}
-.active {
+.authLink:hover {
   color: var(--color-primary);
 }
 
-/* Log in: plain text link */
-.outline {
-  border: 1px solid transparent;
-  background: transparent;
-  color: var(--color-text);
-}
-.outline:hover {
-  color: var(--color-primary);
+.slash {
+  color: var(--color-text-muted);
 }
 
-/* Register: gold outlined button that fills with gold on hover */
+/* List your business: gold outlined button that fills with gold on hover */
 .cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tap-min);
+  padding: 0 var(--space-4);
   border: 1px solid var(--color-primary);
+  border-radius: var(--radius-sm);
   background: transparent;
   color: var(--color-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  text-decoration: none;
 }
 .cta:hover {
   background: var(--color-primary);
@@ -160,8 +144,7 @@
 
 .brand:focus-visible,
 .menuButton:focus-visible,
-.link:focus-visible,
-.outline:focus-visible,
+.authLink:focus-visible,
 .cta:focus-visible,
 .footerLink:focus-visible {
   outline: 3px solid var(--color-focus);
@@ -246,7 +229,7 @@
   }
 }
 
-/* From 1024px the nav sits inline in the header, the links sit in the middle, and the menu button goes away */
+/* From 1024px the actions sit inline on the right of the header and the menu button goes away */
 @media (min-width: 1024px) {
   .menuButton {
     display: none;
@@ -257,22 +240,12 @@
     flex-basis: auto;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     padding-bottom: 0;
-  }
-  .links {
-    flex-direction: row;
-    gap: var(--space-2);
-    margin-inline: auto;
-  }
-  .link {
-    justify-content: center;
   }
   .actions {
     flex-direction: row;
     align-items: center;
-  }
-  .authLinks > * {
-    flex: none;
+    gap: var(--space-4);
   }
 }

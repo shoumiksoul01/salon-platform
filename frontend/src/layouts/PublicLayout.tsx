@@ -1,15 +1,11 @@
 import { useState } from 'react'
 import type { KeyboardEvent } from 'react'
-import { Link, NavLink, Outlet } from 'react-router-dom'
+import { Link, Outlet } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import LanguageSwitcher from '../components/LanguageSwitcher'
 import styles from './PublicLayout.module.css'
 
 const CURRENT_YEAR = new Date().getFullYear()
-
-function navLinkClass({ isActive }: { isActive: boolean }) {
-  return isActive ? `${styles.link} ${styles.active}` : styles.link
-}
 
 // Layout for the public pages: header, page content, footer.
 // The layout provides the page's <main>, so pages inside it must not render their own.
@@ -52,29 +48,22 @@ export default function PublicLayout() {
             aria-label={t('layout.mainNav')}
             className={menuOpen ? `${styles.nav} ${styles.navOpen}` : styles.nav}
           >
-            <ul className={styles.links}>
-              <li>
-                <NavLink to="/shops" className={navLinkClass} onClick={closeMenu}>
-                  {t('layout.findShops')}
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/for-shops" className={navLinkClass} onClick={closeMenu}>
-                  {t('layout.forShops')}
-                </NavLink>
-              </li>
-            </ul>
-
             <div className={styles.actions}>
               <LanguageSwitcher />
               <div className={styles.authLinks}>
-                <Link to="/login" className={styles.outline} onClick={closeMenu}>
+                <Link to="/login" className={styles.authLink} onClick={closeMenu}>
                   {t('layout.login')}
                 </Link>
-                <Link to="/register" className={styles.cta} onClick={closeMenu}>
-                  {t('layout.register')}
+                <span className={styles.slash} aria-hidden="true">
+                  /
+                </span>
+                <Link to="/register" className={styles.authLink} onClick={closeMenu}>
+                  {t('header:signUp')}
                 </Link>
               </div>
+              <Link to="/for-shops" className={styles.cta} onClick={closeMenu}>
+                {t('header:listBusiness')}
+              </Link>
             </div>
           </nav>
         </div>
@@ -93,6 +82,16 @@ export default function PublicLayout() {
             </div>
             <nav aria-label={t('layout.footerNav')}>
               <ul className={styles.footerLinks}>
+                <li>
+                  <Link to="/shops" className={styles.footerLink}>
+                    {t('layout.findShops')}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/for-shops" className={styles.footerLink}>
+                    {t('layout.forShops')}
+                  </Link>
+                </li>
                 <li>
                   <Link to="/about" className={styles.footerLink}>
                     {t('layout.about')}
