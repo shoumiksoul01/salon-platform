@@ -57,6 +57,67 @@
       "cancelledByShop": "The shop cancelled this booking.",
       "noShow": "You did not arrive for this booking.",
       "refunded": "{{amount}} was refunded."
+    },
+    "freeUntil": "You can change or cancel this booking for free until {{when}}.",
+    "tooLate": "It is too late to change this booking online. Please call the shop.",
+    "reviewed": "Thank you, you have reviewed this visit.",
+    "actions": {
+      "confirm": "Confirm I'm coming",
+      "reschedule": "Reschedule",
+      "cancel": "Cancel booking",
+      "review": "Write a review"
+    },
+    "dialogs": {
+      "failed": "Something went wrong. Please try again.",
+      "keep": "Keep booking",
+      "keepTime": "Keep current time",
+      "notYet": "Not yet",
+      "confirm": {
+        "title": "Confirm that you are coming",
+        "text": "{{shop}} is expecting you on {{when}}. Tap Yes if you are coming.",
+        "note": "If you do not confirm in time, the shop can give your time to another customer.",
+        "yes": "Yes, I'm coming",
+        "done": "Thank you. The shop knows you are coming."
+      },
+      "cancel": {
+        "title": "Cancel this booking?",
+        "refund": "You will get back {{amount}} to your {{method}} account.",
+        "nothingPaid": "You have not paid anything, so there is nothing to refund.",
+        "reasonLabel": "Reason (optional)",
+        "reasonPlaceholder": "Choose a reason",
+        "reasons": {
+          "plans": "My plans changed",
+          "time": "I found a better time",
+          "sick": "I am not well",
+          "other": "Other"
+        },
+        "confirm": "Cancel booking",
+        "done": "Your booking was cancelled.",
+        "doneRefund": "Your booking was cancelled. {{amount}} will be refunded."
+      },
+      "reschedule": {
+        "title": "Choose a new time",
+        "intro": "You keep the same services and the same staff member.",
+        "loading": "Looking for free times",
+        "noSlots": "There are no free times in the next 14 days. Please call the shop.",
+        "dayLabel": "Day",
+        "timesLabel": "Free times",
+        "newTime": "New time: {{when}}.",
+        "reconfirm": "You will be asked to confirm again before your visit.",
+        "confirm": "Move booking",
+        "done": "Your booking was moved to {{when}}.",
+        "slotTaken": "That time was just taken. Please choose another."
+      },
+      "review": {
+        "title": "Review your visit",
+        "ratingLabel": "Your rating",
+        "stars": "{{rating}} out of 5 stars",
+        "ratingRequired": "Please choose a rating.",
+        "commentLabel": "Your comments (optional)",
+        "commentHint": "Tell other customers what you liked.",
+        "submit": "Send review",
+        "done": "Thank you for your review."
+      }
     }
   }
 }
