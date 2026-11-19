@@ -24,7 +24,7 @@
   outline-offset: 2px;
 }
 
-/* Header */
+/* Header: dark bar, spaced capitals, gold outlined button */
 .header {
   position: sticky;
   top: 0;
@@ -49,8 +49,10 @@
   align-items: center;
   min-height: var(--tap-min);
   color: var(--color-primary);
-  font-size: var(--text-lg);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
   font-weight: var(--weight-bold);
+  letter-spacing: 0.04em;
   text-decoration: none;
 }
 
@@ -60,12 +62,18 @@
   padding: 0 var(--space-4);
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-sm);
-  background: var(--color-bg);
+  background: transparent;
   color: var(--color-text);
   font-family: inherit;
-  font-size: var(--text-base);
+  font-size: var(--text-sm);
   font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
   cursor: pointer;
+}
+.menuButton:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 /* On phones the nav opens under the bar */
@@ -111,7 +119,10 @@
   min-height: var(--tap-min);
   padding: 0 var(--space-4);
   border-radius: var(--radius-sm);
-  font-weight: var(--weight-medium);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
   text-decoration: none;
 }
 
@@ -120,28 +131,31 @@
   color: var(--color-text);
 }
 .link:hover {
-  background: var(--color-surface-alt);
+  color: var(--color-primary);
 }
 .active {
   color: var(--color-primary);
-  font-weight: var(--weight-semibold);
 }
 
+/* Log in: plain text link */
 .outline {
-  border: 1px solid var(--color-border-strong);
-  background: var(--color-bg);
+  border: 1px solid transparent;
+  background: transparent;
   color: var(--color-text);
 }
 .outline:hover {
-  background: var(--color-surface-alt);
+  color: var(--color-primary);
 }
 
+/* Register: gold outlined button that fills with gold on hover */
 .cta {
-  background: var(--color-primary);
-  color: var(--color-on-primary);
+  border: 1px solid var(--color-primary);
+  background: transparent;
+  color: var(--color-primary);
 }
 .cta:hover {
-  background: var(--color-primary-hover);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
 }
 
 .brand:focus-visible,
@@ -187,8 +201,9 @@
 
 .footerBrand {
   margin: 0;
-  color: var(--color-text);
-  font-size: var(--text-lg);
+  color: var(--color-primary);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
   font-weight: var(--weight-bold);
 }
 
@@ -214,7 +229,7 @@
   text-decoration: underline;
 }
 .footerLink:hover {
-  color: var(--color-text);
+  color: var(--color-primary);
 }
 
 .copyright {
@@ -231,7 +246,7 @@
   }
 }
 
-/* From 1024px the nav sits inline in the header and the menu button goes away */
+/* From 1024px the nav sits inline in the header, the links sit in the middle, and the menu button goes away */
 @media (min-width: 1024px) {
   .menuButton {
     display: none;
@@ -247,7 +262,8 @@
   }
   .links {
     flex-direction: row;
-    gap: var(--space-1);
+    gap: var(--space-2);
+    margin-inline: auto;
   }
   .link {
     justify-content: center;

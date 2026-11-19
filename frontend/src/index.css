@@ -6,10 +6,6 @@
   box-sizing: border-box;
 }
 
-:root {
-  color-scheme: light;
-}
-
 html {
   -webkit-text-size-adjust: 100%;
 }
@@ -23,6 +19,18 @@ body {
   line-height: var(--leading-body);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+/* Headings use the serif display font. Pages set their own sizes. */
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+}
+
+::selection {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
 }
 
 img,

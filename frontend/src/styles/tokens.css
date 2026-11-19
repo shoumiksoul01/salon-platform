@@ -1,38 +1,43 @@
 /* Design tokens: the single source of truth for the look of the site.
    Components use these variables, never raw hex values.
+   Theme: dark and gold (black surfaces, gold accent, warm white text). This is the only theme.
    Breakpoints (CSS variables cannot be used in media queries, so they are
    listed here and used as plain numbers): sm 640px, md 768px, lg 1024px, xl 1280px.
    Design mobile first at 360px, then add min-width media queries. */
 
 :root {
-  /* Colour: brand */
-  --color-primary: #be185d;
-  --color-primary-hover: #9d174d;
-  --color-primary-soft: #fdf2f8;
-  --color-on-primary: #ffffff;
+  color-scheme: dark;
+
+  /* Colour: brand (gold) */
+  --color-primary: #c9a84c;
+  --color-primary-hover: #dcc06e;
+  --color-primary-soft: #242017;
+  --color-on-primary: #0a0a0a; /* dark text on gold, about 8.5:1 */
 
   /* Colour: surfaces and text */
-  --color-bg: #ffffff;
-  --color-surface: #fafaf9;
-  --color-surface-alt: #f5f5f4;
-  --color-text: #1c1917;
-  --color-text-muted: #57534e;
-  --color-border: #e7e5e4;
-  --color-border-strong: #78716c; /* input and control borders, 3:1+ on white */
-  --color-focus: #1d4ed8;
+  --color-bg: #0a0a0a;
+  --color-surface: #111111;
+  --color-surface-alt: #1a1813;
+  --color-text: #f5f1e8;
+  --color-text-muted: #a8a396; /* about 7:1 on the page background */
+  --color-border: #2a261d;
+  --color-border-strong: #766e5a; /* input and control borders, 3:1+ on the dark background */
+  --color-focus: #f2d675;
 
   /* Colour: status (text colour on its soft background) */
-  --color-success: #15803d;
-  --color-success-soft: #f0fdf4;
-  --color-warning: #92400e;
-  --color-warning-soft: #fffbeb;
-  --color-danger: #b91c1c;
-  --color-danger-soft: #fef2f2;
-  --color-info: #1d4ed8;
-  --color-info-soft: #eff6ff;
+  --color-success: #4ade80;
+  --color-success-soft: #0f2a1a;
+  --color-warning: #fbbf24;
+  --color-warning-soft: #2a2008;
+  --color-danger: #f87171;
+  --color-danger-soft: #2d1212;
+  --color-info: #7dd3fc;
+  --color-info-soft: #0f2230;
 
   /* Typography */
   --font-sans: "Inter", "Noto Sans Bengali", "Nirmala UI", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Playfair Display", "Noto Serif Bengali", Georgia, "Times New Roman", serif;
+  --tracking-wide: 0.12em; /* spaced capitals in the navbar and buttons; switched off for Bengali */
   --text-xs: 0.75rem; /* 12px, labels and badges only */
   --text-sm: 0.875rem; /* 14px */
   --text-base: 1rem; /* 16px, body */
@@ -61,13 +66,13 @@
   --space-16: 4rem;
 
   /* Shape and elevation */
-  --radius-sm: 0.5rem;
-  --radius-md: 0.75rem;
-  --radius-lg: 1rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
   --radius-full: 9999px;
-  --shadow-sm: 0 1px 2px rgb(28 25 23 / 0.08);
-  --shadow-md: 0 4px 12px rgb(28 25 23 / 0.1);
-  --shadow-lg: 0 12px 32px rgb(28 25 23 / 0.14);
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 12px rgb(0 0 0 / 0.55);
+  --shadow-lg: 0 12px 32px rgb(0 0 0 / 0.65);
 
   /* Layout */
   --tap-min: 44px; /* minimum touch target, width and height */
@@ -85,9 +90,10 @@
   --ease-out: cubic-bezier(0.2, 0, 0, 1);
 }
 
-/* Bengali script needs more line height than Latin */
+/* Bengali script needs more line height than Latin, and no letter spacing (it breaks joined letters) */
 :root:lang(bn) {
   --leading-body: 1.7;
+  --tracking-wide: 0em;
 }
 
 /* Respect the user's reduced-motion setting */
