@@ -1,9 +1,10 @@
 import { getMockMode, mockDelay } from './mock'
 
-// Mock or real data. Flip to false in the wire-up commit for registration.
+// Mock or real data. Flip to false in the wire-up commit for registration and login.
 const USE_MOCK = true
 
 export type RegisterRole = 'customer' | 'owner'
+export type UserRole = 'customer' | 'owner' | 'staff'
 
 export interface RegisterInput {
   full_name: string
@@ -18,7 +19,17 @@ export interface RegisterResult {
   otp_sent: boolean
 }
 
-export type AuthErrorCode = 'phone_taken' | 'wrong_code' | 'failed'
+export interface LoginResult {
+  full_name: string
+  role: UserRole
+}
+
+export type AuthErrorCode =
+  | 'phone_taken'
+  | 'wrong_code'
+  | 'invalid_credentials'
+  | 'not_verified'
+  | 'failed'
 
 export class AuthError extends Error {
   code: AuthErrorCode
@@ -33,6 +44,15 @@ export class AuthError extends Error {
 const TAKEN_PHONE = '01700000000'
 // In the mock, this is the only correct OTP code.
 const MOCK_OTP = '123456'
+// Mock accounts for the login page. They all use the same password.
+const DEMO_PASSWORD = 'password123'
+const DEMO_ACCOUNTS: Record<string, LoginResult | undefined> = {
+  '01712345678': { full_name: 'Demo Customer', role: 'customer' },
+  '01812345678': { full_name: 'Demo Owner', role: 'owner' },
+  '01612345678': { full_name: 'Demo Staff', role: 'staff' },
+}
+// In the mock, this account exists but its phone number is not verified yet.
+const UNVERIFIED_PHONE = '01900000000'
 
 function normalisePhone(phone: string): string {
   return phone.replace(/^\+?88/, '')
@@ -72,4 +92,20 @@ export async function resendOtp(phone: string): Promise<RegisterResult> {
     })
   }
   throw new Error('The real OTP API is not wired yet')
+}
+
+// AUTH-03: log in with a phone number and a password.
+// The password is sent to the server only, and is never stored in the browser.
+export async function loginAccount(phone: string, password: string): Promise<LoginResult> {
+  if (USE_MOCK) {
+    return mockDelay(() => {
+      if (getMockMode() === 'error') throw new AuthError('failed')
+      const number = normalisePhone(phone)
+      if (number === UNVERIFIED_PHONE) throw new AuthError('not_verified')
+      const account = DEMO_ACCOUNTS[number]
+      if (!account || password !== DEMO_PASSWORD) throw new AuthError('invalid_credentials')
+      return account
+    })
+  }
+  throw new Error('The real login API is not wired yet')
 }
