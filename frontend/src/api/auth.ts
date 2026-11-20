@@ -18,7 +18,7 @@ export interface RegisterResult {
   otp_sent: boolean
 }
 
-export type AuthErrorCode = 'phone_taken' | 'failed'
+export type AuthErrorCode = 'phone_taken' | 'wrong_code' | 'failed'
 
 export class AuthError extends Error {
   code: AuthErrorCode
@@ -31,6 +31,8 @@ export class AuthError extends Error {
 
 // In the mock, this number is always "already registered", so the error state can be checked by hand.
 const TAKEN_PHONE = '01700000000'
+// In the mock, this is the only correct OTP code.
+const MOCK_OTP = '123456'
 
 function normalisePhone(phone: string): string {
   return phone.replace(/^\+?88/, '')
@@ -47,4 +49,27 @@ export async function registerAccount(input: RegisterInput): Promise<RegisterRes
     })
   }
   throw new Error('The real register API is not wired yet')
+}
+
+// AUTH-02: check the 6-digit code that was sent to the phone.
+export async function verifyOtp(phone: string, code: string): Promise<{ verified: boolean }> {
+  if (USE_MOCK) {
+    return mockDelay(() => {
+      if (getMockMode() === 'error') throw new AuthError('failed')
+      if (code !== MOCK_OTP) throw new AuthError('wrong_code')
+      return { verified: true }
+    })
+  }
+  throw new Error(`The real OTP API is not wired yet (${phone})`)
+}
+
+// AUTH-02: send a new code to the same phone.
+export async function resendOtp(phone: string): Promise<RegisterResult> {
+  if (USE_MOCK) {
+    return mockDelay(() => {
+      if (getMockMode() === 'error') throw new AuthError('failed')
+      return { phone: normalisePhone(phone), otp_sent: true }
+    })
+  }
+  throw new Error('The real OTP API is not wired yet')
 }

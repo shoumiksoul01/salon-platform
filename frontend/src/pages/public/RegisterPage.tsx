@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { SyntheticEvent } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Button, Card, Checkbox, FormField, Input, Select, useToast } from '../../components/ui'
 import { AuthError, registerAccount } from '../../api/auth'
@@ -25,6 +25,7 @@ const ROLES: RegisterRole[] = ['customer', 'owner']
 export default function RegisterPage() {
   const { t } = useTranslation('auth')
   const toast = useToast()
+  const navigate = useNavigate()
   const [params] = useSearchParams()
 
   const [fullName, setFullName] = useState('')
@@ -66,9 +67,7 @@ export default function RegisterPage() {
         role,
       })
       toast.show({ message: t('register.success', { phone: result.phone }), variant: 'success' })
-      setPassword('')
-      setConfirm('')
-      // UI-SK-18: go to the OTP page here, and pass the phone number along.
+      navigate('/verify', { state: { phone: result.phone } })
     } catch (error) {
       if (error instanceof AuthError && error.code === 'phone_taken') {
         setErrors({ phone: t('register.errors.phoneTaken') })
