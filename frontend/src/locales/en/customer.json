@@ -24,7 +24,8 @@
     "profile": "Profile and language",
     "more": "More",
     "closeMore": "Close",
-    "myBookings": "My bookings"
+    "myBookings": "My bookings",
+    "queue": "Live queue"
   },
   "bookings": {
     "title": "My bookings",
@@ -65,7 +66,8 @@
       "confirm": "Confirm I'm coming",
       "reschedule": "Reschedule",
       "cancel": "Cancel booking",
-      "review": "Write a review"
+      "review": "Write a review",
+      "queue": "View live queue"
     },
     "dialogs": {
       "failed": "Something went wrong. Please try again.",
@@ -119,5 +121,31 @@
         "done": "Thank you for your review."
       }
     }
+  },
+  "queue": {
+    "title": "Live queue",
+    "loading": "Loading the queue",
+    "notInQueueTitle": "You are not in a queue right now",
+    "notInQueueText": "When you arrive and the shop checks you in, your place in the line will show here.",
+    "myBookings": "My bookings",
+    "yourPlace": "Your place in the line",
+    "summary": "You are number {{position}} in the line. People ahead of you: {{ahead}}.",
+    "youAreNext": "You are next. Please stay close to the shop.",
+    "yourTurn": "It's your turn!",
+    "goTo": "Please go to {{name}}.",
+    "goToDesk": "Please go to the front desk.",
+    "ahead": "People ahead of you",
+    "beingServed": "Being served now",
+    "wait": "Estimated wait",
+    "about": "About {{minutes}} min",
+    "staffWith": "With {{name}}",
+    "updatedAt": "Updated at {{time}}",
+    "autoRefresh": "This page updates by itself every 10 seconds.",
+    "refresh": "Update now",
+    "refreshFailed": "Could not update. Showing the last update.",
+    "listTitle": "The line at {{shop}}",
+    "privacy": "Other customers' names and services are hidden.",
+    "someone": "Another customer",
+    "yourBooking": "Your booking"
   }
 }

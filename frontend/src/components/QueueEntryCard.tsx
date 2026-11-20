@@ -22,6 +22,8 @@ interface QueueEntryCardProps {
   isYou?: boolean
   /** Buttons for the owner and staff pages, for example start, finish and remove. */
   actions?: ReactNode
+  /** Hides the services and the staff member. The customer queue page uses it for other people. */
+  hideDetails?: boolean
 }
 
 export default function QueueEntryCard({
@@ -30,6 +32,7 @@ export default function QueueEntryCard({
   staffName,
   isYou = false,
   actions,
+  hideDetails = false,
 }: QueueEntryCardProps) {
   const { t, i18n } = useTranslation('shared')
 
@@ -56,10 +59,12 @@ export default function QueueEntryCard({
           {entry.is_walk_in && <Badge variant="neutral">{t('queueCard.walkIn')}</Badge>}
           {isYou && <Badge variant="primary">{t('queueCard.you')}</Badge>}
         </div>
-        <p className={styles.line}>{serviceNames.join(', ')}</p>
-        <p className={styles.line}>
-          {staffName ? t('queueCard.staffWith', { name: staffName }) : t('queueCard.anyStaff')}
-        </p>
+        {!hideDetails && serviceNames.length > 0 && <p className={styles.line}>{serviceNames.join(', ')}</p>}
+        {!hideDetails && (
+          <p className={styles.line}>
+            {staffName ? t('queueCard.staffWith', { name: staffName }) : t('queueCard.anyStaff')}
+          </p>
+        )}
         <p className={styles.line}>
           {waiting && entry.position === 1 && `${t('queueCard.next')} · `}
           {waiting && entry.estimated_wait_minutes !== null

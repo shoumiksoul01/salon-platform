@@ -19,9 +19,10 @@ interface NavItem {
 // When you build a new customer page (bookings, queue, notifications), add one line here
 // and one route in routes/customer.tsx.
 const NAV_ITEMS: NavItem[] = [
-  { to: '/', labelKey: 'layout.home', end: true, inBottomBar: true, phoneOnly: true },
+  { to: '/', labelKey: 'layout.home', end: true, phoneOnly: true },
   { to: '/shops', labelKey: 'layout.findShops', inBottomBar: true },
   { to: '/me/bookings', labelKey: 'layout.myBookings', inBottomBar: true },
+  { to: '/me/queue', labelKey: 'layout.queue', inBottomBar: true },
   { to: '/me/profile', labelKey: 'layout.profile', inBottomBar: true },
 ]
 

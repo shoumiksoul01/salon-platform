@@ -22,8 +22,9 @@ const byStart = (a: MyBooking, b: MyBooking) => Date.parse(a.starts_at) - Date.p
 
 // The server says what a customer can still do with each booking (can_* fields).
 const canReview = (booking: MyBooking) => booking.status === 'completed' && !booking.has_review
+const canViewQueue = (booking: MyBooking) => booking.status === 'arrived' || booking.status === 'in_service'
 const hasActions = (booking: MyBooking) =>
-  booking.can_confirm || booking.can_reschedule || booking.can_cancel || canReview(booking)
+  booking.can_confirm || booking.can_reschedule || booking.can_cancel || canReview(booking) || canViewQueue(booking)
 
 function Loading({ label }: { label: string }) {
   return (
@@ -41,8 +42,10 @@ function Loading({ label }: { label: string }) {
 
 function BookingActions({ booking, onOpen }: { booking: MyBooking; onOpen: (kind: DialogKind) => void }) {
   const { t } = useTranslation('customer')
+  const navigate = useNavigate()
   return (
     <>
+      {canViewQueue(booking) && <Button onClick={() => navigate('/me/queue')}>{t('bookings.actions.queue')}</Button>}
       {booking.can_confirm && <Button onClick={() => onOpen('confirm')}>{t('bookings.actions.confirm')}</Button>}
       {booking.can_reschedule && (
         <Button variant="secondary" onClick={() => onOpen('reschedule')}>
