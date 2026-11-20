@@ -53,6 +53,7 @@ const DEMO_ACCOUNTS: Record<string, LoginResult | undefined> = {
 }
 // In the mock, this account exists but its phone number is not verified yet.
 const UNVERIFIED_PHONE = '01900000000'
+const PASSWORD_MIN = 8
 
 function normalisePhone(phone: string): string {
   return phone.replace(/^\+?88/, '')
@@ -108,4 +109,34 @@ export async function loginAccount(phone: string, password: string): Promise<Log
     })
   }
   throw new Error('The real login API is not wired yet')
+}
+
+// AUTH-04, step 1: send a reset code to the phone.
+// The real API must answer the same way whether or not the number has an account.
+export async function requestPasswordReset(phone: string): Promise<RegisterResult> {
+  if (USE_MOCK) {
+    return mockDelay(() => {
+      if (getMockMode() === 'error') throw new AuthError('failed')
+      return { phone: normalisePhone(phone), otp_sent: true }
+    })
+  }
+  throw new Error('The real reset API is not wired yet')
+}
+
+// AUTH-04, step 2: check the code and set the new password.
+// The password is sent to the server only, and is never stored in the browser.
+export async function resetPassword(
+  phone: string,
+  code: string,
+  password: string,
+): Promise<{ reset: boolean }> {
+  if (USE_MOCK) {
+    return mockDelay(() => {
+      if (getMockMode() === 'error') throw new AuthError('failed')
+      if (code !== MOCK_OTP) throw new AuthError('wrong_code')
+      if (password.length < PASSWORD_MIN) throw new AuthError('failed')
+      return { reset: true }
+    })
+  }
+  throw new Error(`The real reset API is not wired yet (${phone})`)
 }
