@@ -145,6 +145,9 @@ function Details({ shopId }: { shopId: string }) {
           )}
         </p>
         <p className={styles.description}>{shop.description}</p>
+                <Link className={styles.bookButton} to={`/book/${shop.id}`}>
+          {t('book:startCta')}
+        </Link>
       </header>
 
       <ShopMedia shopId={shop.id} />

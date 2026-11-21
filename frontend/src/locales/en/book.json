@@ -1,0 +1,30 @@
+{
+  "title": "Choose services and staff",
+  "back": "Back to the shop",
+  "servicesTitle": "Choose your services",
+  "servicesHint": "Pick one or more services.",
+  "staffTitle": "Choose who serves you",
+  "staffHint": "Only staff who do all your chosen services are shown.",
+  "staffFirst": "Choose at least one service first.",
+  "anyStaff": "Anyone available",
+  "anyStaffHint": "We give you whoever is free at your time.",
+  "noStaff": "Nobody here does all of these services together. Remove one service to continue.",
+  "offerBadge": "Offer",
+  "duration": "{{minutes}} min",
+  "summaryTitle": "Your selection",
+  "selected": "Services selected",
+  "totalTime": "Total time",
+  "totalPrice": "Estimated total",
+  "priceNote": "Offer discounts are added on the review step.",
+  "continue": "Choose a time",
+  "startCta": "Book now",
+  "loadError": "Could not load this shop. Please try again.",
+  "errors": {
+    "noService": "Choose at least one service."
+  },
+  "notFound": {
+    "title": "Shop not found",
+    "body": "This shop does not exist, or it is not taking bookings yet.",
+    "action": "Back to all shops"
+  }
+}
