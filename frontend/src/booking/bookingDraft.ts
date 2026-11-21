@@ -1,10 +1,12 @@
 // The booking in progress, kept in this browser tab only (it is gone when the tab closes).
-// It holds ids, never personal data. Reading and writing can fail (private windows), so every call is wrapped.
+// It holds ids and times, never personal data. Reading and writing can fail (private windows), so every call is wrapped.
 
 export interface BookingDraft {
   shop_id: string
   service_ids: string[]
-  staff_id: string | null // null = any available staff
+  staff_id: string | null // the choice from BOOK-01; null = any available staff
+  starts_at?: string // the chosen start time (ISO UTC), set by BOOK-02
+  assigned_staff_id?: string | null // who will actually serve the booking, set by BOOK-02
 }
 
 const KEY = 'salon.bookingDraft'

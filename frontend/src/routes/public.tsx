@@ -7,6 +7,7 @@ import ForShopsPage from '../pages/public/ForShopsPage'
 import RegisterPage from '../pages/public/RegisterPage'
 import OtpPage from '../pages/public/OtpPage'
 import BookServicesPage from '../pages/public/BookServicesPage'
+import BookSlotPage from '../pages/public/BookSlotPage'
 import KitPreview from '../pages/dev/KitPreview'
 import LoginPage from '../pages/public/LoginPage'
 import ResetPasswordPage from '../pages/public/ResetPasswordPage'
@@ -24,6 +25,7 @@ export const publicRoutes: RouteObject[] = [
       { path: '/register', element: <RegisterPage /> },
             { path: '/verify', element: <OtpPage /> },
                   { path: '/book/:shopId', element: <BookServicesPage /> },
+                        { path: '/book/:shopId/slot', element: <BookSlotPage /> },
                   { path: '/login', element: <LoginPage /> },
                         { path: '/reset-password', element: <ResetPasswordPage /> },
       ...(import.meta.env.DEV ? [{ path: '/dev/kit', element: <KitPreview /> }] : []),

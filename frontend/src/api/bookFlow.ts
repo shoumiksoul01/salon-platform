@@ -1,10 +1,16 @@
 import { getShopDetails } from './shops'
 import type { ShopOffer } from './shops'
-import type { Service, Shop } from '../mocks/shops'
+import { freeSlotsForNewBooking } from './bookings'
+import { getMockMode, mockDelay } from './mock'
+import { services as allServices, shops as allShops, type Service, type Shop } from '../mocks/shops'
 import { staffMembers, staffServices } from '../mocks/bookings'
 
 // Mock or real data. Flip to false in the wire-up commit for the booking flow (FR-03).
 const USE_MOCK = true
+
+const DAY_MS = 24 * 60 * 60 * 1000
+const DHAKA_OFFSET_MS = 6 * 60 * 60 * 1000
+const BOOKING_DAYS = 14
 
 export interface BookableStaff {
   id: string
@@ -21,27 +27,105 @@ export interface BookingOptions {
   staff: BookableStaff[]
 }
 
+function staffForShop(shopId: string): BookableStaff[] {
+  return staffMembers
+    .filter((member) => member.shop_id === shopId && member.is_active)
+    .map((member) => ({
+      id: member.id,
+      full_name: member.full_name,
+      role_title: member.role_title,
+      service_ids: staffServices
+        .filter((link) => link.staff_id === member.id)
+        .map((link) => link.service_id),
+    }))
+}
+
 export async function getBookingOptions(shopId: string): Promise<BookingOptions | null> {
   const details = await getShopDetails(shopId)
   if (!details) return null
 
   if (USE_MOCK) {
-    const staff: BookableStaff[] = staffMembers
-      .filter((member) => member.shop_id === shopId && member.is_active)
-      .map((member) => ({
-        id: member.id,
-        full_name: member.full_name,
-        role_title: member.role_title,
-        service_ids: staffServices
-          .filter((link) => link.staff_id === member.id)
-          .map((link) => link.service_id),
-      }))
     return {
       shop: details.shop,
       services: details.services.filter((service) => service.is_active),
       offers: details.offers,
-      staff,
+      staff: staffForShop(shopId),
     }
   }
   throw new Error('The real booking options API is not wired yet')
+}
+
+// One free start time, with every staff member who is free then (BOOK-02).
+export interface Slot {
+  starts_at: string // ISO UTC
+  staff_ids: string[]
+}
+
+export interface SlotDay {
+  date: string // YYYY-MM-DD in Dhaka
+  slots: Slot[] // empty when the day is closed or full
+}
+
+export interface SlotOptions {
+  shop_name: string
+  services: Pick<Service, 'id' | 'name' | 'price_poisha' | 'duration_minutes'>[]
+  total_minutes: number
+  total_poisha: number
+  staff_name: string | null // set when one staff member was chosen in BOOK-01
+  days: SlotDay[]
+}
+
+// Free times for the next two weeks. staffId null = anyone who does all the chosen services.
+export async function getSlotOptions(
+  shopId: string,
+  serviceIds: string[],
+  staffId: string | null,
+): Promise<SlotOptions> {
+  if (!USE_MOCK) throw new Error('The real slots API is not wired yet')
+
+  return mockDelay(() => {
+    if (getMockMode() === 'error') throw new Error('mock error')
+
+    const chosen = allServices.filter(
+      (service) => service.shop_id === shopId && serviceIds.includes(service.id),
+    )
+    const totalMinutes = chosen.reduce((sum, service) => sum + service.duration_minutes, 0)
+    const totalPoisha = chosen.reduce((sum, service) => sum + service.price_poisha, 0)
+
+    const capable = staffForShop(shopId).filter((member) =>
+      serviceIds.every((id) => member.service_ids.includes(id)),
+    )
+    const candidates = staffId ? capable.filter((member) => member.id === staffId) : capable
+
+    const days: SlotDay[] = []
+    for (let i = 0; i < BOOKING_DAYS; i += 1) {
+      const date = new Date(Date.now() + DHAKA_OFFSET_MS + i * DAY_MS).toISOString().slice(0, 10)
+      const byStart = new Map<string, string[]>()
+      if (getMockMode() !== 'empty' && chosen.length > 0) {
+        for (const member of candidates) {
+          for (const start of freeSlotsForNewBooking(shopId, member.id, totalMinutes, date)) {
+            byStart.set(start, [...(byStart.get(start) ?? []), member.id])
+          }
+        }
+      }
+      const slots = [...byStart.entries()]
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([starts_at, staff_ids]) => ({ starts_at, staff_ids }))
+      days.push({ date, slots })
+    }
+
+    return {
+      shop_name: allShops.find((shop) => shop.id === shopId)?.name ?? '',
+      services: chosen.map(({ id, name, price_poisha, duration_minutes }) => ({
+        id,
+        name,
+        price_poisha,
+        duration_minutes,
+      })),
+      total_minutes: totalMinutes,
+      total_poisha: totalPoisha,
+      staff_name: candidates.length === 1 && staffId ? candidates[0].full_name : null,
+      days,
+    }
+  })
 }

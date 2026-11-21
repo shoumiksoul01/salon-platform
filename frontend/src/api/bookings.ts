@@ -280,3 +280,23 @@ export async function submitReview(id: string, rating: number, comment: string):
   }
   throw new Error('The real bookings API is not wired yet')
 }
+
+// Free start times for a NEW booking (BOOK-02): one staff member, one Dhaka day (YYYY-MM-DD)
+// and the total length of the chosen services. It uses the same rules as moving a booking.
+// Start times are ISO UTC. Added by Shoumik for the slot grid.
+export function freeSlotsForNewBooking(
+  shopId: string,
+  staffId: string,
+  durationMinutes: number,
+  date: string,
+): string[] {
+  if (!USE_MOCK) throw new Error('The real slots API is not wired yet')
+  const probe = {
+    id: '',
+    shop_id: shopId,
+    staff_id: staffId,
+    starts_at: '1970-01-01T00:00:00.000Z',
+    ends_at: new Date(durationMinutes * MINUTE_MS).toISOString(),
+  } as Booking
+  return slotsOn(probe, date)
+}

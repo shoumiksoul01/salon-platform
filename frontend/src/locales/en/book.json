@@ -26,5 +26,24 @@
     "title": "Shop not found",
     "body": "This shop does not exist, or it is not taking bookings yet.",
     "action": "Back to all shops"
+  },
+  "slot": {
+    "title": "Pick a day and time",
+    "back": "Back to services",
+    "dayTitle": "Choose a day",
+    "timeTitle": "Choose a start time",
+    "tzNote": "Times are in Bangladesh time.",
+    "noDay": "No free times on this day. Try another day.",
+    "noneAtAll": "There are no free times in the next 14 days for this choice. Try another staff member, or fewer services.",
+    "changeChoice": "Change services or staff",
+    "summaryTitle": "Your booking",
+    "staff": "Staff",
+    "when": "Time",
+    "notChosen": "Not chosen yet",
+    "continue": "Review booking",
+    "loadError": "Could not load the free times. Please try again.",
+    "errors": {
+      "noTime": "Choose a start time to continue."
+    }
   }
 }
