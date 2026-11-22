@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Button, Card } from '../../components/ui'
@@ -8,6 +8,20 @@ import { loadDraft, saveDraft } from '../../booking/bookingDraft'
 import styles from './BookSlotPage.module.css'
 
 type LoadState = 'loading' | 'error' | 'ready'
+type DayPart = 'morning' | 'afternoon' | 'evening'
+
+const DHAKA_OFFSET_MS = 6 * 60 * 60 * 1000
+const DAY_PARTS: DayPart[] = ['morning', 'afternoon', 'evening']
+const MORNING_ENDS_AT = 12 // hours in Bangladesh time
+const AFTERNOON_ENDS_AT = 17
+
+// Which part of the day a start time falls in, by the hour in Bangladesh time.
+function dayPartOf(startsAt: string): DayPart {
+  const hour = new Date(new Date(startsAt).getTime() + DHAKA_OFFSET_MS).getUTCHours()
+  if (hour < MORNING_ENDS_AT) return 'morning'
+  if (hour < AFTERNOON_ENDS_AT) return 'afternoon'
+  return 'evening'
+}
 
 // BOOK-02: pick a day and a start time (FR-03.2)
 export default function BookSlotPage() {
@@ -22,6 +36,7 @@ export default function BookSlotPage() {
   const [date, setDate] = useState('')
   const [slot, setSlot] = useState('')
   const [error, setError] = useState('')
+  const stripRef = useRef<HTMLUListElement>(null)
 
   useEffect(() => {
     if (!draft || draft.service_ids.length === 0) return
@@ -40,6 +55,14 @@ export default function BookSlotPage() {
       cancelled = true
     }
   }, [shopId, draft, reloadKey])
+
+  // Keep the chosen day visible when it changes (the "next free day" button can jump far along the strip).
+  useEffect(() => {
+    if (loadState !== 'ready') return
+    stripRef.current
+      ?.querySelector<HTMLElement>('[aria-pressed="true"]')
+      ?.scrollIntoView({ block: 'nearest', inline: 'nearest' })
+  }, [date, loadState])
 
   // Nothing chosen in BOOK-01 yet (or the tab was reopened): start from the services page.
   if (!draft || draft.service_ids.length === 0) {
@@ -69,9 +92,33 @@ export default function BookSlotPage() {
     maximumFractionDigits: 0,
   })
 
+  function dayLabel(value: string) {
+    return dayFormat.format(new Date(`${value}T12:00:00+06:00`))
+  }
+
+  function staffName(id: string | undefined) {
+    return data?.staff.find((member) => member.id === id)?.full_name ?? ''
+  }
+
+  const partLabel: Record<DayPart, string> = {
+    morning: t('slot.groups.morning'),
+    afternoon: t('slot.groups.afternoon'),
+    evening: t('slot.groups.evening'),
+  }
+
   const currentDay = data?.days.find((day) => day.date === date)
-  const chosenSlot = currentDay?.slots.find((item) => item.starts_at === slot)
+  const daySlots = currentDay?.slots ?? []
+  const chosenSlot = daySlots.find((item) => item.starts_at === slot)
   const hasAnyTime = data?.days.some((day) => day.slots.length > 0) ?? false
+  // "Anyone available": show who will serve the customer at each time.
+  const showStaff = data?.staff_name === null
+  const assignedName = showStaff && chosenSlot ? staffName(chosenSlot.staff_ids[0]) : ''
+  // ISO dates compare correctly as plain strings.
+  const nextFreeDate = data?.days.find((day) => day.date > date && day.slots.length > 0)?.date
+  const groups = DAY_PARTS.map((part) => ({
+    part,
+    slots: daySlots.filter((item) => dayPartOf(item.starts_at) === part),
+  })).filter((group) => group.slots.length > 0)
 
   function retry() {
     setLoadState('loading')
@@ -143,7 +190,7 @@ export default function BookSlotPage() {
           <div className={styles.column}>
             <Card as="section">
               <h2 className={styles.sectionTitle}>{t('slot.dayTitle')}</h2>
-              <ul className={styles.strip}>
+              <ul className={styles.strip} ref={stripRef}>
                 {data.days.map((day) => {
                   const empty = day.slots.length === 0
                   const on = day.date === date
@@ -156,38 +203,55 @@ export default function BookSlotPage() {
                         disabled={empty}
                         onClick={() => pickDay(day.date)}
                       >
-                        {dayFormat.format(new Date(`${day.date}T12:00:00+06:00`))}
+                        {dayLabel(day.date)}
                       </button>
                     </li>
                   )
                 })}
               </ul>
+              {nextFreeDate && (
+                <div className={styles.shortcut}>
+                  <Button variant="secondary" onClick={() => pickDay(nextFreeDate)}>
+                    {t('slot.nextFree', { day: dayLabel(nextFreeDate) })}
+                  </Button>
+                </div>
+              )}
             </Card>
 
             <Card as="section">
               <h2 className={styles.sectionTitle}>{t('slot.timeTitle')}</h2>
-              <p className={styles.hint}>{t('slot.tzNote')}</p>
-              {currentDay && currentDay.slots.length > 0 ? (
-                <ul className={styles.slots}>
-                  {currentDay.slots.map((item) => {
-                    const on = item.starts_at === slot
-                    return (
-                      <li key={item.starts_at}>
-                        <button
-                          type="button"
-                          className={on ? `${styles.slot} ${styles.slotOn}` : styles.slot}
-                          aria-pressed={on}
-                          onClick={() => {
-                            setSlot(item.starts_at)
-                            setError('')
-                          }}
-                        >
-                          {timeFormat.format(new Date(item.starts_at))}
-                        </button>
-                      </li>
-                    )
-                  })}
-                </ul>
+              <p className={styles.hint}>
+                {t('slot.tzNote')}
+                {showStaff ? ` ${t('slot.staffHint')}` : ''}
+              </p>
+              {groups.length > 0 ? (
+                groups.map((group) => (
+                  <div key={group.part} className={styles.group}>
+                    <h3 className={styles.groupTitle}>{partLabel[group.part]}</h3>
+                    <ul className={styles.slots}>
+                      {group.slots.map((item) => {
+                        const on = item.starts_at === slot
+                        const name = showStaff ? staffName(item.staff_ids[0]) : ''
+                        return (
+                          <li key={item.starts_at}>
+                            <button
+                              type="button"
+                              className={on ? `${styles.slot} ${styles.slotOn}` : styles.slot}
+                              aria-pressed={on}
+                              onClick={() => {
+                                setSlot(item.starts_at)
+                                setError('')
+                              }}
+                            >
+                              <span>{timeFormat.format(new Date(item.starts_at))}</span>
+                              {name && <span className={styles.slotStaff}>{name}</span>}
+                            </button>
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  </div>
+                ))
               ) : (
                 <p className={styles.text}>{t('slot.noDay')}</p>
               )}
@@ -213,7 +277,7 @@ export default function BookSlotPage() {
               <dl className={styles.totals}>
                 <div className={styles.totalRow}>
                   <dt>{t('slot.staff')}</dt>
-                  <dd>{data.staff_name ?? t('anyStaff')}</dd>
+                  <dd>{assignedName || data.staff_name || t('anyStaff')}</dd>
                 </div>
                 <div className={styles.totalRow}>
                   <dt>{t('totalTime')}</dt>

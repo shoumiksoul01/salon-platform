@@ -66,12 +66,19 @@ export interface SlotDay {
   slots: Slot[] // empty when the day is closed or full
 }
 
+// A staff member who can take this booking. Used to show a name for each staff id in a slot.
+export interface SlotStaff {
+  id: string
+  full_name: string
+}
+
 export interface SlotOptions {
   shop_name: string
   services: Pick<Service, 'id' | 'name' | 'price_poisha' | 'duration_minutes'>[]
   total_minutes: number
   total_poisha: number
   staff_name: string | null // set when one staff member was chosen in BOOK-01
+  staff: SlotStaff[] // everyone who could take this booking (one person when staff_name is set)
   days: SlotDay[]
 }
 
@@ -125,6 +132,7 @@ export async function getSlotOptions(
       total_minutes: totalMinutes,
       total_poisha: totalPoisha,
       staff_name: candidates.length === 1 && staffId ? candidates[0].full_name : null,
+      staff: candidates.map(({ id, full_name }) => ({ id, full_name })),
       days,
     }
   })

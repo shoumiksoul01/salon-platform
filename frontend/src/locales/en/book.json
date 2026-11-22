@@ -33,6 +33,13 @@
     "dayTitle": "Choose a day",
     "timeTitle": "Choose a start time",
     "tzNote": "Times are in Bangladesh time.",
+    "staffHint": "The name under each time is who will serve you.",
+    "nextFree": "Next free day: {{day}}",
+    "groups": {
+      "morning": "Morning",
+      "afternoon": "Afternoon",
+      "evening": "Evening"
+    },
     "noDay": "No free times on this day. Try another day.",
     "noneAtAll": "There are no free times in the next 14 days for this choice. Try another staff member, or fewer services.",
     "changeChoice": "Change services or staff",
