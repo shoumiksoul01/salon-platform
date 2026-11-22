@@ -1,0 +1,19 @@
+{
+  "nav": "Dashboard",
+  "title": "Dashboard",
+  "loading": "Loading your dashboard",
+  "subtitle": "{{shop}} · {{date}}",
+  "tiles": {
+    "today": "Bookings today",
+    "left": "Still to come",
+    "earnings": "Earnings today",
+    "earningsHint": "From finished bookings",
+    "queue": "Waiting in the queue",
+    "queueHint": "Right now"
+  },
+  "todayTitle": "Today's bookings",
+  "emptyTitle": "No bookings today",
+  "emptyText": "New bookings for today will show up here.",
+  "staffWith": "With {{name}}",
+  "anyStaff": "Any available staff"
+}

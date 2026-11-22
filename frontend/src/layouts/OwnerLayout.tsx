@@ -16,6 +16,7 @@ interface NavItem {
 // One list drives the desktop sidebar, the phone bottom bar and the "More" panel.
 // When you build a new owner page, add one line here and one route in routes/owner.tsx.
 const NAV_ITEMS: NavItem[] = [
+  { to: '/owner', labelKey: 'ownerDashboard:nav', end: true, inBottomBar: true },
   { to: '/owner/shop', labelKey: 'layout.shop', inBottomBar: true },
   { to: '/owner/profile', labelKey: 'layout.profile', inBottomBar: true },
 ]
