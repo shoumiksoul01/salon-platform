@@ -18,7 +18,8 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { to: '/owner', labelKey: 'ownerDashboard:nav', end: true, inBottomBar: true },
   { to: '/owner/shop', labelKey: 'layout.shop', inBottomBar: true },
-  { to: '/owner/profile', labelKey: 'layout.profile', inBottomBar: true },
+  { to: '/owner/services', labelKey: 'ownerServices:nav', inBottomBar: true },
+  { to: '/owner/profile', labelKey: 'layout.profile' },
 ]
 
 function sideLinkClass({ isActive }: { isActive: boolean }) {
