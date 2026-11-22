@@ -23,6 +23,7 @@ const NAV_ITEMS: NavItem[] = [
   { to: '/shops', labelKey: 'layout.findShops', inBottomBar: true },
   { to: '/me/bookings', labelKey: 'layout.myBookings', inBottomBar: true },
   { to: '/me/queue', labelKey: 'layout.queue', inBottomBar: true },
+  { to: '/me/notifications', labelKey: 'notifications:nav' },
   { to: '/me/profile', labelKey: 'layout.profile', inBottomBar: true },
 ]
 

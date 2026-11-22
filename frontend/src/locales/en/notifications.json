@@ -1,0 +1,24 @@
+{
+  "nav": "Notifications",
+  "title": "Notifications",
+  "loading": "Loading your notifications",
+  "unread": "Unread: {{count}}",
+  "allRead": "You are all caught up.",
+  "markAll": "Mark all as read",
+  "new": "New",
+  "today": "Today",
+  "earlier": "Earlier",
+  "emptyTitle": "No notifications yet",
+  "emptyText": "News about your bookings and the live queue will show up here.",
+  "text": {
+    "queue_turn_near": "Your turn at {{shop_name}} is close. You are number {{position}} in the line.",
+    "queue_wait_changed": "The wait at {{shop_name}} changed. It is now about {{minutes}} min.",
+    "confirm_request": "Please confirm that you are coming for {{service_name}} at {{shop_name}}.",
+    "booking_requested": "Your booking request for {{service_name}} at {{shop_name}} was sent. The shop will reply soon.",
+    "payment_received": "We received your payment of ৳{{amount}} for {{shop_name}}.",
+    "booking_confirmed": "{{shop_name}} confirmed your booking for {{service_name}}.",
+    "refund_issued": "Your refund of ৳{{amount}} from {{shop_name}} was sent.",
+    "slot_released": "Your time at {{shop_name}} was released.",
+    "other": "There is an update about your booking."
+  }
+}

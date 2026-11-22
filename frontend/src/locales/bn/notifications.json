@@ -1,0 +1,24 @@
+{
+  "nav": "বিজ্ঞপ্তি",
+  "title": "বিজ্ঞপ্তি",
+  "loading": "আপনার বিজ্ঞপ্তি লোড হচ্ছে",
+  "unread": "অপঠিত: {{count}}",
+  "allRead": "সব দেখা হয়ে গেছে।",
+  "markAll": "সব পড়া হয়েছে চিহ্নিত করুন",
+  "new": "নতুন",
+  "today": "আজ",
+  "earlier": "আগের",
+  "emptyTitle": "এখনও কোনো বিজ্ঞপ্তি নেই",
+  "emptyText": "আপনার বুকিং ও লাইভ লাইনের খবর এখানে দেখা যাবে।",
+  "text": {
+    "queue_turn_near": "{{shop_name}}-এ আপনার পালা কাছে এসেছে। আপনি লাইনে {{position}} নম্বরে আছেন।",
+    "queue_wait_changed": "{{shop_name}}-এ অপেক্ষার সময় বদলেছে। এখন প্রায় {{minutes}} মিনিট।",
+    "confirm_request": "{{shop_name}}-এ {{service_name}}-এর জন্য আপনি আসছেন কি না নিশ্চিত করুন।",
+    "booking_requested": "{{shop_name}}-এ {{service_name}}-এর বুকিং অনুরোধ পাঠানো হয়েছে। সেলুন শিগগিরই জানাবে।",
+    "payment_received": "{{shop_name}}-এর জন্য আপনার ৳{{amount}} পেমেন্ট পাওয়া গেছে।",
+    "booking_confirmed": "{{shop_name}} আপনার {{service_name}} বুকিং নিশ্চিত করেছে।",
+    "refund_issued": "{{shop_name}} থেকে আপনার ৳{{amount}} ফেরত পাঠানো হয়েছে।",
+    "slot_released": "{{shop_name}}-এ আপনার সময়টি ছেড়ে দেওয়া হয়েছে।",
+    "other": "আপনার বুকিং নিয়ে নতুন খবর আছে।"
+  }
+}
