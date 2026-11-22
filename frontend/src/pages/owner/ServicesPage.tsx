@@ -12,9 +12,12 @@ import {
   Modal,
   Select,
   Skeleton,
+  Tabs,
   useToast,
 } from '../../components/ui'
 import { useAsync } from '../../hooks/useAsync'
+import { listOffers } from '../../api/offers'
+import type { OwnerOffer } from '../../api/offers'
 import {
   IMAGE_TYPES,
   MAX_IMAGE_BYTES,
@@ -26,11 +29,12 @@ import {
   uploadServiceImage,
 } from '../../api/services'
 import type { GenderCategory, Service, ServiceInput } from '../../api/services'
+import OffersPanel from './OffersPanel'
 import styles from './ServicesPage.module.css'
 
 // OWN-03: owner services and offers (FR-01.2, FR-01.3).
 // UI-SM-17: the services list, the add and edit dialog, activate and deactivate.
-// UI-SM-18 adds the offers next to this list.
+// UI-SM-18: the offers tab (OffersPanel.tsx). Both tabs share the state kept in Content.
 
 const GENDERS: GenderCategory[] = ['women', 'men', 'unisex']
 const PRICE_PATTERN = /^\d+(\.\d{1,2})?$/
@@ -292,11 +296,23 @@ function ServiceDialog({ service, onClose, onSaved }: DialogProps) {
 
 type DialogState = { service: Service | null } | null
 
-function Content({ initial }: { initial: Service[] }) {
+interface PageData {
+  services: Service[]
+  offers: OwnerOffer[]
+}
+
+// Declared outside the component, so useAsync gets a stable function.
+async function loadPage(): Promise<PageData> {
+  const [services, offers] = await Promise.all([listServices(), listOffers()])
+  return { services, offers }
+}
+
+function Content({ initial }: { initial: PageData }) {
   const { t } = useTranslation('ownerServices')
   const toast = useToast()
   const format = useFormats()
-  const [list, setList] = useState(initial)
+  const [list, setList] = useState(initial.services)
+  const [offers, setOffers] = useState(initial.offers)
   const [showInactive, setShowInactive] = useState(true)
   const [dialog, setDialog] = useState<DialogState>(null)
   const [busyId, setBusyId] = useState<string | null>(null)
@@ -328,14 +344,12 @@ function Content({ initial }: { initial: Service[] }) {
     }
   }
 
-  return (
-    <>
+  const servicesPanel = (
+    <div className={styles.panel}>
       <div className={styles.head}>
-        <h1 className={styles.title}>{t('title')}</h1>
+        <p className={styles.muted}>{t('intro')}</p>
         <Button onClick={() => setDialog({ service: null })}>{t('add')}</Button>
       </div>
-      <p className={styles.muted}>{t('intro')}</p>
-
       {list.length === 0 ? (
         <EmptyState
           title={t('emptyTitle')}
@@ -413,6 +427,24 @@ function Content({ initial }: { initial: Service[] }) {
         </>
       )}
 
+    </div>
+  )
+
+  return (
+    <>
+      <h1 className={styles.title}>{t('title')}</h1>
+      <Tabs
+        label={t('tabs.label')}
+        tabs={[
+          { id: 'services', label: t('tabs.services'), content: servicesPanel },
+          {
+            id: 'offers',
+            label: t('tabs.offers'),
+            content: <OffersPanel offers={offers} services={list} onOffersChange={setOffers} />,
+          },
+        ]}
+      />
+
       {dialog && (
         <ServiceDialog
           key={dialog.service?.id ?? 'new'}
@@ -428,7 +460,7 @@ function Content({ initial }: { initial: Service[] }) {
 // The layout provides the one <main>, so this page renders a <div>.
 export default function ServicesPage() {
   const { t } = useTranslation('ownerServices')
-  const { state, retry } = useAsync(listServices)
+  const { state, retry } = useAsync(loadPage)
 
   return (
     <div className={styles.page}>

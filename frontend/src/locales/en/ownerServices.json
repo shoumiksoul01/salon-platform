@@ -1,6 +1,11 @@
 {
   "nav": "Services",
-  "title": "Services",
+  "title": "Services and offers",
+  "tabs": {
+    "label": "Services and offers",
+    "services": "Services",
+    "offers": "Offers"
+  },
   "intro": "The services customers can book at your shop.",
   "loading": "Loading your services",
   "add": "Add a service",

@@ -1,0 +1,70 @@
+{
+  "intro": "Discounts and combo deals customers can use when they book.",
+  "add": "Create an offer",
+  "edit": "Edit",
+  "editLabel": "Edit {{title}}",
+  "end": "End now",
+  "endLabel": "End {{title}} now",
+  "needServices": "Add and activate a service in the Services tab before you create an offer.",
+  "emptyTitle": "No offers yet",
+  "emptyText": "Create an offer to bring more customers to your shop.",
+  "endNote": "An offer ends at the end of its last day. Ending it now stops it at once. Old bookings keep their discount.",
+  "period": "{{from}} to {{to}}",
+  "appliesTo": "Applies to: {{names}}",
+  "status": {
+    "running": "Running",
+    "scheduled": "Starts soon",
+    "ended": "Ended"
+  },
+  "type": {
+    "percentage": "Percentage off",
+    "fixed": "Amount off",
+    "combo": "Combo"
+  },
+  "discount": {
+    "percent": "{{value}}% off",
+    "amount": "{{value}} off"
+  },
+  "form": {
+    "addTitle": "Create an offer",
+    "editTitle": "Edit offer",
+    "title": "Offer title",
+    "titleInvalid": "Enter a title of {{min}} to {{max}} characters.",
+    "type": "Offer type",
+    "typeHint": {
+      "percentage": "A percentage is taken off each chosen service.",
+      "fixed": "A fixed amount is taken off each chosen service.",
+      "combo": "A fixed amount is taken off when a customer books all the chosen services together."
+    },
+    "percent": "Discount (%)",
+    "percentHint": "A whole number from 1 to {{max}}.",
+    "percentInvalid": "Enter a whole number from 1 to {{max}}.",
+    "amount": "Discount amount (৳)",
+    "amountHint": "In taka, for example 100 or 99.50.",
+    "amountInvalid": "Enter an amount above zero, with at most two decimals.",
+    "fixedTooBig": "The discount must be less than the cheapest chosen service ({{limit}}).",
+    "comboTooBig": "The discount must be less than the total price of the chosen services ({{limit}}).",
+    "startDay": "First day",
+    "endDay": "Last day",
+    "endDayHint": "The offer runs until the end of this day.",
+    "dateRequired": "Choose a date.",
+    "endBeforeStart": "The last day cannot be before the first day.",
+    "endInPast": "The last day cannot be in the past.",
+    "services": "Services in this offer",
+    "servicesRequired": "Choose at least one service.",
+    "comboNeedsTwo": "A combo needs at least two services.",
+    "noServices": "You have no active services yet.",
+    "inactive": "Inactive"
+  },
+  "toast": {
+    "created": "Offer created.",
+    "updated": "Offer saved.",
+    "ended": "{{title}} has ended.",
+    "saveFailed": "Could not save. Please try again."
+  },
+  "endDialog": {
+    "title": "End this offer?",
+    "text": "\"{{title}}\" will stop at once. Customers will no longer get the discount. You can bring it back later by editing its dates.",
+    "confirm": "End offer"
+  }
+}
