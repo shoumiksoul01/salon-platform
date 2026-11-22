@@ -52,5 +52,26 @@
     "errors": {
       "noTime": "Choose a start time to continue."
     }
+  },
+  "review": {
+    "title": "Review your booking",
+    "back": "Back to time",
+    "detailsTitle": "Your details",
+    "name": "Full name",
+    "phone": "Mobile number",
+    "notes": "Notes for the shop (optional)",
+    "summaryTitle": "Booking summary",
+    "subtotal": "Subtotal",
+    "offerLine": "Offer: {{title}}",
+    "total": "Total to pay",
+    "continue": "Continue to payment",
+    "approvalNote": "This shop confirms each booking by hand. You will get a message once it accepts.",
+    "detailsOk": "Your details look good. The payment step is added in the next update.",
+    "loadError": "Could not load your booking. Please try again.",
+    "errors": {
+      "nameRequired": "Enter your full name.",
+      "phoneInvalid": "Enter a valid mobile number, for example 01712345678.",
+      "notesTooLong": "Notes can be at most 300 characters."
+    }
   }
 }

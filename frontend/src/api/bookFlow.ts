@@ -137,3 +137,100 @@ export async function getSlotOptions(
     }
   })
 }
+
+// The offer applied to a booking, as a discount in poisha (BOOK-03).
+export interface AppliedOffer {
+  id: string
+  title: string
+  discount_poisha: number
+}
+
+// Everything BOOK-03 needs to show the booking before payment.
+export interface ReviewOptions {
+  shop_id: string
+  shop_name: string
+  shop_address: string
+  requires_booking_approval: boolean
+  services: Pick<Service, 'id' | 'name' | 'price_poisha' | 'duration_minutes'>[]
+  staff_name: string | null // the person assigned in BOOK-02
+  starts_at: string // ISO UTC
+  total_minutes: number
+  subtotal_poisha: number
+  offer: AppliedOffer | null
+  total_poisha: number
+}
+
+// One offer per booking: the active, in-date offer that gives the biggest discount.
+// A combo offer needs all of its services in the booking. The discount never goes above
+// the price of the services the offer covers.
+function bestOffer(
+  offers: ShopOffer[],
+  chosen: Pick<Service, 'id' | 'price_poisha'>[],
+  nowMs: number,
+): AppliedOffer | null {
+  const chosenIds = new Set(chosen.map((service) => service.id))
+  let best: AppliedOffer | null = null
+
+  for (const offer of offers) {
+    if (!offer.is_active) continue
+    if (nowMs < Date.parse(offer.starts_at) || nowMs > Date.parse(offer.ends_at)) continue
+
+    const covered = chosen.filter((service) => offer.service_ids.includes(service.id))
+    if (covered.length === 0) continue
+    if (offer.offer_type === 'combo' && !offer.service_ids.every((id) => chosenIds.has(id))) continue
+
+    const coveredPoisha = covered.reduce((sum, service) => sum + service.price_poisha, 0)
+    let discount = 0
+    if (offer.discount_percent !== null) {
+      discount = Math.round((coveredPoisha * offer.discount_percent) / 100)
+    } else if (offer.discount_poisha !== null) {
+      discount = offer.discount_poisha
+    }
+    discount = Math.min(discount, coveredPoisha)
+
+    if (discount > 0 && (!best || discount > best.discount_poisha)) {
+      best = { id: offer.id, title: offer.title, discount_poisha: discount }
+    }
+  }
+  return best
+}
+
+// The booking in progress, priced and ready to review. null means the shop was not found
+// or is not approved.
+export async function getReviewOptions(
+  shopId: string,
+  serviceIds: string[],
+  startsAt: string,
+  assignedStaffId: string | null,
+): Promise<ReviewOptions | null> {
+  const details = await getShopDetails(shopId)
+  if (!details) return null
+  if (!USE_MOCK) throw new Error('The real review API is not wired yet')
+
+  const chosen = details.services.filter(
+    (service) => service.is_active && serviceIds.includes(service.id),
+  )
+  const totalMinutes = chosen.reduce((sum, service) => sum + service.duration_minutes, 0)
+  const subtotal = chosen.reduce((sum, service) => sum + service.price_poisha, 0)
+  const offer = bestOffer(details.offers, chosen, Date.now())
+  const staff = staffForShop(shopId).find((member) => member.id === assignedStaffId)
+
+  return {
+    shop_id: details.shop.id,
+    shop_name: details.shop.name,
+    shop_address: details.shop.address,
+    requires_booking_approval: details.shop.requires_booking_approval,
+    services: chosen.map(({ id, name, price_poisha, duration_minutes }) => ({
+      id,
+      name,
+      price_poisha,
+      duration_minutes,
+    })),
+    staff_name: staff?.full_name ?? null,
+    starts_at: startsAt,
+    total_minutes: totalMinutes,
+    subtotal_poisha: subtotal,
+    offer,
+    total_poisha: subtotal - (offer?.discount_poisha ?? 0),
+  }
+}
