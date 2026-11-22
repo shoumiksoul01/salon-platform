@@ -25,7 +25,7 @@
   outline-offset: 2px;
 }
 
-/* Header */
+/* Header: same look as the public navbar (display font name, spaced capitals, gold hover) */
 .header {
   position: sticky;
   top: 0;
@@ -49,8 +49,10 @@
   align-items: center;
   min-height: var(--tap-min);
   color: var(--color-primary);
-  font-size: var(--text-lg);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
   font-weight: var(--weight-bold);
+  letter-spacing: 0.04em;
   text-decoration: none;
 }
 
@@ -86,11 +88,14 @@
   padding: 0 var(--space-4);
   border-radius: var(--radius-sm);
   color: var(--color-text);
-  font-weight: var(--weight-medium);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
   text-decoration: none;
 }
 .link:hover {
-  background: var(--color-surface-alt);
+  color: var(--color-primary);
 }
 .active {
   color: var(--color-primary);
@@ -170,6 +175,11 @@
   }
   .links {
     flex-direction: row;
+  }
+  /* A line under the current page, so it is not shown by colour alone */
+  .active {
+    border-radius: 0;
+    box-shadow: inset 0 -2px 0 var(--color-primary);
   }
   .main {
     padding-bottom: 0;
