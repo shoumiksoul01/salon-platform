@@ -15,5 +15,14 @@
   "emptyTitle": "No bookings today",
   "emptyText": "New bookings for today will show up here.",
   "staffWith": "With {{name}}",
-  "anyStaff": "Any available staff"
+  "anyStaff": "Any available staff",
+  "upcomingTitle": "Coming up this week",
+  "upcomingEmptyTitle": "Nothing booked for the next 7 days",
+  "upcomingEmptyText": "Pending and confirmed bookings from tomorrow on will show up here.",
+  "upcomingMore": "And {{count}} more.",
+  "popularTitle": "Popular services",
+  "popularHint": "The most booked services in the last 30 days.",
+  "popularCount": "Bookings: {{count}}",
+  "popularEmptyTitle": "No bookings to count yet",
+  "popularEmptyText": "Your most booked services will show up here."
 }

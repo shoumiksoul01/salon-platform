@@ -15,5 +15,14 @@
   "emptyTitle": "আজ কোনো বুকিং নেই",
   "emptyText": "আজকের নতুন বুকিং এখানে দেখা যাবে।",
   "staffWith": "{{name}}-এর সাথে",
-  "anyStaff": "যেকোনো স্টাফ"
+  "anyStaff": "যেকোনো স্টাফ",
+  "upcomingTitle": "এই সপ্তাহে আসছে",
+  "upcomingEmptyTitle": "আগামী ৭ দিনে কোনো বুকিং নেই",
+  "upcomingEmptyText": "আগামীকাল থেকে অপেক্ষমাণ ও নিশ্চিত বুকিং এখানে দেখা যাবে।",
+  "upcomingMore": "আরও {{count}}টি।",
+  "popularTitle": "জনপ্রিয় সেবা",
+  "popularHint": "গত ৩০ দিনে সবচেয়ে বেশি বুক হওয়া সেবা।",
+  "popularCount": "বুকিং: {{count}}",
+  "popularEmptyTitle": "গোনার মতো বুকিং এখনও নেই",
+  "popularEmptyText": "আপনার সবচেয়ে বেশি বুক হওয়া সেবা এখানে দেখা যাবে।"
 }
