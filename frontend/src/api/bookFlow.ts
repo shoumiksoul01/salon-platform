@@ -2,7 +2,13 @@ import { getShopDetails } from './shops'
 import type { ShopOffer } from './shops'
 import { freeSlotsForNewBooking } from './bookings'
 import { getMockMode, mockDelay } from './mock'
-import { services as allServices, shops as allShops, type Service, type Shop } from '../mocks/shops'
+import {
+  services as allServices,
+  shops as allShops,
+  type PaymentMode,
+  type Service,
+  type Shop,
+} from '../mocks/shops'
 import { staffMembers, staffServices } from '../mocks/bookings'
 
 // Mock or real data. Flip to false in the wire-up commit for the booking flow (FR-03).
@@ -151,6 +157,7 @@ export interface ReviewOptions {
   shop_name: string
   shop_address: string
   requires_booking_approval: boolean
+  allowed_payment_modes: PaymentMode[]
   services: Pick<Service, 'id' | 'name' | 'price_poisha' | 'duration_minutes'>[]
   staff_name: string | null // the person assigned in BOOK-02
   starts_at: string // ISO UTC
@@ -220,6 +227,7 @@ export async function getReviewOptions(
     shop_name: details.shop.name,
     shop_address: details.shop.address,
     requires_booking_approval: details.shop.requires_booking_approval,
+    allowed_payment_modes: details.shop.allowed_payment_modes,
     services: chosen.map(({ id, name, price_poisha, duration_minutes }) => ({
       id,
       name,

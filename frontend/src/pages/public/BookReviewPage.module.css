@@ -72,6 +72,94 @@
   color: var(--color-text-muted);
 }
 
+/* Payment options: radio buttons inside a fieldset (min-width: 0 stops a wide row from overflowing) */
+.fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.methodSet {
+  margin-top: var(--space-4);
+}
+.legend {
+  padding: 0;
+  margin-bottom: var(--space-2);
+  font-weight: var(--weight-semibold);
+}
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.methods {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
+  gap: var(--space-2);
+}
+.option {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  min-height: var(--tap-min);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-alt);
+  color: var(--color-text);
+  cursor: pointer;
+}
+.option:hover {
+  border-color: var(--color-primary);
+}
+.option input {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0.125rem 0 0;
+  accent-color: var(--color-primary);
+}
+.option:focus-within {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+.optionOn {
+  border-color: var(--color-primary);
+}
+.methodOption {
+  align-items: center;
+}
+.optionText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+.optionTitle {
+  font-weight: var(--weight-medium);
+}
+.optionHint {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.error {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-sm);
+  color: var(--color-danger);
+}
+.errorBox {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+.errorText {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-danger);
+}
+
 .items {
   display: flex;
   flex-direction: column;
@@ -118,12 +206,6 @@
 .grand dt {
   color: var(--color-text);
   font-weight: var(--weight-semibold);
-}
-
-.ok {
-  margin: var(--space-3) 0 0;
-  font-size: var(--text-sm);
-  color: var(--color-text-muted);
 }
 
 @media (min-width: 1024px) {

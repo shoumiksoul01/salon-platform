@@ -63,15 +63,42 @@
     "summaryTitle": "Booking summary",
     "subtotal": "Subtotal",
     "offerLine": "Offer: {{title}}",
-    "total": "Total to pay",
-    "continue": "Continue to payment",
+    "total": "Total",
+    "payNow": "Pay now",
+    "payAtShop": "Pay at the shop",
     "approvalNote": "This shop confirms each booking by hand. You will get a message once it accepts.",
-    "detailsOk": "Your details look good. The payment step is added in the next update.",
+    "paymentTitle": "How do you want to pay?",
+    "modeLegend": "Payment option",
+    "modes": {
+      "deposit": "Pay a deposit now",
+      "full": "Pay in full now",
+      "pay_at_shop": "Pay at the shop"
+    },
+    "modeHints": {
+      "deposit": "Pay {{amount}} now ({{percent}}%) and the rest at the shop.",
+      "full": "Pay {{amount}} now. Nothing to pay at the shop.",
+      "pay_at_shop": "Pay {{amount}} at the shop after your service."
+    },
+    "methodLegend": "Payment method",
+    "methods": {
+      "bkash": "bKash",
+      "nagad": "Nagad",
+      "card": "Card"
+    },
+    "payNote": "Payments run on a test gateway for now. No real money is taken.",
+    "confirm": "Confirm booking",
+    "payAndConfirm": "Pay {{amount}} and confirm",
+    "pickAnotherTime": "Pick another time",
     "loadError": "Could not load your booking. Please try again.",
     "errors": {
       "nameRequired": "Enter your full name.",
       "phoneInvalid": "Enter a valid mobile number, for example 01712345678.",
-      "notesTooLong": "Notes can be at most 300 characters."
+      "notesTooLong": "Notes can be at most 300 characters.",
+      "modeRequired": "Choose how you want to pay.",
+      "methodRequired": "Choose a payment method.",
+      "slotTaken": "Someone just booked this time. Please pick another time.",
+      "paymentFailed": "The payment did not go through. Please try again or choose another method.",
+      "failed": "Could not complete your booking. Please try again."
     }
   }
 }
