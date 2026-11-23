@@ -5,6 +5,7 @@ import ComponentsPreview from '../pages/dev/ComponentsPreview'
 import BookingsPage from '../pages/owner/BookingsPage'
 import DashboardPage from '../pages/owner/DashboardPage'
 import ServicesPage from '../pages/owner/ServicesPage'
+import QueuePage from '../pages/owner/QueuePage'
 import ShopSetupPage from '../pages/owner/ShopSetupPage'
 import StaffAvailabilityPage from '../pages/owner/StaffAvailabilityPage'
 import StaffPage from '../pages/owner/StaffPage'
@@ -19,6 +20,7 @@ export const ownerRoutes: RouteObject[] = [
     children: [
       { path: '/owner', element: <DashboardPage /> },
       { path: '/owner/bookings', element: <BookingsPage /> },
+      { path: '/owner/queue', element: <QueuePage /> },
       { path: '/owner/shop', element: <ShopSetupPage /> },
       { path: '/owner/services', element: <ServicesPage /> },
       { path: '/owner/staff', element: <StaffPage /> },

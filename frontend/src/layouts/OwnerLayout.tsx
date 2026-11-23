@@ -18,6 +18,7 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { to: '/owner', labelKey: 'ownerDashboard:nav', end: true, inBottomBar: true },
   { to: '/owner/bookings', labelKey: 'ownerBookings:nav', inBottomBar: true },
+  { to: '/owner/queue', labelKey: 'ownerQueue:nav' },
   { to: '/owner/shop', labelKey: 'layout.shop' },
   { to: '/owner/services', labelKey: 'ownerServices:nav', inBottomBar: true },
   { to: '/owner/staff', labelKey: 'ownerStaff:nav' },

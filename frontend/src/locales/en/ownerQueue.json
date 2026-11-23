@@ -1,0 +1,62 @@
+{
+  "nav": "Live queue",
+  "title": "Live queue",
+  "loading": "Loading the queue",
+  "intro": "See who is being served and who is waiting. Add walk-ins and check in customers who booked.",
+  "addWalkIn": "Add a walk-in",
+  "anyStaff": "First available staff",
+  "staffWith": "With {{name}}",
+  "tiles": {
+    "waiting": "Waiting",
+    "serving": "Being served",
+    "finished": "Finished today",
+    "newWait": "Wait for a new customer",
+    "newWaitHint": "If someone joins now",
+    "noWait": "No wait",
+    "minutes": "About {{minutes}} min"
+  },
+  "updatedAt": "Updated at {{time}}",
+  "autoRefresh": "This page updates itself every 10 seconds.",
+  "refreshFailed": "Could not update. Showing the last queue.",
+  "refresh": "Update now",
+  "emptyTitle": "Nobody in the queue",
+  "emptyText": "Add a walk-in or check in a customer who booked.",
+  "servingTitle": "Being served",
+  "waitingTitle": "Waiting",
+  "nobodyWaiting": "Nobody is waiting.",
+  "actions": {
+    "start": "Start service",
+    "finish": "Finish",
+    "remove": "Remove"
+  },
+  "expectedTitle": "Booked for today",
+  "expectedHint": "Customers who booked and have not been checked in yet. Check them in when they arrive.",
+  "expectedEmpty": "Everyone booked for today is checked in.",
+  "checkIn": "Check in",
+  "checkInLabel": "Check in {{name}}",
+  "walkIn": {
+    "title": "Add a walk-in",
+    "name": "Customer name",
+    "nameInvalid": "Enter a name of {{min}} to {{max}} characters.",
+    "services": "Services",
+    "servicesRequired": "Choose at least one service.",
+    "noServices": "You have no active services yet.",
+    "staff": "Staff member",
+    "staffHint": "Only staff who do all the chosen services are listed.",
+    "submit": "Add to queue"
+  },
+  "removeDialog": {
+    "title": "Remove from the queue?",
+    "text": "{{name}} will leave the queue. Everyone behind them moves up.",
+    "keep": "Keep in queue",
+    "confirm": "Remove"
+  },
+  "toast": {
+    "walkIn": "{{name}} was added to the queue.",
+    "checkedIn": "{{name}} is checked in.",
+    "start": "{{name}} is being served.",
+    "finish": "Finished: {{name}}.",
+    "remove": "{{name}} was removed from the queue.",
+    "failed": "Could not update the queue. Please try again."
+  }
+}

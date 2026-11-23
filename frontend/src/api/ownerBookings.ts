@@ -108,6 +108,55 @@ function notWritten(): never {
   throw new Error('The real owner bookings API is not written yet')
 }
 
+// Synchronous versions of the two functions below, for other mock modules. The live queue
+// (api/ownerQueue.ts) uses them so that checking a customer in also marks the booking as arrived.
+export function ownerBookingsNow(): OwnerBooking[] {
+  return bookings
+    .map(current)
+    .filter((booking) => booking.shop_id === DEMO_SHOP_ID)
+    .map(toOwnerBooking)
+}
+
+export function applyBookingActionNow(id: string, action: BookingAction, reason = ''): OwnerBooking {
+  const booking = bookings.map(current).find((item) => item.id === id && item.shop_id === DEMO_SHOP_ID)
+  if (!booking) throw new Error('booking_not_found')
+  if (!allowedActions(booking, Date.now()).includes(action)) throw new Error('action_not_allowed')
+
+  const next: Booking = { ...booking }
+  switch (action) {
+    case 'accept':
+      next.status = 'confirmed'
+      break
+    case 'arrive':
+      next.status = 'arrived'
+      break
+    case 'start':
+      next.status = 'in_service'
+      break
+    case 'complete':
+      next.status = 'completed'
+      // Pay at the shop: the owner takes the money when the service ends.
+      if (next.payment_method === 'pay_at_shop' && next.payment_status === 'pending') {
+        next.payment_status = 'paid'
+        next.paid_poisha = next.total_poisha
+      }
+      break
+    case 'no_show':
+      next.status = 'no_show'
+      break
+    case 'reject':
+    case 'cancel':
+      if (!reason.trim()) throw new Error('reason_required')
+      next.status = 'cancelled'
+      next.cancelled_by = 'shop'
+      next.cancel_reason = reason.trim()
+      if (next.paid_poisha > 0) next.payment_status = 'refunded'
+      break
+  }
+  changed.set(next.id, next)
+  return toOwnerBooking(next)
+}
+
 // All bookings of the owner's shop, in no particular order. The page sorts and groups them.
 export async function listOwnerBookings(): Promise<OwnerBooking[]> {
   if (USE_MOCK) {
@@ -115,10 +164,7 @@ export async function listOwnerBookings(): Promise<OwnerBooking[]> {
       const mode = getMockMode()
       if (mode === 'error') throw new Error('Mock error: could not load the bookings')
       if (mode === 'empty') return []
-      return bookings
-        .map(current)
-        .filter((booking) => booking.shop_id === DEMO_SHOP_ID)
-        .map(toOwnerBooking)
+      return ownerBookingsNow()
     })
   }
   return notWritten()
@@ -132,45 +178,7 @@ export async function applyBookingAction(
   reason = '',
 ): Promise<OwnerBooking> {
   if (USE_MOCK) {
-    return mockDelay(() => {
-      const booking = bookings.map(current).find((item) => item.id === id && item.shop_id === DEMO_SHOP_ID)
-      if (!booking) throw new Error('booking_not_found')
-      if (!allowedActions(booking, Date.now()).includes(action)) throw new Error('action_not_allowed')
-
-      const next: Booking = { ...booking }
-      switch (action) {
-        case 'accept':
-          next.status = 'confirmed'
-          break
-        case 'arrive':
-          next.status = 'arrived'
-          break
-        case 'start':
-          next.status = 'in_service'
-          break
-        case 'complete':
-          next.status = 'completed'
-          // Pay at the shop: the owner takes the money when the service ends.
-          if (next.payment_method === 'pay_at_shop' && next.payment_status === 'pending') {
-            next.payment_status = 'paid'
-            next.paid_poisha = next.total_poisha
-          }
-          break
-        case 'no_show':
-          next.status = 'no_show'
-          break
-        case 'reject':
-        case 'cancel':
-          if (!reason.trim()) throw new Error('reason_required')
-          next.status = 'cancelled'
-          next.cancelled_by = 'shop'
-          next.cancel_reason = reason.trim()
-          if (next.paid_poisha > 0) next.payment_status = 'refunded'
-          break
-      }
-      changed.set(next.id, next)
-      return toOwnerBooking(next)
-    })
+    return mockDelay(() => applyBookingActionNow(id, action, reason))
   }
   return notWritten()
 }

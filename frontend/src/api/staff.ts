@@ -95,6 +95,11 @@ function notWritten(): never {
   throw new Error('The real staff API is not written yet')
 }
 
+// How many staff members can serve customers. The live queue uses it for the waiting time.
+export function activeStaffCountNow(): number {
+  return store().staff.filter((member) => member.is_active).length
+}
+
 // All staff of the owner's shop, active and inactive.
 export async function listStaff(): Promise<OwnerStaff[]> {
   if (USE_MOCK) {
