@@ -50,14 +50,9 @@ export class AuthError extends Error {
 // In the mock, this is the only correct OTP code.
 const MOCK_OTP = '123456'
 // Mock accounts for the login page. They all use the same password.
-const DEMO_PASSWORD = 'password123'
-const DEMO_ACCOUNTS: Record<string, LoginResult | undefined> = {
-  '01712345678': { full_name: 'Demo Customer', role: 'customer' },
-  '01812345678': { full_name: 'Demo Owner', role: 'owner' },
-  '01612345678': { full_name: 'Demo Staff', role: 'staff' },
-}
+
+
 // In the mock, this account exists but its phone number is not verified yet.
-const UNVERIFIED_PHONE = '01900000000'
 const PASSWORD_MIN = 8
 
 function normalisePhone(phone: string): string {
@@ -129,20 +124,36 @@ export async function resendOtp(email: string): Promise<void> {
   }
 }
 
-// AUTH-03: log in with a phone number and a password.
-// The password is sent to the server only, and is never stored in the browser.
-export async function loginAccount(phone: string, password: string): Promise<LoginResult> {
-  if (USE_MOCK) {
-    return mockDelay(() => {
-      if (getMockMode() === 'error') throw new AuthError('failed')
-      const number = normalisePhone(phone)
-      if (number === UNVERIFIED_PHONE) throw new AuthError('not_verified')
-      const account = DEMO_ACCOUNTS[number]
-      if (!account || password !== DEMO_PASSWORD) throw new AuthError('invalid_credentials')
-      return account
-    })
+// AUTH-03 (C-03): log in with email and password using Supabase Auth.
+// The password goes to Supabase only and is never stored by our code.
+// The role comes from the signup data, which a database trigger copied into profiles.
+// It is only used to choose the landing page. Route guards must not rely on it.
+export async function loginAccount(email: string, password: string): Promise<LoginResult> {
+  const cleanEmail = email.trim().toLowerCase()
+  const { data, error } = await getSupabase().auth.signInWithPassword({
+    email: cleanEmail,
+    password,
+  })
+
+  if (error) {
+    if (error.code === 'email_not_confirmed') {
+      // Send a fresh code so the user can finish verifying on the OTP page.
+      await resendOtp(cleanEmail).catch(() => undefined)
+      throw new AuthError('not_verified')
+    }
+    if (error.status === 429 || error.code === 'over_request_rate_limit') {
+      throw new AuthError('rate_limited')
+    }
+    if (error.code === 'invalid_credentials') {
+      throw new AuthError('invalid_credentials')
+    }
+    throw new AuthError('failed')
   }
-  throw new Error('The real login API is not wired yet')
+
+  const meta = data.user.user_metadata as { full_name?: string; role?: string }
+  const role: UserRole =
+    meta.role === 'owner' || meta.role === 'staff' ? meta.role : 'customer'
+  return { full_name: meta.full_name ?? cleanEmail, role }
 }
 
 // AUTH-04, step 1: send a reset code to the phone.

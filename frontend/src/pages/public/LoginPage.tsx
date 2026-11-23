@@ -8,11 +8,11 @@ import type { UserRole } from '../../api/auth'
 import styles from './LoginPage.module.css'
 
 interface FormErrors {
-  phone?: string
+  email?: string
   password?: string
 }
 
-const PHONE_PATTERN = /^(?:\+?88)?01[3-9]\d{8}$/
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 // Where each kind of user lands after logging in.
 const HOME: Record<UserRole, string> = {
@@ -27,7 +27,7 @@ export default function LoginPage() {
   const toast = useToast()
   const navigate = useNavigate()
 
-  const [phone, setPhone] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [errors, setErrors] = useState<FormErrors>({})
   const [formError, setFormError] = useState('')
@@ -35,8 +35,8 @@ export default function LoginPage() {
 
   function validate(): FormErrors {
     const found: FormErrors = {}
-    if (!phone.trim()) found.phone = t('login.errors.phoneRequired')
-    else if (!PHONE_PATTERN.test(phone.trim())) found.phone = t('login.errors.phoneInvalid')
+    if (!email.trim()) found.email = t('login.errors.emailRequired')
+    else if (!EMAIL_PATTERN.test(email.trim())) found.email = t('login.errors.emailInvalid')
     if (!password) found.password = t('login.errors.passwordRequired')
     return found
   }
@@ -50,14 +50,16 @@ export default function LoginPage() {
 
     setSubmitting(true)
     try {
-      const result = await loginAccount(phone.trim(), password)
+      const result = await loginAccount(email.trim(), password)
       toast.show({ message: t('login.welcome', { name: result.full_name }), variant: 'success' })
       navigate(HOME[result.role])
     } catch (error) {
       if (error instanceof AuthError && error.code === 'invalid_credentials') {
         setFormError(t('login.errors.invalid'))
       } else if (error instanceof AuthError && error.code === 'not_verified') {
-        navigate('/verify', { state: { phone: phone.trim().replace(/^\+?88/, '') } })
+        navigate('/verify', { state: { email: email.trim().toLowerCase() } })
+      } else if (error instanceof AuthError && error.code === 'rate_limited') {
+        toast.show({ message: t('login.errors.rateLimited'), variant: 'danger' })
       } else {
         toast.show({ message: t('login.errors.failed'), variant: 'danger' })
       }
@@ -74,16 +76,15 @@ export default function LoginPage() {
 
         <Card as="section">
           <form className={styles.form} onSubmit={handleSubmit} noValidate>
-            <FormField label={t('login.phone')} error={errors.phone} required>
+            <FormField label={t('login.email')} error={errors.email} required>
               {(control) => (
                 <Input
                   {...control}
-                  type="tel"
-                  inputMode="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="01XXXXXXXXX"
-                  autoComplete="tel"
+                  type="email"
+                  inputMode="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="email"
                 />
               )}
             </FormField>
@@ -111,7 +112,6 @@ export default function LoginPage() {
                 {formError}
               </p>
             )}
-            {import.meta.env.DEV && <p className={styles.hint}>{t('login.demoHint')}</p>}
 
             <Button type="submit" loading={submitting} fullWidth>
               {t('login.submit')}
