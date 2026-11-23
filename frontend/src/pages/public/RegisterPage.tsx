@@ -21,7 +21,7 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const PASSWORD_MIN = 8
 const ROLES: RegisterRole[] = ['customer', 'owner']
 
-// AUTH-01: register a customer or a shop owner (FR-02)
+// AUTH-01: register a customer or a shop owner (C-01)
 export default function RegisterPage() {
   const { t } = useTranslation('auth')
   const toast = useToast()
@@ -41,9 +41,10 @@ export default function RegisterPage() {
   function validate(): FormErrors {
     const found: FormErrors = {}
     if (!fullName.trim()) found.fullName = t('register.errors.nameRequired')
+    if (!email.trim()) found.email = t('register.errors.emailRequired')
+    else if (!EMAIL_PATTERN.test(email.trim())) found.email = t('register.errors.emailInvalid')
     if (!phone.trim()) found.phone = t('register.errors.phoneRequired')
     else if (!PHONE_PATTERN.test(phone.trim())) found.phone = t('register.errors.phoneInvalid')
-    if (email.trim() && !EMAIL_PATTERN.test(email.trim())) found.email = t('register.errors.emailInvalid')
     if (!password) found.password = t('register.errors.passwordRequired')
     else if (password.length < PASSWORD_MIN) found.password = t('register.errors.passwordShort')
     if (confirm !== password) found.confirm = t('register.errors.confirmMismatch')
@@ -62,15 +63,16 @@ export default function RegisterPage() {
       const result = await registerAccount({
         full_name: fullName.trim(),
         phone: phone.trim(),
-        email: email.trim() || null,
+        email: email.trim(),
         password,
         role,
       })
-      toast.show({ message: t('register.success', { phone: result.phone }), variant: 'success' })
-      navigate('/verify', { state: { phone: result.phone } })
+      toast.show({ message: t('register.success', { email: result.email }), variant: 'success' })
+      // The OTP page still reads the phone until it is wired to the email code (next commit).
+      navigate('/verify', { state: { phone: result.phone, email: result.email } })
     } catch (error) {
-      if (error instanceof AuthError && error.code === 'phone_taken') {
-        setErrors({ phone: t('register.errors.phoneTaken') })
+      if (error instanceof AuthError && error.code === 'rate_limited') {
+        toast.show({ message: t('register.errors.rateLimited'), variant: 'danger' })
       } else {
         toast.show({ message: t('register.errors.failed'), variant: 'danger' })
       }
@@ -115,6 +117,24 @@ export default function RegisterPage() {
             </FormField>
 
             <FormField
+              label={t('register.email')}
+              hint={t('register.emailHint')}
+              error={errors.email}
+              required
+            >
+              {(control) => (
+                <Input
+                  {...control}
+                  type="email"
+                  inputMode="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="email"
+                />
+              )}
+            </FormField>
+
+            <FormField
               label={t('register.phone')}
               hint={t('register.phoneHint')}
               error={errors.phone}
@@ -129,19 +149,6 @@ export default function RegisterPage() {
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="01XXXXXXXXX"
                   autoComplete="tel"
-                />
-              )}
-            </FormField>
-
-            <FormField label={t('register.email')} error={errors.email}>
-              {(control) => (
-                <Input
-                  {...control}
-                  type="email"
-                  inputMode="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  autoComplete="email"
                 />
               )}
             </FormField>

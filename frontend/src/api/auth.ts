@@ -1,6 +1,8 @@
 import { getMockMode, mockDelay } from './mock'
+import { getSupabase } from './supabaseClient'
 
-// Mock or real data. Flip to false in the wire-up commit for registration and login.
+// Mock data for the auth functions that are not wired yet.
+// registerAccount is real (Supabase Auth). The others are wired in their own commits.
 const USE_MOCK = true
 
 export type RegisterRole = 'customer' | 'owner'
@@ -9,7 +11,7 @@ export type UserRole = 'customer' | 'owner' | 'staff'
 export interface RegisterInput {
   full_name: string
   phone: string
-  email: string | null
+  email: string
   password: string
   role: RegisterRole
 }
@@ -17,6 +19,10 @@ export interface RegisterInput {
 export interface RegisterResult {
   phone: string
   otp_sent: boolean
+}
+
+export interface SignUpResult extends RegisterResult {
+  email: string
 }
 
 export interface LoginResult {
@@ -29,6 +35,7 @@ export type AuthErrorCode =
   | 'wrong_code'
   | 'invalid_credentials'
   | 'not_verified'
+  | 'rate_limited'
   | 'failed'
 
 export class AuthError extends Error {
@@ -40,8 +47,6 @@ export class AuthError extends Error {
   }
 }
 
-// In the mock, this number is always "already registered", so the error state can be checked by hand.
-const TAKEN_PHONE = '01700000000'
 // In the mock, this is the only correct OTP code.
 const MOCK_OTP = '123456'
 // Mock accounts for the login page. They all use the same password.
@@ -59,17 +64,31 @@ function normalisePhone(phone: string): string {
   return phone.replace(/^\+?88/, '')
 }
 
-// AUTH-01: create an account and send an OTP code to the phone.
-// The password is sent to the server only, and is never stored in the browser.
-export async function registerAccount(input: RegisterInput): Promise<RegisterResult> {
-  if (USE_MOCK) {
-    return mockDelay(() => {
-      if (getMockMode() === 'error') throw new AuthError('failed')
-      if (normalisePhone(input.phone) === TAKEN_PHONE) throw new AuthError('phone_taken')
-      return { phone: normalisePhone(input.phone), otp_sent: true }
-    })
+// AUTH-01 (C-01): create the account with Supabase Auth and send a 6-digit code to the email.
+// The name, phone and role go in as signup data; a database trigger copies them into
+// public.profiles. The trigger only accepts the roles customer and owner.
+// The password goes to Supabase only and is never stored in the browser.
+// With "Confirm email" on, Supabase answers the same way for an email that already
+// has an account, so the page cannot tell the user that an email is taken.
+export async function registerAccount(input: RegisterInput): Promise<SignUpResult> {
+  const phone = normalisePhone(input.phone)
+  const email = input.email.trim().toLowerCase()
+
+  const { error } = await getSupabase().auth.signUp({
+    email,
+    password: input.password,
+    options: {
+      data: { full_name: input.full_name, phone, role: input.role },
+    },
+  })
+
+  if (error) {
+    if (error.status === 429 || error.code === 'over_email_send_rate_limit') {
+      throw new AuthError('rate_limited')
+    }
+    throw new AuthError('failed')
   }
-  throw new Error('The real register API is not wired yet')
+  return { phone, email, otp_sent: true }
 }
 
 // AUTH-02: check the 6-digit code that was sent to the phone.
