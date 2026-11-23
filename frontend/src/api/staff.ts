@@ -1,4 +1,12 @@
-import { DEMO_SHOP_ID, bookings, staffMembers, staffServices } from '../mocks/bookings'
+import {
+  DEMO_SHOP_ID,
+  bookings,
+  staffBreaks,
+  staffHours,
+  staffMembers,
+  staffServices,
+  staffTimeOff,
+} from '../mocks/bookings'
 import type { Staff } from '../mocks/bookings'
 import { getMockMode, mockDelay } from './mock'
 
@@ -147,6 +155,105 @@ export async function setStaffActive(id: string, isActive: boolean): Promise<Own
       if (!member) throw new StaffError('failed')
       member.is_active = isActive
       return view(member)
+    })
+  }
+  return notWritten()
+}
+
+// ---------------------------------------------------------------------------
+// Availability (UI-SM-20): weekly hours, breaks and blocked time of one staff member
+// ---------------------------------------------------------------------------
+
+// day_of_week: 0 = Sunday ... 6 = Saturday. Times are local shop time, "HH:MM".
+// A break with day_of_week null repeats on every working day.
+// Blocked time is ISO UTC.
+export interface StaffSchedule {
+  hours: { day_of_week: number; opens_at: string; closes_at: string; is_closed: boolean }[]
+  breaks: { id: string; day_of_week: number | null; starts_at: string; ends_at: string; label: string }[]
+  time_off: { id: string; starts_at: string; ends_at: string; reason: string }[]
+}
+
+export interface StaffAvailability {
+  member: OwnerStaff
+  schedule: StaffSchedule
+}
+
+// A new staff member starts with 10:00 to 20:00, closed on Friday.
+const DEFAULT_HOURS: StaffSchedule['hours'] = [0, 1, 2, 3, 4, 5, 6].map((day) => ({
+  day_of_week: day,
+  opens_at: '10:00',
+  closes_at: '20:00',
+  is_closed: day === 5,
+}))
+
+const mockSchedules = new Map<string, StaffSchedule>()
+
+function cloneSchedule(schedule: StaffSchedule): StaffSchedule {
+  return {
+    hours: schedule.hours.map((item) => ({ ...item })),
+    breaks: schedule.breaks.map((item) => ({ ...item })),
+    time_off: schedule.time_off.map((item) => ({ ...item })),
+  }
+}
+
+function scheduleOf(staffId: string): StaffSchedule {
+  let schedule = mockSchedules.get(staffId)
+  if (!schedule) {
+    const hours = staffHours
+      .filter((item) => item.staff_id === staffId)
+      .map((item) => ({
+        day_of_week: item.day_of_week,
+        opens_at: item.opens_at,
+        closes_at: item.closes_at,
+        is_closed: item.is_closed,
+      }))
+    schedule = {
+      hours: hours.length === 7 ? hours : DEFAULT_HOURS.map((item) => ({ ...item })),
+      breaks: staffBreaks
+        .filter((item) => item.staff_id === staffId)
+        .map((item) => ({
+          id: item.id,
+          day_of_week: item.day_of_week,
+          starts_at: item.starts_at,
+          ends_at: item.ends_at,
+          label: item.label,
+        })),
+      time_off: staffTimeOff
+        .filter((item) => item.staff_id === staffId)
+        .map((item) => ({
+          id: item.id,
+          starts_at: item.starts_at,
+          ends_at: item.ends_at,
+          reason: item.reason,
+        })),
+    }
+    mockSchedules.set(staffId, schedule)
+  }
+  return schedule
+}
+
+// The staff member and their schedule, or null when this shop has no such staff member.
+export async function getStaffAvailability(staffId: string): Promise<StaffAvailability | null> {
+  if (USE_MOCK) {
+    return mockDelay(() => {
+      const mode = getMockMode()
+      if (mode === 'error') throw new Error('Mock error: could not load the availability')
+      if (mode === 'empty') return null
+      const member = store().staff.find((item) => item.id === staffId)
+      if (!member) return null
+      return { member: view(member), schedule: cloneSchedule(scheduleOf(staffId)) }
+    })
+  }
+  return notWritten()
+}
+
+// Saves the whole schedule. It applies to new bookings. Bookings already made are not moved.
+export async function saveStaffSchedule(staffId: string, schedule: StaffSchedule): Promise<StaffSchedule> {
+  if (USE_MOCK) {
+    return mockDelay(() => {
+      if (!store().staff.some((item) => item.id === staffId)) throw new StaffError('failed')
+      mockSchedules.set(staffId, cloneSchedule(schedule))
+      return cloneSchedule(schedule)
     })
   }
   return notWritten()

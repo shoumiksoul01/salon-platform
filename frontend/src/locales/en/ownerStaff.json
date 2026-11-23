@@ -54,5 +54,29 @@
     "text": "{{name}} will not be able to log in and will get no new bookings. You can activate them again at any time.",
     "upcoming": "They still have {{number}} booking(s) to come. These stay as they are, so check them in Bookings.",
     "confirm": "Deactivate"
+  },
+  "availability": {
+    "button": "Availability",
+    "buttonLabel": "Set availability for {{name}}",
+    "back": "← Back to staff",
+    "title": "Availability: {{name}}",
+    "loading": "Loading the availability",
+    "intro": "Set when this person works. Customers can book them only in this time.",
+    "inactiveNote": "This staff member is inactive. Their schedule is kept for when you activate them.",
+    "note": "Changes apply to new bookings. Bookings already made are not moved.",
+    "save": "Save changes",
+    "discard": "Discard changes",
+    "unsaved": "You have unsaved changes.",
+    "problem": {
+      "fix": "Fix the marked fields before you save.",
+      "noWorkingDay": "Keep at least one working day. Use blocked time for a long leave.",
+      "breakName": "Give every break a name.",
+      "reason": "Give every blocked time a reason."
+    },
+    "toast": {
+      "saved": "Availability saved."
+    },
+    "notFoundTitle": "Staff member not found",
+    "notFoundText": "This staff member does not exist or was removed."
   }
 }

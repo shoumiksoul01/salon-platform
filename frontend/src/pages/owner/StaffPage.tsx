@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 import {
   Badge,
   Button,
@@ -22,7 +23,7 @@ import styles from './StaffPage.module.css'
 
 // OWN-05: staff and availability (FR-01.5). UI-SM-19: the staff list, the add and edit
 // dialog with service assignment, activate and deactivate.
-// UI-SM-20 adds the working hours, breaks and blocked time of each staff member.
+// UI-SM-20: the Availability button opens StaffAvailabilityPage (hours, breaks, blocked time).
 
 const PHONE_PATTERN = /^01[3-9]\d{8}$/
 const NAME_MIN = 2
@@ -239,6 +240,7 @@ function Content({ initial }: { initial: PageData }) {
   const { t } = useTranslation('ownerStaff')
   const toast = useToast()
   const formatNumber = useNumber()
+  const navigate = useNavigate()
   const [list, setList] = useState(initial.staff)
   const services = initial.services
   const [showInactive, setShowInactive] = useState(true)
@@ -346,6 +348,13 @@ function Content({ initial }: { initial: PageData }) {
                           aria-label={t('editLabel', { name: member.full_name })}
                         >
                           {t('edit')}
+                        </Button>
+                        <Button
+                          variant="secondary"
+                          onClick={() => navigate(`/owner/staff/${member.id}/availability`)}
+                          aria-label={t('availability.buttonLabel', { name: member.full_name })}
+                        >
+                          {t('availability.button')}
                         </Button>
                         {member.is_active ? (
                           <Button
