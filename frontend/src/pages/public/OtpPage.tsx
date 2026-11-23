@@ -13,12 +13,12 @@ function emptyDigits(): string[] {
   return Array.from({ length: LENGTH }, () => '')
 }
 
-// AUTH-02: verify the OTP code sent to the phone (FR-02)
+// AUTH-02 (C-02): verify the OTP code sent to the email
 export default function OtpPage() {
   const { t } = useTranslation('auth')
   const toast = useToast()
   const location = useLocation()
-  const phone = (location.state as { phone?: string } | null)?.phone ?? ''
+  const email = (location.state as { email?: string } | null)?.email ?? ''
 
   const [digits, setDigits] = useState<string[]>(emptyDigits)
   const [error, setError] = useState('')
@@ -67,13 +67,15 @@ export default function OtpPage() {
 
     setSubmitting(true)
     try {
-      await verifyOtp(phone, code)
+      await verifyOtp(email, code)
       setVerified(true)
     } catch (caught) {
       if (caught instanceof AuthError && caught.code === 'wrong_code') {
         setError(t('otp.errors.wrongCode'))
         setDigits(emptyDigits())
         refs.current[0]?.focus()
+      } else if (caught instanceof AuthError && caught.code === 'rate_limited') {
+        toast.show({ message: t('otp.errors.rateLimited'), variant: 'danger' })
       } else {
         toast.show({ message: t('otp.errors.failed'), variant: 'danger' })
       }
@@ -85,20 +87,24 @@ export default function OtpPage() {
   async function handleResend() {
     setResending(true)
     try {
-      await resendOtp(phone)
+      await resendOtp(email)
       setSeconds(RESEND_SECONDS)
       setDigits(emptyDigits())
       setError('')
       refs.current[0]?.focus()
       toast.show({ message: t('otp.resent'), variant: 'success' })
-    } catch {
-      toast.show({ message: t('otp.errors.resendFailed'), variant: 'danger' })
+    } catch (caught) {
+      const key =
+        caught instanceof AuthError && caught.code === 'rate_limited'
+          ? 'otp.errors.rateLimited'
+          : 'otp.errors.resendFailed'
+      toast.show({ message: t(key), variant: 'danger' })
     } finally {
       setResending(false)
     }
   }
 
-  if (!phone) {
+  if (!email) {
     return (
       <div className={styles.page}>
         <div className={styles.wrap}>
@@ -134,7 +140,7 @@ export default function OtpPage() {
     <div className={styles.page}>
       <div className={styles.wrap}>
         <h1 className={styles.title}>{t('otp.title')}</h1>
-        <p className={styles.intro}>{t('otp.intro', { phone })}</p>
+        <p className={styles.intro}>{t('otp.intro', { email })}</p>
 
         <Card as="section">
           <form className={styles.form} onSubmit={handleSubmit} noValidate>
@@ -169,7 +175,6 @@ export default function OtpPage() {
                 {error}
               </p>
             )}
-            {import.meta.env.DEV && <p className={styles.hint}>{t('otp.demoHint')}</p>}
 
             <Button type="submit" loading={submitting} fullWidth>
               {t('otp.submit')}

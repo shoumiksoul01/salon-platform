@@ -92,26 +92,41 @@ export async function registerAccount(input: RegisterInput): Promise<SignUpResul
 }
 
 // AUTH-02: check the 6-digit code that was sent to the phone.
-export async function verifyOtp(phone: string, code: string): Promise<{ verified: boolean }> {
-  if (USE_MOCK) {
-    return mockDelay(() => {
-      if (getMockMode() === 'error') throw new AuthError('failed')
-      if (code !== MOCK_OTP) throw new AuthError('wrong_code')
-      return { verified: true }
-    })
+// AUTH-02 (C-02): check the 6-digit code that was emailed at signup.
+// Supabase treats a wrong code and an expired code the same way, so both are wrong_code.
+// A correct code also confirms the email and starts a session in this browser.
+export async function verifyOtp(email: string, code: string): Promise<{ verified: boolean }> {
+  const { error } = await getSupabase().auth.verifyOtp({
+    email: email.trim().toLowerCase(),
+    token: code,
+    type: 'signup',
+  })
+
+  if (error) {
+    if (error.status === 429 || error.code === 'over_request_rate_limit') {
+      throw new AuthError('rate_limited')
+    }
+    if (error.code === 'otp_expired' || (error.status && error.status < 500)) {
+      throw new AuthError('wrong_code')
+    }
+    throw new AuthError('failed')
   }
-  throw new Error(`The real OTP API is not wired yet (${phone})`)
+  return { verified: true }
 }
 
-// AUTH-02: send a new code to the same phone.
-export async function resendOtp(phone: string): Promise<RegisterResult> {
-  if (USE_MOCK) {
-    return mockDelay(() => {
-      if (getMockMode() === 'error') throw new AuthError('failed')
-      return { phone: normalisePhone(phone), otp_sent: true }
-    })
+// AUTH-02: send a new signup code to the same email.
+export async function resendOtp(email: string): Promise<void> {
+  const { error } = await getSupabase().auth.resend({
+    type: 'signup',
+    email: email.trim().toLowerCase(),
+  })
+
+  if (error) {
+    if (error.status === 429 || error.code === 'over_email_send_rate_limit') {
+      throw new AuthError('rate_limited')
+    }
+    throw new AuthError('failed')
   }
-  throw new Error('The real OTP API is not wired yet')
 }
 
 // AUTH-03: log in with a phone number and a password.
