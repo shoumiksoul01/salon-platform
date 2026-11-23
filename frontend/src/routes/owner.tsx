@@ -2,6 +2,7 @@ import type { RouteObject } from 'react-router-dom'
 import OwnerLayout from '../layouts/OwnerLayout'
 import ProfilePage from '../pages/customer/ProfilePage'
 import ComponentsPreview from '../pages/dev/ComponentsPreview'
+import BookingsPage from '../pages/owner/BookingsPage'
 import DashboardPage from '../pages/owner/DashboardPage'
 import ServicesPage from '../pages/owner/ServicesPage'
 import ShopSetupPage from '../pages/owner/ShopSetupPage'
@@ -17,6 +18,7 @@ export const ownerRoutes: RouteObject[] = [
     element: <OwnerLayout />,
     children: [
       { path: '/owner', element: <DashboardPage /> },
+      { path: '/owner/bookings', element: <BookingsPage /> },
       { path: '/owner/shop', element: <ShopSetupPage /> },
       { path: '/owner/services', element: <ServicesPage /> },
       { path: '/owner/staff', element: <StaffPage /> },

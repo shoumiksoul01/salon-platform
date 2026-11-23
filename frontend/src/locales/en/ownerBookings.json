@@ -1,0 +1,100 @@
+{
+  "nav": "Bookings",
+  "title": "Bookings",
+  "loading": "Loading your bookings",
+  "intro": "Answer new requests and follow each booking from arrival to the end of the service.",
+  "tabsLabel": "Bookings",
+  "staffFilter": "Staff",
+  "allStaff": "All staff",
+  "tabs": {
+    "today": "Today",
+    "requests": "Requests",
+    "requestsCount": "Requests ({{number}})",
+    "upcoming": "Upcoming",
+    "past": "Past"
+  },
+  "empty": {
+    "today": {
+      "title": "No bookings today",
+      "text": "Bookings for today will show up here."
+    },
+    "requests": {
+      "title": "No requests waiting",
+      "text": "Bookings that need your answer will show up here."
+    },
+    "upcoming": {
+      "title": "Nothing coming up",
+      "text": "Bookings from tomorrow on will show up here."
+    },
+    "past": {
+      "title": "No past bookings",
+      "text": "Finished, cancelled and missed bookings will show up here."
+    }
+  },
+  "staffWith": "With {{name}}",
+  "anyStaff": "Any staff member",
+  "total": "Total {{amount}}",
+  "paid": "Paid {{amount}}",
+  "earlierNoShows": "Earlier no-shows: {{number}}",
+  "notes": {
+    "hold": "Waiting for the customer to pay. The slot is held until {{time}}.",
+    "needsAnswer": "This booking needs your answer. Accept it or reject it.",
+    "cancelledByShop": "Cancelled by the shop.",
+    "cancelledByCustomer": "Cancelled by the customer.",
+    "reason": "Reason: {{reason}}.",
+    "noShow": "The customer did not come."
+  },
+  "actions": {
+    "accept": "Accept",
+    "reject": "Reject",
+    "arrive": "Mark arrived",
+    "start": "Start service",
+    "complete": "Mark completed",
+    "no_show": "No-show",
+    "cancel": "Cancel booking"
+  },
+  "reasons": {
+    "staff": "The staff member is not available",
+    "closed": "The shop is closed then",
+    "slot": "The time cannot be given",
+    "other": "Other"
+  },
+  "dialog": {
+    "keep": "Keep booking",
+    "reason": "Reason",
+    "reasonPlaceholder": "Choose a reason",
+    "reasonRequired": "Choose a reason. The customer will see it.",
+    "refund": "The customer gets back everything they paid ({{amount}}).",
+    "nothingPaid": "The customer has not paid anything, so there is nothing to refund.",
+    "reject": {
+      "title": "Reject this booking?",
+      "confirm": "Reject booking"
+    },
+    "cancel": {
+      "title": "Cancel this booking?",
+      "confirm": "Cancel booking"
+    },
+    "no_show": {
+      "title": "Mark as a no-show?",
+      "confirm": "Mark no-show",
+      "text": "The customer gets a warning. Repeated no-shows can limit their bookings.",
+      "earlier": "This customer has {{number}} earlier no-show(s)."
+    }
+  },
+  "toast": {
+    "accept": "Booking accepted.",
+    "reject": "Booking rejected.",
+    "arrive": "Marked as arrived.",
+    "start": "Service started.",
+    "complete": "Booking completed.",
+    "no_show": "Marked as a no-show.",
+    "cancel": "Booking cancelled.",
+    "failed": "Could not update the booking. Please try again."
+  },
+  "pagination": {
+    "nav": "Booking pages",
+    "previous": "Previous",
+    "next": "Next",
+    "status": "Page {{page}} of {{total}}"
+  }
+}
