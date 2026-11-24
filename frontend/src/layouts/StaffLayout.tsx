@@ -15,7 +15,10 @@ interface NavItem {
 //   { to: '/staff', labelKey: 'layout.today', end: true }
 //   { to: '/staff/queue', labelKey: 'layout.queue' }
 // Keep it to 4 items at most, because the buttons are big and share one row on a phone.
-const NAV_ITEMS: NavItem[] = [{ to: '/staff/profile', labelKey: 'layout.profile' }]
+const NAV_ITEMS: NavItem[] = [
+  { to: '/staff', labelKey: 'layout.today', end: true },
+  { to: '/staff/profile', labelKey: 'layout.profile' },
+]
 
 function topLinkClass({ isActive }: { isActive: boolean }) {
   return isActive ? `${styles.link} ${styles.active}` : styles.link
