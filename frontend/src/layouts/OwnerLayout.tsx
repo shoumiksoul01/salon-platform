@@ -24,6 +24,7 @@ const NAV_ITEMS: NavItem[] = [
   { to: '/owner/services', labelKey: 'ownerServices:nav', inBottomBar: true },
   { to: '/owner/staff', labelKey: 'ownerStaff:nav' },
   { to: '/owner/reviews', labelKey: 'ownerReviews:nav' },
+  { to: '/owner/reports', labelKey: 'ownerReports:nav' },
   { to: '/owner/profile', labelKey: 'layout.profile' },
 ]
 

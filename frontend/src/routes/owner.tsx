@@ -6,6 +6,7 @@ import BookingsPage from '../pages/owner/BookingsPage'
 import DashboardPage from '../pages/owner/DashboardPage'
 import ServicesPage from '../pages/owner/ServicesPage'
 import QueuePage from '../pages/owner/QueuePage'
+import ReportsPage from '../pages/owner/ReportsPage'
 import ReviewsPage from '../pages/owner/ReviewsPage'
 import ShopSetupPage from '../pages/owner/ShopSetupPage'
 import StaffAvailabilityPage from '../pages/owner/StaffAvailabilityPage'
@@ -27,6 +28,7 @@ export const ownerRoutes: RouteObject[] = [
       { path: '/owner/staff', element: <StaffPage /> },
       { path: '/owner/staff/:staffId/availability', element: <StaffAvailabilityPage /> },
       { path: '/owner/reviews', element: <ReviewsPage /> },
+      { path: '/owner/reports', element: <ReportsPage /> },
       { path: '/owner/profile', element: <ProfilePage /> },
       ...(import.meta.env.DEV
         ? [{ path: '/owner/dev/components', element: <ComponentsPreview /> }]
