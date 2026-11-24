@@ -4,6 +4,7 @@ import ProfilePage from '../pages/customer/ProfilePage'
 import ComponentsPreview from '../pages/dev/ComponentsPreview'
 import BookingsPage from '../pages/owner/BookingsPage'
 import DashboardPage from '../pages/owner/DashboardPage'
+import MediaPage from '../pages/owner/MediaPage'
 import ServicesPage from '../pages/owner/ServicesPage'
 import QueuePage from '../pages/owner/QueuePage'
 import ReportsPage from '../pages/owner/ReportsPage'
@@ -24,6 +25,7 @@ export const ownerRoutes: RouteObject[] = [
       { path: '/owner/bookings', element: <BookingsPage /> },
       { path: '/owner/queue', element: <QueuePage /> },
       { path: '/owner/shop', element: <ShopSetupPage /> },
+      { path: '/owner/media', element: <MediaPage /> },
       { path: '/owner/services', element: <ServicesPage /> },
       { path: '/owner/staff', element: <StaffPage /> },
       { path: '/owner/staff/:staffId/availability', element: <StaffAvailabilityPage /> },

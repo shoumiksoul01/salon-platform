@@ -1,0 +1,72 @@
+{
+  "nav": "Photos and tour",
+  "title": "Photos and virtual tour",
+  "loading": "Loading your photos",
+  "photos": {
+    "title": "Photos",
+    "intro": "Customers see these on your shop page. The first photo is the cover.",
+    "add": "Add a photo",
+    "count": "Photos: {{number}} of {{max}}",
+    "full": "You have reached the limit of {{max}} photos. Remove one to add another.",
+    "emptyTitle": "No photos yet",
+    "emptyText": "Add a few photos of your shop so customers know what to expect."
+  },
+  "photo": {
+    "position": "Photo {{number}}",
+    "cover": "Cover",
+    "altFallback": "Shop photo {{number}}",
+    "noDescription": "No description",
+    "earlier": "Move earlier",
+    "earlierLabel": "Move photo {{number}} earlier",
+    "later": "Move later",
+    "laterLabel": "Move photo {{number}} later",
+    "edit": "Edit description",
+    "editLabel": "Edit the description of photo {{number}}",
+    "remove": "Remove",
+    "removeLabel": "Remove photo {{number}}",
+    "moved": "Photo moved to position {{position}}."
+  },
+  "add": {
+    "title": "Add a photo",
+    "submit": "Add photo",
+    "file": "Photo",
+    "fileHint": "JPG, PNG or WebP, up to {{max}} MB.",
+    "fileRequired": "Choose a photo.",
+    "alt": "Description",
+    "altHint": "Optional. Say what the photo shows, for example \"Facial room\". Up to {{max}} characters."
+  },
+  "alt": {
+    "title": "Edit description"
+  },
+  "remove": {
+    "title": "Remove this photo?",
+    "text": "The photo will no longer be shown on your shop page.",
+    "confirm": "Remove photo"
+  },
+  "tour": {
+    "title": "Virtual tour",
+    "intro": "Add a link to a virtual tour of your shop. Customers can open it from your shop page.",
+    "label": "Tour link",
+    "hint": "A link that starts with https://. Leave it empty to show no tour.",
+    "current": "Current tour:",
+    "open": "Open the tour in a new tab",
+    "remove": "Remove tour"
+  },
+  "errors": {
+    "too_many": "You can have up to {{maxPhotos}} photos.",
+    "bad_type": "Use a JPG, PNG or WebP picture.",
+    "too_big": "The picture is larger than 2 MB.",
+    "read_failed": "Could not read the picture. Try again.",
+    "alt_too_long": "The description can be at most {{max}} characters.",
+    "bad_url": "Enter a link that starts with https:// and is at most {{urlMax}} characters.",
+    "not_found": "This photo no longer exists. Reload the page.",
+    "failed": "Could not save. Please try again."
+  },
+  "toast": {
+    "added": "Photo added.",
+    "altSaved": "Description saved.",
+    "removed": "Photo removed.",
+    "tourSaved": "Tour link saved.",
+    "tourRemoved": "Tour link removed."
+  }
+}

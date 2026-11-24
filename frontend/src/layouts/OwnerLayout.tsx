@@ -21,6 +21,7 @@ const NAV_ITEMS: NavItem[] = [
   { to: '/owner/bookings', labelKey: 'ownerBookings:nav', inBottomBar: true },
   { to: '/owner/queue', labelKey: 'ownerQueue:nav' },
   { to: '/owner/shop', labelKey: 'layout.shop' },
+  { to: '/owner/media', labelKey: 'ownerMedia:nav' },
   { to: '/owner/services', labelKey: 'ownerServices:nav', inBottomBar: true },
   { to: '/owner/staff', labelKey: 'ownerStaff:nav' },
   { to: '/owner/reviews', labelKey: 'ownerReviews:nav' },
