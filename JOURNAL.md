@@ -2,7 +2,7 @@
 
 Day-by-day record of what each team member did, taken from the Git history (`git log`) up to 23 November 2026. Each entry lists the commits made that day.
 
-Totals: Shoumik 37 commits, Shomrat 33 commits (70 in all).
+Totals: Shoumik 37 commits, Shomrat 33 commits (70 in all) as of 23 November 2026. For the current numbers run `git shortlog -sn --no-merges`.
 
 | Date | Author | What was done | Commits |
 |---|---|---|---|
@@ -26,5 +26,8 @@ Totals: Shoumik 37 commits, Shomrat 33 commits (70 in all).
 | 2026-11-22 | Shomrat | Customer notifications page; Match customer, owner and staff headers to the gold navbar; Match staff header to the gold navbar; Owner dashboard numbers and today's bookings; Owner dashboard upcoming bookings and popular services | `985803c`, `f1d5447`, `cf4efdf`, `3092a01`, `62118c3` |
 | 2026-11-22 | Shoumik | Choose services and staff page; Pick a day and time page; Staff names, next free day and time groups on slot page; Review booking page; Payment choice and booking confirmation | `544a96e`, `6363e90`, `b01a4aa`, `114bb0f`, `354da01` |
 | 2026-11-23 | Shomrat | Owner services list with add, edit and deactivate; Owner offers tab with create, edit and end; Owner staff list with add, edit and service assignment; Owner staff availability with hours, breaks and blocked time; Owner bookings with requests, status updates and no-show; Owner live queue with walk-ins and check-in | `11126bc`, `f233739`, `e159368`, `5e382d1`, `9d18e97`, `0f3ce05` |
+| 2026-11-24 | Shoumik | Chose Supabase Auth (email as the login id) and set up the dev project with Brevo email; Add supabase-js and env example; Supabase client module; Profiles table, role column and signup trigger; Wire register, OTP verify and login to Supabase | `7aff1c9`, `73e0a45`, `b3921b5`, `8401d36`, `408e873`, `7f45ed5` |
 
-Entries after 23 November 2026 are added in the same commit as the work.
+Notes for 24 November: register, OTP and login now run against Supabase and are no longer mock. The first signup timed out (504) because the email send to Brevo was slow, and it was fixed by changing the SMTP port. Supabase first sent 8-digit codes, so the OTP length was set to 6. Commit `c1b11e0` (README with team contributions and project journal) also landed between the 23 and 24 November work; its exact day was not checked. The first three Supabase commits are listed under 24 November, but their exact day was not verified, so correct this row with `git log --format="%h %ad %s" --date=short` if needed. Next: session and log out, reset password with Supabase, route guards.
+
+Entries after 24 November 2026 are added in the same commit as the work.
