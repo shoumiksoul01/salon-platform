@@ -1,17 +1,30 @@
 import { useState } from 'react'
 import type { KeyboardEvent } from 'react'
-import { Link, Outlet, useLocation } from 'react-router-dom'
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import LanguageSwitcher from '../components/LanguageSwitcher'
+import { Button } from '../components/ui'
+import { logoutAccount } from '../api/auth'
+import type { ProfileRole } from '../api/auth'
+import { useAuth } from '../auth/useAuth'
 import styles from './PublicLayout.module.css'
 
 const CURRENT_YEAR = new Date().getFullYear()
+
+// Where the name in the header leads. Admin pages do not exist yet.
+const ACCOUNT_HOME: Partial<Record<ProfileRole, string>> = {
+  customer: '/me',
+  owner: '/owner',
+  staff: '/staff',
+}
 
 // Layout for the public pages: header, page content, footer.
 // The layout provides the page's <main>, so pages inside it must not render their own.
 export default function PublicLayout() {
   const { t } = useTranslation('public')
   const { pathname } = useLocation()
+  const navigate = useNavigate()
+  const { status, user } = useAuth()
   const [menuOpen, setMenuOpen] = useState(false)
 
   // On the Home page the header sits on top of the hero video.
@@ -31,6 +44,15 @@ export default function PublicLayout() {
   function handleKeyDown(event: KeyboardEvent<HTMLElement>) {
     if (event.key === 'Escape') closeMenu()
   }
+
+  async function handleLogout() {
+    closeMenu()
+    await logoutAccount().catch(() => undefined)
+    navigate('/')
+  }
+
+  const firstName = user ? user.full_name.trim().split(/\s+/)[0] || user.email : ''
+  const accountHome = user ? ACCOUNT_HOME[user.role] : undefined
 
   return (
     <div className={styles.shell}>
@@ -62,15 +84,32 @@ export default function PublicLayout() {
             <div className={styles.actions}>
               <LanguageSwitcher />
               <div className={styles.authLinks}>
-                <Link to="/login" className={styles.authLink} onClick={closeMenu}>
-                  {t('layout.login')}
-                </Link>
-                <span className={styles.slash} aria-hidden="true">
-                  /
-                </span>
-                <Link to="/register" className={styles.authLink} onClick={closeMenu}>
-                  {t('header:signUp')}
-                </Link>
+                {status === 'signedIn' && user ? (
+                  <>
+                    {accountHome ? (
+                      <Link to={accountHome} className={styles.authLink} onClick={closeMenu}>
+                        {firstName}
+                      </Link>
+                    ) : (
+                      <span className={styles.authLink}>{firstName}</span>
+                    )}
+                    <Button variant="secondary" onClick={handleLogout}>
+                      {t('layout.logout')}
+                    </Button>
+                  </>
+                ) : status === 'signedOut' ? (
+                  <>
+                    <Link to="/login" className={styles.authLink} onClick={closeMenu}>
+                      {t('layout.login')}
+                    </Link>
+                    <span className={styles.slash} aria-hidden="true">
+                      /
+                    </span>
+                    <Link to="/register" className={styles.authLink} onClick={closeMenu}>
+                      {t('header:signUp')}
+                    </Link>
+                  </>
+                ) : null}
               </div>
               <Link to="/for-shops" className={styles.cta} onClick={closeMenu}>
                 {t('header:listBusiness')}

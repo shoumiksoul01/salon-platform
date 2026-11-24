@@ -13,6 +13,7 @@
     "terms": "Terms",
     "privacy": "Privacy",
     "tagline": "Find a salon or parlour, book a slot and skip the wait.",
-    "rights": "© {{year}} Salon & Parlour Booking. All rights reserved."
+    "rights": "© {{year}} Salon & Parlour Booking. All rights reserved.",
+        "logout": "Log out"
   }
 }

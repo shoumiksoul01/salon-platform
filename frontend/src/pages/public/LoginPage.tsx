@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Button, Card, FormField, Input, useToast } from '../../components/ui'
 import { AuthError, loginAccount } from '../../api/auth'
-import type { UserRole } from '../../api/auth'
+import type { ProfileRole } from '../../api/auth'
 import styles from './LoginPage.module.css'
 
 interface FormErrors {
@@ -15,10 +15,11 @@ interface FormErrors {
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 // Where each kind of user lands after logging in.
-const HOME: Record<UserRole, string> = {
+const HOME: Record<ProfileRole, string> = {
   customer: '/me',
   owner: '/owner',
   staff: '/staff',
+  admin: '/', // the admin pages come with ADM-01
 }
 
 // AUTH-03: log in (C-03)
