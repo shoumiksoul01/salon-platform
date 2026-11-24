@@ -1,0 +1,71 @@
+{
+  "nav": "Reviews",
+  "title": "Reviews",
+  "loading": "Loading your reviews",
+  "intro": "See what customers say about your shop and reply to them. Your reply is shown under the review on your shop page.",
+  "tabsLabel": "Reviews",
+  "starsFilter": "Rating",
+  "allStars": "All ratings",
+  "stars": "{{rating}} out of 5 stars",
+  "noComment": "The customer gave a rating without a written comment.",
+  "yourReply": "Your reply",
+  "needsReplyBadge": "No reply yet",
+  "reply": "Reply",
+  "editReply": "Edit reply",
+  "tiles": {
+    "average": "Average rating",
+    "averageValue": "{{value}} / 5",
+    "total": "Reviews",
+    "waiting": "Waiting for a reply"
+  },
+  "tabs": {
+    "all": "All",
+    "needsReply": "Needs reply",
+    "needsReplyCount": "Needs reply ({{number}})",
+    "replied": "Replied"
+  },
+  "empty": {
+    "none": {
+      "title": "No reviews yet",
+      "text": "Customers can review a visit after it is finished. Their reviews will show up here."
+    },
+    "all": {
+      "title": "No reviews",
+      "text": "There are no reviews to show."
+    },
+    "needsReply": {
+      "title": "Nothing waiting for a reply",
+      "text": "You have replied to every review. New reviews will show up here."
+    },
+    "replied": {
+      "title": "No replies yet",
+      "text": "Reviews that you have replied to will show up here."
+    },
+    "filtered": {
+      "title": "No reviews with this rating",
+      "text": "Choose a different rating to see more reviews."
+    }
+  },
+  "dialog": {
+    "title": "Reply to review",
+    "editTitle": "Edit your reply",
+    "label": "Your reply",
+    "hint": "Be polite and keep it about the visit. Everyone who opens your shop page can read it.",
+    "counter": "{{used}} / {{max}}",
+    "empty": "Write a reply before you send it.",
+    "tooLong": "The reply can have at most {{max}} characters.",
+    "send": "Send reply",
+    "saveEdit": "Save reply"
+  },
+  "toast": {
+    "sent": "Your reply was posted.",
+    "updated": "Your reply was updated.",
+    "failed": "Could not save the reply. Please try again."
+  },
+  "pagination": {
+    "nav": "Reviews pages",
+    "previous": "Previous",
+    "next": "Next",
+    "status": "Page {{page}} of {{total}}"
+  }
+}
