@@ -3,6 +3,7 @@ import type { KeyboardEvent } from 'react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import LanguageSwitcher from '../components/LanguageSwitcher'
+import LogoutButton from '../components/LogoutButton'
 import styles from './OwnerLayout.module.css'
 
 interface NavItem {
@@ -78,6 +79,7 @@ export default function OwnerLayout() {
 
             <div className={styles.navFooter}>
               <LanguageSwitcher />
+              <LogoutButton />
               <Link to="/" className={styles.siteLink}>
                 {t('layout.viewSite')}
               </Link>
@@ -103,6 +105,7 @@ export default function OwnerLayout() {
             ))}
           </ul>
           <LanguageSwitcher />
+          <LogoutButton onDone={closeMore} />
           <Link to="/" className={styles.siteLink} onClick={closeMore}>
             {t('layout.viewSite')}
           </Link>

@@ -1,6 +1,7 @@
 import { Link, NavLink, Outlet } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import LanguageSwitcher from '../components/LanguageSwitcher'
+import LogoutButton from '../components/LogoutButton'
 import styles from './StaffLayout.module.css'
 
 interface NavItem {
@@ -57,6 +58,7 @@ export default function StaffLayout() {
               </ul>
             </nav>
             <LanguageSwitcher />
+            <LogoutButton />
           </div>
         </div>
       </header>
