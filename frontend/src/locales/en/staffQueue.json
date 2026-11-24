@@ -1,0 +1,52 @@
+{
+  "title": "Queue and hours",
+  "loading": "Loading your queue",
+  "staffLine": "Signed in as {{name}}",
+  "tabs": {
+    "label": "Queue and hours",
+    "queue": "My queue",
+    "hours": "My hours"
+  },
+  "tiles": {
+    "serving": "Serving now",
+    "waiting": "Waiting"
+  },
+  "updatedAt": "Updated at {{time}}",
+  "autoRefresh": "This page updates itself every 10 seconds.",
+  "refreshFailed": "Could not update. Showing the last queue.",
+  "refresh": "Update now",
+  "emptyTitle": "Nobody in your queue",
+  "emptyText": "Customers who are waiting for you will appear here.",
+  "servingTitle": "Being served",
+  "waitingTitle": "Waiting for you",
+  "nobodyWaiting": "Nobody is waiting.",
+  "finishFirst": "Finish the current service before you start the next one.",
+  "actions": {
+    "start": "Start service",
+    "finish": "Finish service"
+  },
+  "toast": {
+    "start": "{{name}} is being served.",
+    "finish": "Finished: {{name}}.",
+    "failed": "Could not update the queue. Please try again."
+  },
+  "hours": {
+    "intro": "Set when you work. Customers can book you only in this time.",
+    "note": "Changes apply to new bookings. Bookings already made are not moved.",
+    "save": "Save changes",
+    "discard": "Discard changes",
+    "unsaved": "You have unsaved changes.",
+    "problem": {
+      "fix": "Fix the marked fields before you save.",
+      "noWorkingDay": "Keep at least one working day. Use blocked time for a long leave.",
+      "breakName": "Give every break a name.",
+      "reason": "Give every blocked time a reason."
+    },
+    "toast": {
+      "saved": "Your hours are saved.",
+      "failed": "Could not save. Please try again."
+    },
+    "notFoundTitle": "Your hours are not available",
+    "notFoundText": "Your schedule could not be found. Ask the owner for help."
+  }
+}

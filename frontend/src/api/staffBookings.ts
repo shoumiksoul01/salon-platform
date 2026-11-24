@@ -30,10 +30,11 @@ const dhakaDay = (ms: number) => new Date(ms + DHAKA_OFFSET_MS).toISOString().sl
 
 // There is no staff login yet (the real API will know the signed-in staff member). The mock
 // uses the staff member of the demo shop who has the most bookings today, so the page always
-// has something to show, and keeps that choice until the page is reloaded.
+// has something to show, and keeps that choice until the page is reloaded. The staff queue
+// page (api/staffQueue.ts) uses the same staff member.
 let demoStaffId: string | null = null
 
-function currentStaffId(): string {
+export function currentStaffId(): string {
   if (demoStaffId) return demoStaffId
   const today = dhakaDay(Date.now())
   const counts = new Map<string, number>()
