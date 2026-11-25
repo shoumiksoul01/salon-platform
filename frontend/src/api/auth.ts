@@ -1,10 +1,5 @@
 import type { User } from '@supabase/supabase-js'
-import { getMockMode, mockDelay } from './mock'
 import { getSupabase } from './supabaseClient'
-
-// Mock data for the auth functions that are not wired yet.
-// registerAccount is real (Supabase Auth). The others are wired in their own commits.
-const USE_MOCK = true
 
 export type RegisterRole = 'customer' | 'owner'
 export type UserRole = 'customer' | 'owner' | 'staff'
@@ -47,6 +42,7 @@ export type AuthErrorCode =
   | 'invalid_credentials'
   | 'not_verified'
   | 'rate_limited'
+  | 'same_password'
   | 'failed'
 
 export class AuthError extends Error {
@@ -57,14 +53,6 @@ export class AuthError extends Error {
     this.code = code
   }
 }
-
-// In the mock, this is the only correct OTP code.
-const MOCK_OTP = '123456'
-// Mock accounts for the login page. They all use the same password.
-
-
-// In the mock, this account exists but its phone number is not verified yet.
-const PASSWORD_MIN = 8
 
 function normalisePhone(phone: string): string {
   return phone.replace(/^\+?88/, '')
@@ -97,7 +85,6 @@ export async function registerAccount(input: RegisterInput): Promise<SignUpResul
   return { phone, email, otp_sent: true }
 }
 
-// AUTH-02: check the 6-digit code that was sent to the phone.
 // AUTH-02 (C-02): check the 6-digit code that was emailed at signup.
 // Supabase treats a wrong code and an expired code the same way, so both are wrong_code.
 // A correct code also confirms the email and starts a session in this browser.
@@ -235,32 +222,46 @@ export async function logoutAccount(): Promise<void> {
   if (error) throw new AuthError('failed')
 }
 
-// AUTH-04, step 1: send a reset code to the phone.
-// The real API must answer the same way whether or not the number has an account.
-export async function requestPasswordReset(phone: string): Promise<RegisterResult> {
-  if (USE_MOCK) {
-    return mockDelay(() => {
-      if (getMockMode() === 'error') throw new AuthError('failed')
-      return { phone: normalisePhone(phone), otp_sent: true }
-    })
+// AUTH-04 (C-04), step 1: email a 6-digit reset code.
+// Supabase answers the same way whether or not the email has an account, so the page
+// cannot reveal which emails are registered.
+export async function requestPasswordReset(email: string): Promise<void> {
+  const { error } = await getSupabase().auth.resetPasswordForEmail(email.trim().toLowerCase())
+
+  if (error) {
+    if (error.status === 429 || error.code === 'over_email_send_rate_limit') {
+      throw new AuthError('rate_limited')
+    }
+    throw new AuthError('failed')
   }
-  throw new Error('The real reset API is not wired yet')
 }
 
-// AUTH-04, step 2: check the code and set the new password.
-// The password is sent to the server only, and is never stored in the browser.
-export async function resetPassword(
-  phone: string,
-  code: string,
-  password: string,
-): Promise<{ reset: boolean }> {
-  if (USE_MOCK) {
-    return mockDelay(() => {
-      if (getMockMode() === 'error') throw new AuthError('failed')
-      if (code !== MOCK_OTP) throw new AuthError('wrong_code')
-      if (password.length < PASSWORD_MIN) throw new AuthError('failed')
-      return { reset: true }
-    })
+// AUTH-04 (C-04), step 2: check the code, then set the new password.
+// A correct code starts a short session in this browser, which is what lets updateUser
+// change the password. That session is ended again, so the user logs in with the new password.
+export async function resetPassword(email: string, code: string, password: string): Promise<void> {
+  const supabase = getSupabase()
+
+  const { error: codeError } = await supabase.auth.verifyOtp({
+    email: email.trim().toLowerCase(),
+    token: code,
+    type: 'recovery',
+  })
+  if (codeError) {
+    if (codeError.status === 429 || codeError.code === 'over_request_rate_limit') {
+      throw new AuthError('rate_limited')
+    }
+    if (codeError.code === 'otp_expired' || (codeError.status && codeError.status < 500)) {
+      throw new AuthError('wrong_code')
+    }
+    throw new AuthError('failed')
   }
-  throw new Error(`The real reset API is not wired yet (${phone})`)
+
+  const { error: updateError } = await supabase.auth.updateUser({ password })
+  await supabase.auth.signOut({ scope: 'local' })
+
+  if (updateError) {
+    if (updateError.code === 'same_password') throw new AuthError('same_password')
+    throw new AuthError('failed')
+  }
 }

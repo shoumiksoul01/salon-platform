@@ -4,15 +4,15 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Button, Card, FormField, Input, useToast } from '../../components/ui'
 import OtpInput from '../../components/OtpInput'
-import { AuthError, requestPasswordReset, resendOtp, resetPassword } from '../../api/auth'
+import { AuthError, requestPasswordReset, resetPassword } from '../../api/auth'
 import styles from './ResetPasswordPage.module.css'
 
 const LENGTH = 6
 const RESEND_SECONDS = 60
-const PHONE_PATTERN = /^(?:\+?88)?01[3-9]\d{8}$/
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const PASSWORD_MIN = 8
 
-type Step = 'phone' | 'reset' | 'done'
+type Step = 'email' | 'reset' | 'done'
 
 interface ResetErrors {
   code?: string
@@ -24,14 +24,14 @@ function emptyDigits(): string[] {
   return Array.from({ length: LENGTH }, () => '')
 }
 
-// AUTH-04: reset a forgotten password with an OTP code (C-04)
+// AUTH-04: reset a forgotten password with an emailed code (C-04)
 export default function ResetPasswordPage() {
   const { t } = useTranslation('auth')
   const toast = useToast()
 
-  const [step, setStep] = useState<Step>('phone')
-  const [phone, setPhone] = useState('')
-  const [phoneError, setPhoneError] = useState('')
+  const [step, setStep] = useState<Step>('email')
+  const [email, setEmail] = useState('')
+  const [emailError, setEmailError] = useState('')
   const [digits, setDigits] = useState<string[]>(emptyDigits)
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
@@ -47,30 +47,34 @@ export default function ResetPasswordPage() {
     return () => window.clearTimeout(id)
   }, [step, seconds])
 
-  async function handlePhoneSubmit(event: SyntheticEvent<HTMLFormElement>) {
+  async function handleEmailSubmit(event: SyntheticEvent<HTMLFormElement>) {
     event.preventDefault()
-    const value = phone.trim()
+    const value = email.trim().toLowerCase()
     if (!value) {
-      setPhoneError(t('reset.errors.phoneRequired'))
+      setEmailError(t('reset.errors.emailRequired'))
       return
     }
-    if (!PHONE_PATTERN.test(value)) {
-      setPhoneError(t('reset.errors.phoneInvalid'))
+    if (!EMAIL_PATTERN.test(value)) {
+      setEmailError(t('reset.errors.emailInvalid'))
       return
     }
-    setPhoneError('')
+    setEmailError('')
 
     setSubmitting(true)
     try {
-      const result = await requestPasswordReset(value)
-      setPhone(result.phone)
+      await requestPasswordReset(value)
+      setEmail(value)
       setDigits(emptyDigits())
       setSeconds(RESEND_SECONDS)
       setFocusKey((key) => key + 1)
       setStep('reset')
-      toast.show({ message: t('reset.codeSent', { phone: result.phone }), variant: 'success' })
-    } catch {
-      toast.show({ message: t('reset.errors.sendFailed'), variant: 'danger' })
+      toast.show({ message: t('reset.codeSent', { email: value }), variant: 'success' })
+    } catch (error) {
+      const limited = error instanceof AuthError && error.code === 'rate_limited'
+      toast.show({
+        message: t(limited ? 'reset.errors.rateLimited' : 'reset.errors.sendFailed'),
+        variant: 'danger',
+      })
     } finally {
       setSubmitting(false)
     }
@@ -93,13 +97,22 @@ export default function ResetPasswordPage() {
 
     setSubmitting(true)
     try {
-      await resetPassword(phone, digits.join(''), password)
+      await resetPassword(email, digits.join(''), password)
       setStep('done')
     } catch (error) {
-      if (error instanceof AuthError && error.code === 'wrong_code') {
+      const code = error instanceof AuthError ? error.code : 'failed'
+      if (code === 'wrong_code') {
         setErrors({ code: t('otp.errors.wrongCode') })
         setDigits(emptyDigits())
         setFocusKey((key) => key + 1)
+      } else if (code === 'same_password') {
+        // The code was used up by the check, so a new one is needed.
+        setDigits(emptyDigits())
+        setSeconds(0)
+        setFocusKey((key) => key + 1)
+        toast.show({ message: t('reset.errors.samePassword'), variant: 'danger' })
+      } else if (code === 'rate_limited') {
+        toast.show({ message: t('reset.errors.rateLimited'), variant: 'danger' })
       } else {
         toast.show({ message: t('reset.errors.failed'), variant: 'danger' })
       }
@@ -111,21 +124,25 @@ export default function ResetPasswordPage() {
   async function handleResend() {
     setResending(true)
     try {
-      await resendOtp(phone)
+      await requestPasswordReset(email)
       setSeconds(RESEND_SECONDS)
       setDigits(emptyDigits())
       setErrors({})
       setFocusKey((key) => key + 1)
       toast.show({ message: t('otp.resent'), variant: 'success' })
-    } catch {
-      toast.show({ message: t('otp.errors.resendFailed'), variant: 'danger' })
+    } catch (error) {
+      const limited = error instanceof AuthError && error.code === 'rate_limited'
+      toast.show({
+        message: t(limited ? 'reset.errors.rateLimited' : 'otp.errors.resendFailed'),
+        variant: 'danger',
+      })
     } finally {
       setResending(false)
     }
   }
 
   function handleBack() {
-    setStep('phone')
+    setStep('email')
     setDigits(emptyDigits())
     setPassword('')
     setConfirm('')
@@ -153,7 +170,7 @@ export default function ResetPasswordPage() {
       <div className={styles.page}>
         <div className={styles.wrap}>
           <h1 className={styles.title}>{t('reset.title')}</h1>
-          <p className={styles.intro}>{t('reset.codeIntro', { phone })}</p>
+          <p className={styles.intro}>{t('reset.codeIntro', { email })}</p>
 
           <Card as="section">
             <form className={styles.form} onSubmit={handleResetSubmit} noValidate>
@@ -205,8 +222,6 @@ export default function ResetPasswordPage() {
                 )}
               </FormField>
 
-              {import.meta.env.DEV && <p className={styles.hint}>{t('otp.demoHint')}</p>}
-
               <Button type="submit" loading={submitting} fullWidth>
                 {t('reset.submit')}
               </Button>
@@ -222,7 +237,7 @@ export default function ResetPasswordPage() {
               </Button>
             )}
             <Button variant="ghost" onClick={handleBack}>
-              {t('reset.changeNumber')}
+              {t('reset.changeEmail')}
             </Button>
           </div>
         </div>
@@ -234,20 +249,19 @@ export default function ResetPasswordPage() {
     <div className={styles.page}>
       <div className={styles.wrap}>
         <h1 className={styles.title}>{t('reset.title')}</h1>
-        <p className={styles.intro}>{t('reset.phoneIntro')}</p>
+        <p className={styles.intro}>{t('reset.emailIntro')}</p>
 
         <Card as="section">
-          <form className={styles.form} onSubmit={handlePhoneSubmit} noValidate>
-            <FormField label={t('reset.phone')} error={phoneError || undefined} required>
+          <form className={styles.form} onSubmit={handleEmailSubmit} noValidate>
+            <FormField label={t('reset.email')} error={emailError || undefined} required>
               {(control) => (
                 <Input
                   {...control}
-                  type="tel"
-                  inputMode="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="01XXXXXXXXX"
-                  autoComplete="tel"
+                  type="email"
+                  inputMode="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="email"
                 />
               )}
             </FormField>
