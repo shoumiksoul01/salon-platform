@@ -12,6 +12,8 @@ import BookReviewPage from '../pages/public/BookReviewPage'
 import KitPreview from '../pages/dev/KitPreview'
 import LoginPage from '../pages/public/LoginPage'
 import ResetPasswordPage from '../pages/public/ResetPasswordPage'
+import StaticPage from '../pages/public/StaticPage'
+import NotFoundPage from '../pages/public/NotFoundPage'
 
 // Public pages (PUB, AUTH, BOOK, SHR) are added to the children array of the layout route.
 // The /dev/kit page exists only while running "npm run dev".
@@ -30,7 +32,12 @@ export const publicRoutes: RouteObject[] = [
       { path: '/book/:shopId/review', element: <BookReviewPage /> },
       { path: '/login', element: <LoginPage /> },
       { path: '/reset-password', element: <ResetPasswordPage /> },
+      { path: '/about', element: <StaticPage page="about" /> },
+      { path: '/terms', element: <StaticPage page="terms" /> },
+      { path: '/privacy', element: <StaticPage page="privacy" /> },
       ...(import.meta.env.DEV ? [{ path: '/dev/kit', element: <KitPreview /> }] : []),
+      // Keep this last: every address that matches no page shows the 404 page.
+      { path: '*', element: <NotFoundPage /> },
     ],
   },
 ]

@@ -1,0 +1,97 @@
+{
+  "demoNotice": "This platform is a university demonstration project. This text describes how it is meant to work and is not legal advice.",
+  "about": {
+    "title": "About us",
+    "intro": "Salon & Parlour Booking is a platform for Bangladesh that helps customers find a salon or parlour, book a slot and skip the wait.",
+    "sections": {
+      "what": {
+        "heading": "What we do",
+        "body": "Customers browse shops on a list or a map, look at photos and virtual tours, and book one or more services for a time that suits them. Shops manage their services, staff, offers and queue in one place."
+      },
+      "customers": {
+        "heading": "For customers",
+        "body": "Choose your services and, if you like, a staff member. Pay online with bKash, Nagad or a card, or pay at the shop where the shop allows it. You can follow the queue and get a notification when your turn is near."
+      },
+      "shops": {
+        "heading": "For shop owners and staff",
+        "body": "Owners set up the shop profile, working hours, photos, services and offers. Staff see their own bookings and queue. Everyone can use the platform in English or in Bengali."
+      },
+      "approval": {
+        "heading": "Trusted shops",
+        "body": "Every shop is reviewed by our admin team before it goes live. We check the shop's details and trade licence, and we can suspend a shop that breaks the rules."
+      }
+    }
+  },
+  "terms": {
+    "title": "Terms of use",
+    "intro": "Please read these terms before you use the platform. When you register, you agree to them.",
+    "sections": {
+      "use": {
+        "heading": "Using the platform",
+        "body": "Give correct information when you register and keep your password private. You are responsible for what happens in your account. Do not use the platform to harm other people or shops."
+      },
+      "bookings": {
+        "heading": "Bookings",
+        "body": "A booking is for a service at a time. Some bookings are confirmed at once and some wait for the shop to accept them. In My bookings you can see what you can change or cancel, and any refund, before you confirm. Please arrive on time."
+      },
+      "payments": {
+        "heading": "Payments and refunds",
+        "body": "You can pay online with bKash, Nagad or a card, or pay at the shop when the shop allows it. While you pay online, the slot is held for you for a short time. If a booking is cancelled, any refund follows the rule shown to you when you cancel."
+      },
+      "noShows": {
+        "heading": "No-shows",
+        "body": "If you do not come to a confirmed booking, the shop can mark it as a no-show. Shops can see how many earlier no-shows a customer has."
+      },
+      "reviews": {
+        "heading": "Reviews",
+        "body": "You can review a shop after a completed booking. Write honestly and respectfully. Our admin team can hide reviews that break the rules."
+      },
+      "shops": {
+        "heading": "Shop owners",
+        "body": "Owners must give true information about the shop and keep services, prices and working hours up to date. A shop goes live after the admin team approves it, and it can be suspended if it breaks these terms."
+      },
+      "changes": {
+        "heading": "Changes to these terms",
+        "body": "We may update these terms. If you keep using the platform after a change, you accept the new terms."
+      }
+    }
+  },
+  "privacy": {
+    "title": "Privacy policy",
+    "intro": "This page explains what information we keep about you and why.",
+    "sections": {
+      "collect": {
+        "heading": "What we keep",
+        "body": "We keep your name, phone number, email address and sign-in details. We also keep your bookings, payments, reviews and queue history. For shop owners, we keep the shop details and trade licence documents."
+      },
+      "use": {
+        "heading": "How we use it",
+        "body": "We use it to make and manage bookings, show your place in the queue, send you notifications about your bookings, and keep the platform safe and fair."
+      },
+      "sharing": {
+        "heading": "Who sees it",
+        "body": "The shop you book with sees your name and your booking details, including your earlier no-shows. Our admin team can see what it needs to review shops, reviews and complaints. We do not sell your information."
+      },
+      "choices": {
+        "heading": "Your choices",
+        "body": "You can change your name, phone number and language in your profile. To ask us to correct or delete your information, contact the project team."
+      },
+      "security": {
+        "heading": "Keeping it safe",
+        "body": "Your account is protected by your password, and we send an email code when you register. Online payments are handled by the payment providers."
+      },
+      "contact": {
+        "heading": "Questions",
+        "body": "This platform is a university demonstration project. For questions about this page, contact the project team that built it."
+      }
+    }
+  },
+  "notFound": {
+    "title": "Page not found",
+    "text": "The page you are looking for does not exist or has moved.",
+    "address": "Address:",
+    "homeGuest": "Go to the Home page",
+    "homeAccount": "Go to my account",
+    "shops": "Find shops"
+  }
+}
