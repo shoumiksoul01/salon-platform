@@ -1,0 +1,57 @@
+{
+  "titleConfirmed": "Booking confirmed",
+  "titlePending": "Booking request sent",
+  "leadConfirmed": "Your time is reserved. Keep this receipt for your records.",
+  "leadPending": "The shop confirms each booking by hand. You will get a message once it accepts.",
+  "reference": "Booking number",
+  "detailsTitle": "Booking details",
+  "staff": "Staff",
+  "anyStaff": "Anyone available",
+  "when": "Time",
+  "totalTime": "Total time",
+  "duration": "{{minutes}} min",
+  "customer": "Name",
+  "phone": "Mobile number",
+  "servicesTitle": "Services",
+  "paymentTitle": "Payment",
+  "subtotal": "Subtotal",
+  "offerLine": "Offer: {{title}}",
+  "total": "Total",
+  "paidNow": "Paid now",
+  "dueAtShop": "To pay at the shop",
+  "method": "Payment method",
+  "bookingStatus": "Booking status",
+  "paymentStatus": "Payment status",
+  "dueNote": "Please pay {{amount}} at the shop after your service.",
+  "testNote": "This payment was made on a test gateway. No real money was taken.",
+  "print": "Print receipt",
+  "myBookings": "My bookings",
+  "findShops": "Find more shops",
+  "loadError": "Could not load your receipt. Please try again.",
+  "notFound": {
+    "title": "Receipt not found",
+    "body": "We could not find this receipt. If you just booked, check My bookings.",
+    "action": "Back to all shops"
+  },
+  "methods": {
+    "bkash": "bKash",
+    "nagad": "Nagad",
+    "card": "Card",
+    "pay_at_shop": "Pay at the shop"
+  },
+  "status": {
+    "pending": "Waiting for the shop",
+    "confirmed": "Confirmed",
+    "arrived": "Arrived",
+    "in_service": "In service",
+    "completed": "Completed",
+    "cancelled": "Cancelled",
+    "no_show": "No-show"
+  },
+  "paymentStates": {
+    "pending": "Not paid yet",
+    "paid": "Paid",
+    "failed": "Failed",
+    "refunded": "Refunded"
+  }
+}
