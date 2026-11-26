@@ -9,6 +9,7 @@ import OtpPage from '../pages/public/OtpPage'
 import BookServicesPage from '../pages/public/BookServicesPage'
 import BookSlotPage from '../pages/public/BookSlotPage'
 import BookReviewPage from '../pages/public/BookReviewPage'
+import BookReceiptPage from '../pages/public/BookReceiptPage'
 import KitPreview from '../pages/dev/KitPreview'
 import LoginPage from '../pages/public/LoginPage'
 import ResetPasswordPage from '../pages/public/ResetPasswordPage'
@@ -30,6 +31,7 @@ export const publicRoutes: RouteObject[] = [
       { path: '/book/:shopId', element: <BookServicesPage /> },
       { path: '/book/:shopId/slot', element: <BookSlotPage /> },
       { path: '/book/:shopId/review', element: <BookReviewPage /> },
+      { path: '/booking/:bookingId/receipt', element: <BookReceiptPage /> },
       { path: '/login', element: <LoginPage /> },
       { path: '/reset-password', element: <ResetPasswordPage /> },
       { path: '/about', element: <StaticPage page="about" /> },
