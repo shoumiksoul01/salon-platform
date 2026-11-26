@@ -1,14 +1,28 @@
 import type { RouteObject } from 'react-router-dom'
+import RequireRole from '../auth/RequireRole'
 import AdminLayout from '../layouts/AdminLayout'
 import KitPreview from '../pages/dev/KitPreview'
 
-// Admin pages (ADM) are added to the children array of the layout route.
-// The /dev/admin-kit page exists only while running "npm run dev"; it shows the layout around the kit preview.
+// Admin pages (ADM) are added to the children array of the guarded layout route.
+// Only a signed-in user whose profile role is "admin" can see them (C-06).
+// The /dev/admin-kit page exists only while running "npm run dev"; it shows the layout around the kit preview
+// and stays outside the guard, so the layout can still be checked without an admin account.
 export const adminRoutes: RouteObject[] = [
   {
-    element: <AdminLayout />,
+    element: <RequireRole roles={['admin']} />,
     children: [
-      ...(import.meta.env.DEV ? [{ path: '/dev/admin-kit', element: <KitPreview /> }] : []),
+      {
+        element: <AdminLayout />,
+        children: [],
+      },
     ],
   },
+  ...(import.meta.env.DEV
+    ? [
+        {
+          element: <AdminLayout />,
+          children: [{ path: '/dev/admin-kit', element: <KitPreview /> }],
+        },
+      ]
+    : []),
 ]
