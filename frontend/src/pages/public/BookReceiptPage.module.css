@@ -1,0 +1,128 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 44rem;
+  margin-inline: auto;
+  padding: var(--space-6) var(--container-padding) var(--space-12);
+}
+
+.link {
+  color: var(--color-primary);
+  font-weight: var(--weight-semibold);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--text-3xl);
+}
+
+.text {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.sectionTitle {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-xl);
+}
+
+.banner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5) var(--space-4);
+  border: 1px solid var(--color-success);
+  border-radius: var(--radius-md);
+  background: var(--color-success-soft);
+}
+.bannerPending {
+  border-color: var(--color-warning);
+  background: var(--color-warning-soft);
+}
+.bannerText {
+  margin: 0;
+  color: var(--color-text);
+}
+.reference {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: var(--space-2) 0 0;
+  color: var(--color-text-muted);
+}
+.reference strong {
+  color: var(--color-text);
+  letter-spacing: 0.08em;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 0;
+}
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+}
+.row dt {
+  color: var(--color-text-muted);
+}
+.row dd {
+  margin: 0;
+  font-weight: var(--weight-semibold);
+  text-align: end;
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.item {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.totals {
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+}
+.discount {
+  color: var(--color-success);
+}
+.grand {
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border);
+  font-size: var(--text-lg);
+}
+.grand dt {
+  color: var(--color-text);
+  font-weight: var(--weight-semibold);
+}
+
+.note {
+  margin: var(--space-4) 0 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+@media print {
+  .actions {
+    display: none;
+  }
+}
