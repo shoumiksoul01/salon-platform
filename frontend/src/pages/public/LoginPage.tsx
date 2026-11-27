@@ -19,7 +19,7 @@ const HOME: Record<ProfileRole, string> = {
   customer: '/me',
   owner: '/owner',
   staff: '/staff',
-  admin: '/', // the admin pages come with ADM-01
+  admin: '/admin',
 }
 
 // AUTH-03: log in (C-03)

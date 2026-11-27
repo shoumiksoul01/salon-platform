@@ -7,7 +7,7 @@ const HOME: Record<ProfileRole, string> = {
   customer: '/me',
   owner: '/owner',
   staff: '/staff',
-  admin: '/',
+  admin: '/admin',
 }
 
 interface RequireRoleProps {
