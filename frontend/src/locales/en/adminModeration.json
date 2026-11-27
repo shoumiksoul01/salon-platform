@@ -1,0 +1,93 @@
+{
+  "title": "Moderation",
+  "intro": "Handle reported reviews, disputes and refund complaints. Every action is logged.",
+  "tabsLabel": "Moderation lists",
+  "tabs": {
+    "reports": "Reported reviews",
+    "complaints": "Complaints",
+    "audit": "Audit log"
+  },
+  "columns": {
+    "shop": "Shop",
+    "reason": "Report reason",
+    "customer": "Customer",
+    "type": "Type",
+    "opened": "Opened",
+    "status": "Status",
+    "action": "Action",
+    "when": "When",
+    "admin": "Administrator",
+    "target": "Target",
+    "note": "Note"
+  },
+  "reportStatus": {
+    "open": "Open",
+    "dismissed": "Kept",
+    "review_hidden": "Hidden"
+  },
+  "complaintStatus": {
+    "open": "Open",
+    "in_review": "In review",
+    "resolved": "Resolved",
+    "rejected": "Rejected"
+  },
+  "complaintType": {
+    "dispute": "Dispute",
+    "refund": "Refund"
+  },
+  "auditAction": {
+    "shop_approved": "Approved shop",
+    "shop_rejected": "Rejected shop",
+    "shop_suspended": "Suspended shop",
+    "report_dismissed": "Kept reported review",
+    "review_hidden": "Hid review",
+    "complaint_in_review": "Started complaint review",
+    "complaint_resolved": "Resolved complaint",
+    "complaint_rejected": "Rejected complaint"
+  },
+  "entity": {
+    "shop": "Shop",
+    "review_report": "Review report",
+    "complaint": "Complaint"
+  },
+  "details": {
+    "rating": "Rating",
+    "ratingValue": "{{rating}} out of 5",
+    "review": "Review",
+    "noComment": "No written comment.",
+    "reviewer": "Written by",
+    "reporter": "Reported by",
+    "visit": "Appointment",
+    "total": "Booking total",
+    "paid": "Paid",
+    "description": "Complaint",
+    "resolution": "Resolution",
+    "refundNote": "Resolving a complaint does not send money."
+  },
+  "actions": {
+    "view": "View",
+    "viewItem": "View {{name}}",
+    "keep": "Keep review",
+    "hide": "Hide review",
+    "start": "Start review",
+    "resolve": "Resolve",
+    "reject": "Reject"
+  },
+  "resolution": {
+    "label": "Resolution note",
+    "required": "Write a resolution note."
+  },
+  "empty": {
+    "reports": "No reported reviews",
+    "complaints": "No complaints",
+    "audit": "No actions yet",
+    "hint": "New items appear here."
+  },
+  "error": {
+    "title": "Could not load moderation data",
+    "hint": "Check your connection and try again.",
+    "retry": "Try again"
+  },
+  "saved": "Saved",
+  "failed": "Could not save. Try again."
+}

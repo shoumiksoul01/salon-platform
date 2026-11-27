@@ -1,0 +1,93 @@
+{
+  "title": "পর্যালোচনা ও অভিযোগ",
+  "intro": "রিপোর্ট করা রিভিউ, বিরোধ ও রিফান্ড অভিযোগ দেখুন। প্রতিটি কাজ লগে থাকে।",
+  "tabsLabel": "পর্যালোচনার তালিকা",
+  "tabs": {
+    "reports": "রিপোর্ট করা রিভিউ",
+    "complaints": "অভিযোগ",
+    "audit": "অডিট লগ"
+  },
+  "columns": {
+    "shop": "দোকান",
+    "reason": "রিপোর্টের কারণ",
+    "customer": "গ্রাহক",
+    "type": "ধরন",
+    "opened": "জমার তারিখ",
+    "status": "অবস্থা",
+    "action": "কাজ",
+    "when": "সময়",
+    "admin": "অ্যাডমিনিস্ট্রেটর",
+    "target": "বিষয়",
+    "note": "নোট"
+  },
+  "reportStatus": {
+    "open": "খোলা",
+    "dismissed": "রাখা হয়েছে",
+    "review_hidden": "লুকানো"
+  },
+  "complaintStatus": {
+    "open": "খোলা",
+    "in_review": "যাচাই চলছে",
+    "resolved": "সমাধান হয়েছে",
+    "rejected": "প্রত্যাখ্যাত"
+  },
+  "complaintType": {
+    "dispute": "বিরোধ",
+    "refund": "রিফান্ড"
+  },
+  "auditAction": {
+    "shop_approved": "দোকান অনুমোদন",
+    "shop_rejected": "দোকান প্রত্যাখ্যান",
+    "shop_suspended": "দোকান স্থগিত",
+    "report_dismissed": "রিপোর্ট করা রিভিউ রাখা",
+    "review_hidden": "রিভিউ লুকানো",
+    "complaint_in_review": "অভিযোগ যাচাই শুরু",
+    "complaint_resolved": "অভিযোগ সমাধান",
+    "complaint_rejected": "অভিযোগ প্রত্যাখ্যান"
+  },
+  "entity": {
+    "shop": "দোকান",
+    "review_report": "রিভিউ রিপোর্ট",
+    "complaint": "অভিযোগ"
+  },
+  "details": {
+    "rating": "রেটিং",
+    "ratingValue": "৫-এর মধ্যে {{rating}}",
+    "review": "রিভিউ",
+    "noComment": "কোনো লিখিত মন্তব্য নেই।",
+    "reviewer": "লিখেছেন",
+    "reporter": "রিপোর্ট করেছেন",
+    "visit": "অ্যাপয়েন্টমেন্ট",
+    "total": "বুকিংয়ের মোট",
+    "paid": "পরিশোধিত",
+    "description": "অভিযোগ",
+    "resolution": "সমাধান",
+    "refundNote": "অভিযোগ সমাধান করলে টাকা পাঠানো হয় না।"
+  },
+  "actions": {
+    "view": "দেখুন",
+    "viewItem": "{{name}} দেখুন",
+    "keep": "রিভিউ রাখুন",
+    "hide": "রিভিউ লুকান",
+    "start": "যাচাই শুরু করুন",
+    "resolve": "সমাধান করুন",
+    "reject": "প্রত্যাখ্যান করুন"
+  },
+  "resolution": {
+    "label": "সমাধানের নোট",
+    "required": "সমাধানের নোট লিখুন।"
+  },
+  "empty": {
+    "reports": "কোনো রিপোর্ট করা রিভিউ নেই",
+    "complaints": "কোনো অভিযোগ নেই",
+    "audit": "এখনো কোনো কাজ হয়নি",
+    "hint": "নতুন কিছু এলে এখানে দেখা যাবে।"
+  },
+  "error": {
+    "title": "তথ্য আনা যায়নি",
+    "hint": "ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।",
+    "retry": "আবার চেষ্টা করুন"
+  },
+  "saved": "সংরক্ষিত হয়েছে",
+  "failed": "সংরক্ষণ করা যায়নি। আবার চেষ্টা করুন।"
+}
