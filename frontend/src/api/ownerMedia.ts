@@ -1,12 +1,13 @@
 import { DEMO_SHOP_ID } from '../mocks/bookings'
 import { shopImages, shopTours } from '../mocks/shopMedia'
 import type { ShopImage } from '../mocks/shopMedia'
+import { ApiError, apiConfigured, apiFetch } from './http'
 import { getMockMode, mockDelay } from './mock'
 import { IMAGE_TYPES, MAX_IMAGE_BYTES } from './services'
 
-// true = use the fixtures in src/mocks/. Set to false in the wire-up commit for FR-01.4.
+// Mock data until VITE_API_URL points at the backend (FR-01.4 is wired).
 // Pages call the functions below and never import the fixtures.
-const USE_MOCK = true
+const USE_MOCK = !apiConfigured
 
 export type { ShopImage }
 
@@ -72,8 +73,28 @@ function renumber() {
   })
 }
 
-function notWritten(): never {
-  throw new Error('The real shop media API is not written yet')
+const MEDIA_ERROR_CODES: MediaErrorCode[] = [
+  'too_many',
+  'bad_type',
+  'too_big',
+  'read_failed',
+  'alt_too_long',
+  'bad_url',
+  'not_found',
+]
+
+// Runs a real API call. The backend uses the same error codes as MediaError, so the
+// page shows the same messages as it does with the mock.
+async function real<T>(call: () => Promise<T>): Promise<T> {
+  try {
+    return await call()
+  } catch (error) {
+    if (error instanceof ApiError) {
+      const code = MEDIA_ERROR_CODES.find((item) => item === error.code)
+      if (code) throw new MediaError(code)
+    }
+    throw error
+  }
 }
 
 function cleanAlt(value: string): string {
@@ -115,7 +136,7 @@ export async function getOwnerMedia(): Promise<OwnerMedia> {
       return snapshot()
     })
   }
-  return notWritten()
+  return real(() => apiFetch<OwnerMedia>('/shops/me/media'))
 }
 
 // Adds a photo at the end of the gallery. The mock turns the picture into a data URL.
@@ -139,7 +160,10 @@ export async function addShopImage(file: File, altText: string): Promise<OwnerMe
       return snapshot()
     })
   }
-  return notWritten()
+  const form = new FormData()
+  form.append('file', file)
+  form.append('alt_text', altText)
+  return real(() => apiFetch<OwnerMedia>('/shops/me/media/images', { method: 'POST', form }))
 }
 
 export async function updateImageAlt(id: string, altText: string): Promise<OwnerMedia> {
@@ -152,7 +176,9 @@ export async function updateImageAlt(id: string, altText: string): Promise<Owner
       return snapshot()
     })
   }
-  return notWritten()
+  return real(() =>
+    apiFetch<OwnerMedia>(`/shops/me/media/images/${id}`, { method: 'PATCH', body: { alt_text: altText } }),
+  )
 }
 
 // direction -1 = one place earlier (towards the cover), 1 = one place later.
@@ -171,7 +197,9 @@ export async function moveImage(id: string, direction: -1 | 1): Promise<OwnerMed
       return snapshot()
     })
   }
-  return notWritten()
+  return real(() =>
+    apiFetch<OwnerMedia>(`/shops/me/media/images/${id}/move`, { method: 'POST', body: { direction } }),
+  )
 }
 
 export async function removeImage(id: string): Promise<OwnerMedia> {
@@ -184,7 +212,7 @@ export async function removeImage(id: string): Promise<OwnerMedia> {
       return snapshot()
     })
   }
-  return notWritten()
+  return real(() => apiFetch<OwnerMedia>(`/shops/me/media/images/${id}`, { method: 'DELETE' }))
 }
 
 // Saves the virtual tour link. An empty text removes the tour. Returns the saved link or null.
@@ -196,5 +224,8 @@ export async function saveTourUrl(value: string): Promise<string | null> {
       return url
     })
   }
-  return notWritten()
+  const saved = await real(() =>
+    apiFetch<{ tour_url: string | null }>('/shops/me/media/tour', { method: 'PUT', body: { tour_url: value } }),
+  )
+  return saved.tour_url
 }
