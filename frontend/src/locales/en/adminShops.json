@@ -1,0 +1,70 @@
+{
+  "title": "Shop approvals",
+  "intro": "Check each application and its documents before approving.",
+  "tabsLabel": "Shops by status",
+  "status": {
+    "pending": "Pending",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "suspended": "Suspended"
+  },
+  "table": {
+    "caption": "Shops",
+    "shop": "Shop",
+    "owner": "Shop Owner",
+    "registered": "Registered",
+    "action": "Action",
+    "review": "Review",
+    "reviewShop": "Review {{name}}"
+  },
+  "empty": {
+    "pending": "No applications waiting",
+    "approved": "No approved shops",
+    "rejected": "No rejected shops",
+    "suspended": "No suspended shops",
+    "hint": "Shops appear here when their status changes."
+  },
+  "error": {
+    "title": "Could not load shops",
+    "hint": "Check your connection and try again.",
+    "retry": "Try again"
+  },
+  "details": {
+    "status": "Status",
+    "owner": "Shop Owner",
+    "phone": "Phone",
+    "address": "Address",
+    "category": "Category",
+    "registered": "Registered",
+    "description": "Description",
+    "location": "Location",
+    "map": "Open in OpenStreetMap",
+    "documents": "Documents",
+    "noDocuments": "No documents uploaded.",
+    "reason": "Reason"
+  },
+  "category": {
+    "men": "Men",
+    "women": "Women",
+    "unisex": "Unisex"
+  },
+  "actions": {
+    "approve": "Approve",
+    "reject": "Reject",
+    "suspend": "Suspend",
+    "back": "Back",
+    "confirmReject": "Confirm rejection",
+    "confirmSuspend": "Confirm suspension"
+  },
+  "reason": {
+    "reject": "Why is this application rejected?",
+    "suspend": "Why is this shop suspended?",
+    "required": "Write a reason."
+  },
+  "done": {
+    "approve": "{{name}} approved",
+    "reject": "{{name}} rejected",
+    "suspend": "{{name}} suspended"
+  },
+  "failed": "Could not save the decision. Try again."
+}
