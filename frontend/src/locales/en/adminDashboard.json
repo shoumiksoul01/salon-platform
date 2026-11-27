@@ -1,0 +1,34 @@
+{
+  "title": "Platform dashboard",
+  "subtitle": "How the platform is doing right now.",
+  "loading": "Loading the dashboard",
+  "tiles": {
+    "shops": "Shops",
+    "shopsHint": "Approved shops",
+    "users": "Users",
+    "usersHint": "Registered users",
+    "bookings": "Bookings",
+    "bookingsHint": "All time",
+    "revenue": "Revenue",
+    "revenueHint": "Paid through the platform"
+  },
+  "pending": {
+    "title": "Waiting for approval",
+    "count_one": "{{formatted}} shop is waiting for your review.",
+    "count_other": "{{formatted}} shops are waiting for your review.",
+    "none": "No shops are waiting right now.",
+    "hint": "Open Shop approvals in the sidebar to review them."
+  },
+  "charts": {
+    "title": "Last 6 months",
+    "bookingsTitle": "Bookings per month",
+    "revenueTitle": "Revenue per month",
+    "showTable": "Show as a table",
+    "tableCaption": "Bookings and revenue for the last 6 months",
+    "month": "Month",
+    "bookings": "Bookings",
+    "revenue": "Revenue",
+    "emptyTitle": "No data yet",
+    "emptyText": "Charts appear after the first bookings."
+  }
+}
