@@ -1,6 +1,7 @@
 import type { RouteObject } from 'react-router-dom'
 import RequireRole from '../auth/RequireRole'
 import AdminLayout from '../layouts/AdminLayout'
+import AdminDashboardPage from '../pages/admin/AdminDashboardPage'
 import KitPreview from '../pages/dev/KitPreview'
 
 // Admin pages (ADM) are added to the children array of the guarded layout route.
@@ -13,7 +14,7 @@ export const adminRoutes: RouteObject[] = [
     children: [
       {
         element: <AdminLayout />,
-        children: [],
+        children: [{ path: '/admin', element: <AdminDashboardPage /> }],
       },
     ],
   },
