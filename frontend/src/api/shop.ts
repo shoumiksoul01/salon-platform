@@ -1,8 +1,9 @@
 import { mockShop } from '../mocks/shop'
 import type { GenderCategory, ShopStatus } from '../mocks/shops'
+import { apiConfigured, apiFetch } from './http'
 
-// Mock or real data. Flip to false in the wire-up commit for FR-01.1.
-const USE_MOCK = true
+// Mock data until VITE_API_URL points at the backend (FR-01.1 is wired).
+const USE_MOCK = !apiConfigured
 
 // Same values as the shared fixtures. 'draft' only exists in the shop setup page,
 // before the owner submits the shop for approval.
@@ -63,7 +64,7 @@ export async function getMyShop(): Promise<Shop> {
     await delay(300)
     return { ...current }
   }
-  throw new Error('The real shop API is not wired yet')
+  return apiFetch<Shop>('/shops/me')
 }
 
 export async function saveMyShop(input: ShopInput): Promise<Shop> {
@@ -72,7 +73,7 @@ export async function saveMyShop(input: ShopInput): Promise<Shop> {
     current = { ...current, ...input }
     return { ...current }
   }
-  throw new Error('The real shop API is not wired yet')
+  return apiFetch<Shop>('/shops/me', { method: 'PATCH', body: input })
 }
 
 export async function uploadDocument(file: File): Promise<ShopDocument> {
@@ -88,7 +89,9 @@ export async function uploadDocument(file: File): Promise<ShopDocument> {
     current = { ...current, documents: [...current.documents, document] }
     return document
   }
-  throw new Error('The real shop API is not wired yet')
+  const form = new FormData()
+  form.append('file', file)
+  return apiFetch<ShopDocument>('/shops/me/documents', { method: 'POST', form })
 }
 
 export async function deleteDocument(id: string): Promise<void> {
@@ -97,7 +100,7 @@ export async function deleteDocument(id: string): Promise<void> {
     current = { ...current, documents: current.documents.filter((doc) => doc.id !== id) }
     return
   }
-  throw new Error('The real shop API is not wired yet')
+  await apiFetch<void>(`/shops/me/documents/${id}`, { method: 'DELETE' })
 }
 
 export async function submitForApproval(): Promise<Shop> {
@@ -106,5 +109,5 @@ export async function submitForApproval(): Promise<Shop> {
     current = { ...current, status: 'pending', approval_reason: null }
     return { ...current }
   }
-  throw new Error('The real shop API is not wired yet')
+  return apiFetch<Shop>('/shops/me/submit', { method: 'POST' })
 }
