@@ -1,0 +1,15 @@
+.chart {
+  width: 100%;
+  height: 16rem;
+}
+
+.tipLabel {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.tipValue {
+  margin: 0;
+  font-size: var(--text-lg);
+}
