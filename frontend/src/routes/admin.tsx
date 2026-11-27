@@ -2,6 +2,7 @@ import type { RouteObject } from 'react-router-dom'
 import RequireRole from '../auth/RequireRole'
 import AdminLayout from '../layouts/AdminLayout'
 import AdminDashboardPage from '../pages/admin/AdminDashboardPage'
+import AdminModerationPage from '../pages/admin/AdminModerationPage'
 import AdminShopsPage from '../pages/admin/AdminShopsPage'
 import KitPreview from '../pages/dev/KitPreview'
 
@@ -15,9 +16,10 @@ export const adminRoutes: RouteObject[] = [
     children: [
       {
         element: <AdminLayout />,
-        children: [
+                children: [
           { path: '/admin', element: <AdminDashboardPage /> },
           { path: '/admin/shops', element: <AdminShopsPage /> },
+          { path: '/admin/moderation', element: <AdminModerationPage /> },
         ],
       },
     ],
