@@ -11,13 +11,13 @@ type LoadState = 'loading' | 'error' | 'ready'
 interface FormErrors {
   fullName?: string
   phone?: string
-  email?: string
 }
 
 const PHONE_PATTERN = /^(?:\+?88)?01[3-9]\d{8}$/
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-// CUS-04: profile and language (C-05, C-07)
+// CUS-04: profile and language (C-05, C-07).
+// A user may change the name, phone and language. The email is the login, so it is shown
+// but read only; the role cannot be changed at all.
 export default function ProfilePage() {
   const { t } = useTranslation(['customer', 'common'])
   const toast = useToast()
@@ -26,7 +26,7 @@ export default function ProfilePage() {
   const [reloadKey, setReloadKey] = useState(0)
   const [fullName, setFullName] = useState('')
   const [phone, setPhone] = useState('')
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState('') // read only
   const [errors, setErrors] = useState<FormErrors>({})
   const [saving, setSaving] = useState(false)
 
@@ -57,15 +57,9 @@ export default function ProfilePage() {
     const found: FormErrors = {}
     const name = fullName.trim()
     const phoneValue = phone.trim()
-    const emailValue = email.trim()
 
     if (!name) found.fullName = t('profile.nameRequired')
-    if (!phoneValue && !emailValue) {
-      found.phone = t('profile.contactRequired')
-    } else {
-      if (phoneValue && !PHONE_PATTERN.test(phoneValue)) found.phone = t('profile.phoneInvalid')
-      if (emailValue && !EMAIL_PATTERN.test(emailValue)) found.email = t('profile.emailInvalid')
-    }
+    if (phoneValue && !PHONE_PATTERN.test(phoneValue)) found.phone = t('profile.phoneInvalid')
     return found
   }
 
@@ -80,7 +74,6 @@ export default function ProfilePage() {
       await updateProfile({
         full_name: fullName.trim(),
         phone: phone.trim() || null,
-        email: email.trim() || null,
       })
       toast.show({ message: t('profile.saved'), variant: 'success' })
     } catch {
@@ -147,15 +140,9 @@ export default function ProfilePage() {
               )}
             </FormField>
 
-            <FormField label={t('profile.email')} error={errors.email}>
+            <FormField label={t('profile.email')} hint={t('profile.emailHint')}>
               {(control) => (
-                <Input
-                  {...control}
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  autoComplete="email"
-                />
+                <Input {...control} type="email" value={email} readOnly autoComplete="email" />
               )}
             </FormField>
 

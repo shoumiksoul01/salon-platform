@@ -1,17 +1,25 @@
+import type { Language } from '../i18n'
 import { mockProfile } from '../mocks/profile'
+import { apiConfigured, apiFetch } from './http'
 
-// Mock or real data. Flip to false in the wire-up commit for C-05.
-const USE_MOCK = true
+// Mock data until VITE_API_URL is set (see http.ts).
+const USE_MOCK = !apiConfigured
 
 export interface Profile {
   id: string
   full_name: string
   phone: string | null
-  email: string | null
-  preferred_language: 'bn' | 'en'
+  email: string | null // read only: the email is the login, Supabase Auth owns it
+  preferred_language: Language | null // null = not chosen yet
 }
 
-export type ProfileUpdate = Pick<Profile, 'full_name' | 'phone' | 'email'>
+// C-05 update policy: a user may change only these three. The role and the email
+// can never be changed here, and the backend refuses any other field.
+export interface ProfileUpdate {
+  full_name?: string
+  phone?: string | null
+  preferred_language?: Language
+}
 
 const delay = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms))
 
@@ -23,7 +31,7 @@ export async function getProfile(): Promise<Profile> {
     await delay(300)
     return { ...current }
   }
-  throw new Error('The real profile API is not wired yet')
+  return apiFetch<Profile>('/me')
 }
 
 export async function updateProfile(update: ProfileUpdate): Promise<Profile> {
@@ -32,5 +40,17 @@ export async function updateProfile(update: ProfileUpdate): Promise<Profile> {
     current = { ...current, ...update }
     return { ...current }
   }
-  throw new Error('The real profile API is not wired yet')
+  return apiFetch<Profile>('/me', { method: 'PATCH', body: update })
+}
+
+// C-07: the language the user saved on the server, or null if none (or in mock mode).
+export async function fetchSavedLanguage(): Promise<Language | null> {
+  if (USE_MOCK) return null
+  return (await getProfile()).preferred_language
+}
+
+// C-07: remember the choice for later sessions and other devices.
+export async function saveLanguage(language: Language): Promise<void> {
+  if (USE_MOCK) return
+  await updateProfile({ preferred_language: language })
 }

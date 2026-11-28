@@ -8,6 +8,7 @@
     "phone": "Phone number",
     "phoneHint": "Used for booking reminders.",
     "email": "Email",
+    "emailHint": "Your email is your login, so it cannot be changed here.",
     "nameRequired": "Enter your name.",
     "phoneInvalid": "Enter a valid mobile number, like 01XXXXXXXXX.",
     "emailInvalid": "Enter a valid email address.",
