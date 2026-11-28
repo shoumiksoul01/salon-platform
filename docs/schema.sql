@@ -30,15 +30,16 @@ create extension if not exists btree_gist;
 
 -- Mirror of supabase/migrations/20261124040000_create_profiles.sql (checked against it).
 -- The migration also holds the RLS policy and the signup trigger; they are not repeated here.
--- Email lives in auth.users. The preferred language is not stored yet (the frontend keeps
--- it in the browser); C-05 or C-07 adds a column in its own migration if it is needed.
+-- Email lives in auth.users. preferred_language (C-07) is added by its own migration,
+-- supabase/migrations/20261127100000_add_profile_language.sql; null = not chosen yet.
 create table if not exists public.profiles (
   id         uuid primary key references auth.users (id) on delete cascade,
   full_name  text not null,
   phone      text,
   role       text not null default 'customer'
                check (role in ('customer', 'owner', 'staff', 'admin')),
-  created_at timestamptz not null default now()
+  created_at timestamptz not null default now(),
+  preferred_language text check (preferred_language in ('bn', 'en'))
 );
 
 

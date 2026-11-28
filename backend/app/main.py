@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from .config import get_settings
 from .db import close_pool
 from .errors import add_error_handlers
-from .routers import shop, shop_media
+from .routers import me, shop, shop_media
 
 API_PREFIX = "/api/v1"
 
@@ -34,5 +34,6 @@ def health():
 
 
 # One router file per feature, one line each (docs/workflow.md).
+app.include_router(me.router, prefix=API_PREFIX)
 app.include_router(shop.router, prefix=API_PREFIX)
 app.include_router(shop_media.router, prefix=API_PREFIX)
